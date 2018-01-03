@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/viewbuilder.iml" filepath="$PROJECT_DIR$/.idea/modules/viewbuilder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/viewbuilder_main.iml" filepath="$PROJECT_DIR$/.idea/modules/viewbuilder_main.iml" group="viewbuilder" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/viewbuilder_test.iml" filepath="$PROJECT_DIR$/.idea/modules/viewbuilder_test.iml" group="viewbuilder" />
     </modules>
   </component>
 </project>
