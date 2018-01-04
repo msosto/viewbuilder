@@ -39,22 +39,22 @@ public class ViewBuilder<Model> {
 
             List<Object> models = getModels(template, model);
 
-            template.getMapper().ifPresent(o -> {
-                models.forEach(newModel -> {
+            models.forEach(newModel -> {
+
+                final String id = (String) template.getId()
+                        .orElse(
+                                template.getIdBuilder().map(idb -> {
+                                    Function idbuilder = (Function) idb;
+                                    return idbuilder.apply(newModel).toString();
+                                }).orElse(null)
+                        );
+
+                final Object data = template.getMapper().map(o -> {
                     Function f = (Function) o;
-                    final String id = (String) template.getId()
-                            .orElse(
-                                    template.getIdBuilder().map(idb -> {
-                                        Function idbuilder = (Function) idb;
-                                        return idbuilder.apply(newModel).toString();
-                                    }).orElse(null)
-                            );
+                    return f.apply(newModel);
+                }).orElse(null);
 
-                    final Object data = f.apply(newModel);
-
-                    addComponent(template, (Model) newModel, components, id, data);
-                });
-
+                addComponent(template, (Model) newModel, components, id, data);
             });
 
             return Optional.of(components);

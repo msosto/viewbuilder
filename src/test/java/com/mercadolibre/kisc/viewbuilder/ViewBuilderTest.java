@@ -46,7 +46,7 @@ public class ViewBuilderTest {
                                                                     return model.getItems();
                                                                 })
                                                                 .add(
-                                                                        new Template<Label, ExampleModelItem>("picture")
+                                                                        new Template<Label, ExampleModelItem>("title")
                                                                                 .withMapper(m -> new Label()
                                                                                         .withText(m.getTitle()))
                                                                 )
@@ -72,7 +72,7 @@ public class ViewBuilderTest {
         System.out.println(gson.toJson(view));
 
         /*
-        {
+{
   "components": [
     {
       "id": "search",
@@ -82,6 +82,44 @@ public class ViewBuilderTest {
         "formName": "q",
         "icon": "lupita"
       }
+    },
+    {
+      "id": "grid",
+      "uiType": "desktop_grid",
+      "components": [
+        {
+          "id": "rows",
+          "uiType": "grid_body",
+          "components": [
+            {
+              "uiType": "row",
+              "components": [
+                {
+                  "uiType": "title",
+                  "data": {
+                    "text": "item 1"
+                  }
+                }
+              ]
+            },
+            {
+              "uiType": "row",
+              "components": [
+                {
+                  "uiType": "title",
+                  "data": {
+                    "text": "item 2"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pages",
+          "uiType": "grid_footer"
+        }
+      ]
     }
   ]
 }
