@@ -2,101 +2,82 @@ package com.mercadolibre.kisc.viewbuilder;
 
 import com.mercadolibre.kisc.viewbuilder.template.Template;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Created by abertolo on 22/12/17.
  */
 public class ViewBuilder<Model> {
 
-    Template template;
+    //final ViewBuilder<>
 
-    public ViewBuilder(Template template) {
-        if (template == null) {
-            throw new IllegalArgumentException("ViewTemplate is required.");
-        }
-        this.template = template;
+    final Class<Model> modelType;
+
+    final Map<String, Template> templates;
+
+    public ViewBuilder(Class<Model> modelType) {
+        this.modelType = modelType;
+        this.templates = new HashMap<>();
+        this.templates.put(null, new Template<>(this, modelType, modelType, null));
     }
+
+    public <Model, OriginalModel> ViewBuilder(Class<Model> modelType, ViewBuilder<OriginalModel> viewBuilder) {
+
+    }
+
+    public Template<Model, Model> add(String templateId) {
+        return add(templateId, (String) null, modelType);
+    }
+
+    public <T> Template<T, Model> add(String templateId, Class<T> newModel) {
+        return add(templateId, (String) null, newModel);
+    }
+
+
+    public Template<Model, Model> add(String templateId, String parentId) {
+        return add(templateId, parentId, modelType);
+    }
+
+    public <T> Template<T, Model> add(String templateId, String parentId, Class<T> newModel) {
+        final Template<T, Model> template = new Template<>(this, newModel, modelType, templateId);
+        templates.put(templateId, template);
+
+        final Template parent = templates.get(parentId);
+        if (parent == null) {
+            throw new IllegalArgumentException("No parent found with id:" + parentId);
+        }
+        parent.add(template);
+        return template;
+    }
+
+    public Template<Model, Model> add(String templateId, Template parent) {
+        return add(templateId, parent.getTemplateId());
+    }
+
+
+    public <T> Template<T, Model> add(String templateId, Template parent, Class<T> newModel) {
+        return add(templateId, parent.getTemplateId(), newModel);
+    }
+
 
     public Component build(Model model) {
         final Component cmp = new Component();
-        subComponents(template, model, cmp);
+        subComponents(templates.get(null), model, cmp);
         return cmp;
     }
 
 
-    Optional<List<Component>> buildComponent(Template template, Model model) {
-        final Boolean apply = (Boolean) template.getApply()
-                .map(f -> ((Function) f).apply(model))
-                .orElse(true);
-
-        if (apply) {
-            List<Component> components = new ArrayList<>();
-
-            List<Object> models = getModels(template, model);
-
-            models.forEach(newModel -> {
-
-                final String id = (String) template.getId()
-                        .orElse(
-                                template.getIdBuilder().map(idb -> {
-                                    Function idbuilder = (Function) idb;
-                                    return idbuilder.apply(newModel).toString();
-                                }).orElse(null)
-                        );
-
-                final Object data = template.getMapper().map(o -> {
-                    Function f = (Function) o;
-                    return f.apply(newModel);
-                }).orElse(null);
-
-                addComponent(template, (Model) newModel, components, id, data);
-            });
-
-            return Optional.of(components);
-        }
-        return Optional.empty();
-
-    }
-
-    private List<Object> getModels(Template template, Model model) {
-        List<Object> models = new ArrayList<>();
-
-        template.getTransform().ifPresent(o -> {
-            Function f = (Function) o;
-            models.add(f.apply(model));
-        });
-
-        template.getTransformToList().ifPresent(o -> {
-            Function f = (Function) o;
-            models.addAll((Collection) f.apply(model));
-        });
-
-        if (models.isEmpty()) {
-            models.add(model);
-        }
-        return models;
-    }
-
-    private void addComponent(Template template, Model model, List<Component> components, String id, Object data) {
-        Component cmp = new Component()
-                .withId(id)
-                .withData(data)
-                .withUiType(template.getUiType());
-
-        subComponents(template, model, cmp);
-        components.add(cmp);
-    }
-
     private void subComponents(Template template, Model model, Component cmp) {
-        template.getTemplates().forEach(t ->
-                buildComponent((Template) t, model)
-                        .ifPresent(components -> components.forEach(component -> cmp.add(component)))
-        );
+        final List<Template> templates = template.getTemplates();
+        templates.forEach(t -> {
+            final Optional<List<Component>> toComponents = t.toComponents(model);
+            toComponents
+                    .ifPresent(components -> components.forEach(component -> cmp.add(component)));
+        });
     }
+
 
 }

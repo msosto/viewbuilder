@@ -1,9 +1,11 @@
 package com.mercadolibre.example.contract;
 
+import com.mercadolibre.kisc.viewbuilder.ViewContract;
+
 /**
  * Created by abertolo on 03/01/18.
  */
-public class ActionButton {
+public class ActionButton implements ViewContract {
 
     String label;
     String link;

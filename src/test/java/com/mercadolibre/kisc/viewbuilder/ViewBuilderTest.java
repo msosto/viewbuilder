@@ -4,10 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mercadolibre.example.ExampleModel;
 import com.mercadolibre.example.ExampleModelItem;
+import com.mercadolibre.example.OtherModel;
 import com.mercadolibre.example.contract.AutocompleteInput;
 import com.mercadolibre.example.contract.Label;
-import com.mercadolibre.example.contract.PriceLabel;
-import com.mercadolibre.kisc.viewbuilder.template.Template;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -25,43 +24,18 @@ public class ViewBuilderTest {
     @Test
     public void build() throws Exception {
 
-        final Template template = new Template("layout")
-                .add(
-                        new Template<AutocompleteInput, ExampleModel>("autocomplete")
-                                .withMapper(m -> new AutocompleteInput()
-                                        .withPlaceholder(m.getSearchPlaceholder())
-                                        .withIcon(m.getSearchIcon())
-                                        .withFormName("q"))
-                                .withId("search")
 
-                )
-                .add(
-                        new Template("desktop_grid")
-                                .add(
-                                        new Template("grid_body")
-                                                .add(
-                                                        new Template<Object, ExampleModelItem>("row")
-                                                                .withTransformToList(o -> {
-                                                                    ExampleModel model = (ExampleModel) o;
-                                                                    return model.getItems();
-                                                                })
-                                                                .add(
-                                                                        new Template<Label, ExampleModelItem>("title")
-                                                                                .withMapper(m -> new Label()
-                                                                                        .withText(m.getTitle()))
-                                                                )
-                                                )
-                                                .withId("rows")
-                                )
-                                .add(
-                                        new Template("grid_footer")
-                                                .withId("pages")
-                                )
-                                .withId("grid")
-                );
-
-
-        ViewBuilder<ExampleModel> viewBuilder = new ViewBuilder<>(template);
+        ViewBuilder<ExampleModel> viewBuilder = new ViewBuilder<>(ExampleModel.class)
+                .add("page").uiType("desktop_page").done()
+                .add("search", "page").mapper(m -> new AutocompleteInput()
+                        .withPlaceholder(m.getSearchPlaceholder())
+                        .withIcon(m.getSearchIcon())
+                        .withFormName("q")).id("search").done()
+                .add("grid", "page").uiType("desktop_grid").done()
+                .add("row", "grid", ExampleModelItem.class).spread(ExampleModel::getItems).newModel()
+                .add("title", "row").mapper(m -> new Label().withText(m.getTitle())).done()
+                .add("footer", "grid").id("pages").done()
+                .add("footer_page", "page", OtherModel.class).transform(ExampleModel::getOther).done();
 
         final ExampleModel model = getModel();
 

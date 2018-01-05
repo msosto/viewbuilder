@@ -13,6 +13,7 @@ public class ExampleModel {
     Integer offset;
     Integer currentPage;
     List<ExampleModelItem> items;
+    OtherModel other;
 
     public String getSearchPlaceholder() {
         return searchPlaceholder;
@@ -74,6 +75,15 @@ public class ExampleModel {
 
     public ExampleModel withItems(List<ExampleModelItem> items) {
         this.items = items;
+        return this;
+    }
+
+    public OtherModel getOther() {
+        return other;
+    }
+
+    public ExampleModel withOther(OtherModel other) {
+        this.other = other;
         return this;
     }
 }

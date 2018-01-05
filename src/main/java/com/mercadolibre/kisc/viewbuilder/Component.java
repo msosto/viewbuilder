@@ -1,20 +1,18 @@
 package com.mercadolibre.kisc.viewbuilder;
 
-import com.mercadolibre.kisc.viewbuilder.template.Template;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by abertolo on 22/12/17.
  */
-public class Component<VC> {
+public class Component {
 
     String id;
 
     String uiType;
 
-    VC data;
+    ViewContract data;
 
     List<Component> components;
 
@@ -36,11 +34,11 @@ public class Component<VC> {
         return this;
     }
 
-    public VC getData() {
+    public ViewContract getData() {
         return data;
     }
 
-    public Component withData(VC data) {
+    public Component withData(ViewContract data) {
         this.data = data;
         return this;
     }
@@ -49,8 +47,8 @@ public class Component<VC> {
         return components;
     }
 
-    public void add(Component cmp){
-        if (components == null){
+    public void add(Component cmp) {
+        if (components == null) {
             components = new ArrayList<>();
         }
         components.add(cmp);
