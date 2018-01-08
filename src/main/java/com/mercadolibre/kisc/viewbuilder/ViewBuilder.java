@@ -10,74 +10,98 @@ import java.util.Optional;
 /**
  * Created by abertolo on 22/12/17.
  */
-public class ViewBuilder<Model> {
+public class ViewBuilder<Model, OriginalModel> {
 
-    //final ViewBuilder<>
+    final ViewBuilder<OriginalModel, OriginalModel> parent;
+
+    final Class<OriginalModel> originalModelType;
 
     final Class<Model> modelType;
+
+    final Template<Model, ?> root;
 
     final Map<String, Template> templates;
 
     public ViewBuilder(Class<Model> modelType) {
         this.modelType = modelType;
+        this.originalModelType = (Class<OriginalModel>) modelType;
+        this.parent = null;
         this.templates = new HashMap<>();
-        this.templates.put(null, new Template<>(this, modelType, modelType, null));
-    }
-
-    public <Model, OriginalModel> ViewBuilder(Class<Model> modelType, ViewBuilder<OriginalModel> viewBuilder) {
+        this.root = new Template<>((ViewBuilder<?, Model>) this, modelType, modelType, null);
+        this.templates.put(null, root);
 
     }
 
-    public Template<Model, Model> add(String templateId) {
-        return add(templateId, (String) null, modelType);
+    public ViewBuilder(Class<Model> modelType, Class<OriginalModel> originalModelType, ViewBuilder<OriginalModel, OriginalModel> parent) {
+        this.modelType = modelType;
+        this.originalModelType = originalModelType;
+        this.parent = null;
+        this.templates = parent.getTemplates();
+        this.root = (Template<Model, ?>) parent.getRoot();
     }
 
-    public <T> Template<T, Model> add(String templateId, Class<T> newModel) {
-        return add(templateId, (String) null, newModel);
+    public Template<Model, OriginalModel> add(String templateId) {
+        return add(templateId, root, modelType);
+    }
+
+    public <T> Template<T, OriginalModel> add(String templateId, Class<T> newModel) {
+        return add(templateId, root, newModel);
     }
 
 
-    public Template<Model, Model> add(String templateId, String parentId) {
+    public Template<Model, OriginalModel> add(String templateId, String parentId) {
         return add(templateId, parentId, modelType);
     }
 
-    public <T> Template<T, Model> add(String templateId, String parentId, Class<T> newModel) {
-        final Template<T, Model> template = new Template<>(this, newModel, modelType, templateId);
+    public <T> Template<T, OriginalModel> add(String templateId, String parentId, Class<T> newModel) {
+        return add(templateId, templates.get(parentId), newModel);
+    }
+
+    public Template<Model, OriginalModel> add(String templateId, Template parent) {
+        return add(templateId, parent, modelType);
+    }
+
+    public <T> Template<T, OriginalModel> add(String templateId, Template parent, Class<T> newModel) {
+        if (parent == null) {
+            throw new IllegalArgumentException("No parent found for template id:" + templateId);
+        }
+
+        final Template<T, OriginalModel> template = new Template<>(this, newModel, originalModelType, templateId);
         templates.put(templateId, template);
 
-        final Template parent = templates.get(parentId);
-        if (parent == null) {
-            throw new IllegalArgumentException("No parent found with id:" + parentId);
-        }
         parent.add(template);
         return template;
     }
 
-    public Template<Model, Model> add(String templateId, Template parent) {
-        return add(templateId, parent.getTemplateId());
-    }
 
-
-    public <T> Template<T, Model> add(String templateId, Template parent, Class<T> newModel) {
-        return add(templateId, parent.getTemplateId(), newModel);
-    }
-
-
-    public Component build(Model model) {
-        final Component cmp = new Component();
-        subComponents(templates.get(null), model, cmp);
+    public Component<Model> build(Model model) {
+        final Component cmp = new Component<Model>().withModel(model);
+        buildTemplate(root, model, cmp);
         return cmp;
     }
 
 
-    private void subComponents(Template template, Model model, Component cmp) {
-        final List<Template> templates = template.getTemplates();
-        templates.forEach(t -> {
-            final Optional<List<Component>> toComponents = t.toComponents(model);
-            toComponents
-                    .ifPresent(components -> components.forEach(component -> cmp.add(component)));
-        });
+    private void buildTemplate(Template template, Model model, Component<?> father) {
+        Optional<List<Component>> thisTemplateComponents = template.toComponents(model, father);
+        thisTemplateComponents.ifPresent(components -> components.forEach(component -> {
+            father.add(component);
+
+            template.getTemplates().forEach(t -> {
+                System.out.println("###father component: " + component);
+                buildTemplate((Template) t, model, component);
+            });
+        }));
     }
 
+    protected Map<String, Template> getTemplates() {
+        return templates;
+    }
 
+    public ViewBuilder<OriginalModel, OriginalModel> getParent() {
+        return parent;
+    }
+
+    public Template<Model,?> getRoot() {
+        return root;
+    }
 }

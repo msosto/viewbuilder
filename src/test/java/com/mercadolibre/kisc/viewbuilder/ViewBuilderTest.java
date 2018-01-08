@@ -1,5 +1,6 @@
 package com.mercadolibre.kisc.viewbuilder;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mercadolibre.example.ExampleModel;
@@ -7,6 +8,7 @@ import com.mercadolibre.example.ExampleModelItem;
 import com.mercadolibre.example.OtherModel;
 import com.mercadolibre.example.contract.AutocompleteInput;
 import com.mercadolibre.example.contract.Label;
+import com.mercadolibre.example.contract.Picture;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -25,17 +27,18 @@ public class ViewBuilderTest {
     public void build() throws Exception {
 
 
-        ViewBuilder<ExampleModel> viewBuilder = new ViewBuilder<>(ExampleModel.class)
-                .add("page").uiType("desktop_page").done()
-                .add("search", "page").mapper(m -> new AutocompleteInput()
+        ViewBuilder viewBuilder = new ViewBuilder<ExampleModel, ExampleModel>(ExampleModel.class)
+                .add("page").id("page").uiType("desktop_page").root()
+                .add("search", "page").id("search").mapper(m -> new AutocompleteInput()
                         .withPlaceholder(m.getSearchPlaceholder())
                         .withIcon(m.getSearchIcon())
-                        .withFormName("q")).id("search").done()
-                .add("grid", "page").uiType("desktop_grid").done()
-                .add("row", "grid", ExampleModelItem.class).spread(ExampleModel::getItems).newModel()
-                .add("title", "row").mapper(m -> new Label().withText(m.getTitle())).done()
-                .add("footer", "grid").id("pages").done()
-                .add("footer_page", "page", OtherModel.class).transform(ExampleModel::getOther).done();
+                        .withFormName("q")).id("search").root()
+                .add("grid", "page").id("grid").uiType("desktop_grid").root()
+                .add("row", "grid", ExampleModelItem.class).id("row").spread(ExampleModel::getItems).branch()
+                .add("picture", "row").id("picture").mapper(m -> m.getPictures().stream().findFirst().orElse(null)).branch()
+                .add("title", "row").id("title").mapper(m -> new Label().withText(m.getTitle())).root()
+                .add("footer", "grid").id("footer").root()
+                .add("footer_page", "page", OtherModel.class).id("page_footer").transform(ExampleModel::getOther).root();
 
         final ExampleModel model = getModel();
 
@@ -102,12 +105,13 @@ public class ViewBuilderTest {
 
     private ExampleModel getModel() {
         List<ExampleModelItem> items = new ArrayList<>();
-        items.add(new ExampleModelItem().withTitle("item 1"));
-        items.add(new ExampleModelItem().withTitle("item 2"));
+        items.add(new ExampleModelItem().withTitle("item 1").withPictures(Lists.newArrayList(new Picture().withUrl("picture1_url"))));
+        items.add(new ExampleModelItem().withTitle("item 2").withPictures(Lists.newArrayList(new Picture().withUrl("picture2_url"))));
         return new ExampleModel()
                 .withSearchPlaceholder("soy un placeholder")
                 .withSearchIcon("lupita")
-                .withItems(items);
+                .withItems(items)
+                .withOther(new OtherModel().withTermsAndCondition("terminos y condiciones"));
     }
 
 }

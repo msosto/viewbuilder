@@ -14,7 +14,7 @@ import java.util.function.Function;
  */
 public class Template<Model, OriginalModel> {
 
-    final ViewBuilder<OriginalModel> viewBuilder;
+    final ViewBuilder<?, OriginalModel> viewBuilder;
 
     final Class<Model> modelType;
 
@@ -39,7 +39,7 @@ public class Template<Model, OriginalModel> {
     Optional<Function<OriginalModel, List<Model>>> spread;
 
 
-    public Template(ViewBuilder<OriginalModel> viewBuilder, Class<Model> modelType, Class<OriginalModel> originalModelType, String templateId) {
+    public Template(ViewBuilder<?, OriginalModel> viewBuilder, Class<Model> modelType, Class<OriginalModel> originalModelType, String templateId) {
         this.viewBuilder = viewBuilder;
         this.modelType = modelType;
         this.originalModelType = originalModelType;
@@ -104,7 +104,7 @@ public class Template<Model, OriginalModel> {
         return this;
     }
 
-    public Optional<List<Component>> toComponents(final OriginalModel model) {
+    public Optional<List<Component>> toComponents(final OriginalModel model, Component<Model> father) {
         final Boolean shouldApply = apply
                 .map(f -> f.apply(model))
                 .orElse(true);
@@ -112,7 +112,8 @@ public class Template<Model, OriginalModel> {
         if (shouldApply) {
             List<Component> components = new ArrayList<>();
 
-            List<Model> models = getModels(model);
+            List<Model> models = getModels(model, father);
+            System.out.println("---template: " + templateId + "| father: " + father +" | models: " + models);
 
             models.forEach(newModel -> {
                 final String cmpId = id
@@ -122,10 +123,11 @@ public class Template<Model, OriginalModel> {
                 final ViewContract viewContract = mapper.map(f -> f.apply(newModel)).orElse(null);
 
                 components.add(
-                        new Component()
+                        new Component<Model>()
                                 .withId(cmpId)
                                 .withData(viewContract)
                                 .withUiType(uiType.orElse(null))
+                                .withModel(newModel)
                 );
             });
 
@@ -134,10 +136,18 @@ public class Template<Model, OriginalModel> {
         return Optional.empty();
     }
 
-    private List<Model> getModels(OriginalModel model) {
-        return spread.map(f -> f.apply(model))
-                .orElseGet(() -> transform.map(f -> toList(f.apply(model)))
-                        .orElseGet(() -> toList((Model) model)));
+    private List<Model> getModels(OriginalModel model, Component<Model> father) {
+        System.out.println( originalModelType + " == " + model.getClass());
+
+        final Model fatherModel = Optional.ofNullable(father).map(Component::getModel).orElse(null);
+
+        System.out.println( "father.getModel():" + fatherModel + " | model:" + model);
+
+        final Object m = !model.getClass().equals(fatherModel) ? fatherModel : model;
+
+        return spread.map(f -> f.apply((OriginalModel) m))
+                .orElseGet(() -> transform.map(f -> toList(f.apply((OriginalModel) m)))
+                        .orElseGet(() -> toList((Model) m)));
 
     }
 
@@ -147,14 +157,29 @@ public class Template<Model, OriginalModel> {
         return models;
     }
 
-    public ViewBuilder<OriginalModel> done() {
-        if (!modelType.equals(originalModelType) && !transform.isPresent() && !spread.isPresent()) {
-            throw new RuntimeException("A transformer is required to map " + originalModelType + " into " + modelType);
-        }
+    public ViewBuilder<OriginalModel, OriginalModel> root() {
+        templateValidations();
+        final ViewBuilder<OriginalModel, OriginalModel> parent = viewBuilder.getParent();
+        return parent != null ? parent : (ViewBuilder<OriginalModel, OriginalModel>) viewBuilder;
+    }
+
+
+    public ViewBuilder<?, OriginalModel> keep() {
         return viewBuilder;
     }
 
-    public ViewBuilder<Model> newModel() {
-        return new ViewBuilder<>(modelType, viewBuilder);
+    public ViewBuilder<Model, OriginalModel> branch() {
+        templateValidations();
+        return new ViewBuilder<>(modelType, originalModelType, (ViewBuilder<OriginalModel, OriginalModel>) viewBuilder);
     }
+
+    private void templateValidations() {
+        /*
+        if (!modelType.equals(originalModelType) && !transform.isPresent() && !spread.isPresent()) {
+            throw new RuntimeException("A transformer is required to map " + originalModelType + " into " + modelType);
+        }
+         */
+    }
+
+
 }

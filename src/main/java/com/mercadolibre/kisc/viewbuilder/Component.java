@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by abertolo on 22/12/17.
  */
-public class Component {
+public class Component<Model> {
 
     String id;
 
@@ -15,6 +15,10 @@ public class Component {
     ViewContract data;
 
     List<Component> components;
+
+    Component father;
+
+    transient Model model;
 
     public String getId() {
         return id;
@@ -47,6 +51,24 @@ public class Component {
         return components;
     }
 
+    public Model getModel() {
+        return model;
+    }
+
+    public Component withModel(Model model) {
+        this.model = model;
+        return this;
+    }
+
+    public Component getFather() {
+        return father;
+    }
+
+    public Component withFather(Component father) {
+        this.father = father;
+        return this;
+    }
+
     public void add(Component cmp) {
         if (components == null) {
             components = new ArrayList<>();
@@ -54,4 +76,11 @@ public class Component {
         components.add(cmp);
     }
 
+    @Override
+    public String toString() {
+        return "Component{" +
+                "id='" + id + '\'' +
+                ", uiType='" + uiType + '\'' +
+                '}';
+    }
 }

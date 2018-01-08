@@ -20,7 +20,9 @@ repositories {
 }
 
 dependencies {
-    compile 'com.google.code.gson:gson:2.8.0'
+    testCompile 'com.google.code.gson:gson:2.8.0'
+    testCompile 'com.google.guava:guava:23.6-jre'
+
     testCompile "junit:junit:4.12"
     testCompile 'org.mockito:mockito-core:2.3.5'
 }
