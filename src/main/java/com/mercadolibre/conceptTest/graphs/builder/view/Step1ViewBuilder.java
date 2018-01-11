@@ -1,6 +1,6 @@
 package com.mercadolibre.conceptTest.graphs.builder.view;
 
-import com.mercadolibre.conceptTest.graphs.builder.view.contracts.FinderInput;
+import com.mercadolibre.conceptTest.graphs.builder.view.contracts.finder.FinderViewContract;
 import com.mercadolibre.conceptTest.graphs.model.FinderModel;
 import com.mercadolibre.conceptTest.graphs.model.Step1Model;
 import com.mercadolibre.conceptTest.graphs.model.TaskModel;
@@ -33,7 +33,7 @@ public class Step1ViewBuilder {
 
     private Template<FinderModel, FinderModel> addFinderTaks(ViewBuilder<FinderModel, FinderModel> stepView) {
         return stepView.add("finder", "task").uiType("finder").id("finder_ID")
-                .mapper(m -> new FinderInput().withValue(m.getTitle()));
+                .mapper(m -> new FinderViewContract().withValue(m.getTitle()));
     }
 
     private void addFinderTaskStep1(ViewBuilder<Step1Model, Step1Model> stepView) {
