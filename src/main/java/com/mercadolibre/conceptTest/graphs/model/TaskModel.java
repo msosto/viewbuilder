@@ -5,4 +5,20 @@ package com.mercadolibre.conceptTest.graphs.model;
  * Created by msosto on 1/10/18.
  */
 public class TaskModel {
+
+    private HeaderModel headerModel;
+    private FooterModel footerModel;
+
+    public TaskModel(){
+        this.headerModel = new HeaderModel();
+        this.footerModel = new FooterModel();
+    }
+
+    public HeaderModel getHeaderModel() {
+        return headerModel;
+    }
+
+    public FooterModel getFooterModel() {
+        return footerModel;
+    }
 }
