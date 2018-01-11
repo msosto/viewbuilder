@@ -1,4 +1,4 @@
-package com.mercadolibre.conceptTest.graphs.builder.view.contracts;
+package com.mercadolibre.conceptTest.graphs.builder.view.contracts.attribute;
 
 import com.mercadolibre.flux.flow.graph.navigation.DataProxy;
 

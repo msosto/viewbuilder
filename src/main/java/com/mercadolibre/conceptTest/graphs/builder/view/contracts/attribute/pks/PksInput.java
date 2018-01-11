@@ -1,5 +1,6 @@
-package com.mercadolibre.conceptTest.graphs.builder.view.contracts;
+package com.mercadolibre.conceptTest.graphs.builder.view.contracts.attribute.pks;
 
+import com.mercadolibre.conceptTest.graphs.builder.view.contracts.attribute.AttributeInput;
 import com.mercadolibre.flux.flow.graph.navigation.DataProxy;
 import com.mercadolibre.kisc.viewbuilder.ViewContract;
 
