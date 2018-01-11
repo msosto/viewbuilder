@@ -9,13 +9,13 @@ import java.util.List;
  */
 public class CategoryBreadcrumbViewContract implements ViewContract {
 
-    private List<Category> categories;
+    private List<BreadcrumbCategory> categories;
 
-    public List<Category> getCategories() {
+    public List<BreadcrumbCategory> getCategories() {
         return categories;
     }
 
-    public CategoryBreadcrumbViewContract withCategories(List<Category> categories) {
+    public CategoryBreadcrumbViewContract withCategories(List<BreadcrumbCategory> categories) {
         this.categories = categories;
         return this;
     }

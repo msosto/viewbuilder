@@ -8,8 +8,16 @@ import com.mercadolibre.flux.flow.graph.navigation.Context;
  */
 public class Step1ModelBuilder {
 
+    private CategorySelectionModelBuilder categorySelectionModelBuilder;
+
+    public Step1ModelBuilder() {
+        this.categorySelectionModelBuilder = new CategorySelectionModelBuilder();
+    }
+
     public Step1Model getModel(Context context) {
-        return new Step1Model(); // todo
+        Step1Model step1Model = new Step1Model()
+                .withCategorySelectionModel(categorySelectionModelBuilder.build(context));
+        return step1Model;
     }
 
 }

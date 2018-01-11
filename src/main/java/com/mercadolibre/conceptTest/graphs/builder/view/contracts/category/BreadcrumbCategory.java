@@ -3,7 +3,7 @@ package com.mercadolibre.conceptTest.graphs.builder.view.contracts.category;
 /**
  * Created by mlizarraga on 11/1/18
  */
-public class Category {
+public class BreadcrumbCategory {
 
     private String id;
     private String name;
@@ -13,7 +13,7 @@ public class Category {
         return id;
     }
 
-    public Category withId(String id) {
+    public BreadcrumbCategory withId(String id) {
         this.id = id;
         return this;
     }
@@ -22,7 +22,7 @@ public class Category {
         return name;
     }
 
-    public Category withName(String name) {
+    public BreadcrumbCategory withName(String name) {
         this.name = name;
         return this;
     }
@@ -31,7 +31,7 @@ public class Category {
         return output;
     }
 
-    public Category withOutput(String output) {
+    public BreadcrumbCategory withOutput(String output) {
         this.output = output;
         return this;
     }

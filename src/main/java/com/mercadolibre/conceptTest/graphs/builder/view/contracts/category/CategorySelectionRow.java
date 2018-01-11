@@ -1,6 +1,7 @@
 package com.mercadolibre.conceptTest.graphs.builder.view.contracts.category;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mlizarraga on 11/1/18
@@ -8,7 +9,7 @@ import java.util.List;
 public class CategorySelectionRow {
 
     private String name;
-    private String output;
+    private Map<String, Object> output;
     private String customOutput;
     private List<String> tags;
 
@@ -21,11 +22,11 @@ public class CategorySelectionRow {
         return this;
     }
 
-    public String getOutput() {
+    public Map<String, Object> getOutput() {
         return output;
     }
 
-    public CategorySelectionRow withOutput(String output) {
+    public CategorySelectionRow withOutput(Map<String, Object> output) {
         this.output = output;
         return this;
     }
