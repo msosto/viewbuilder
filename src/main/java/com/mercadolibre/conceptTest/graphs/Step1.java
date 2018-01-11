@@ -106,6 +106,7 @@ public class Step1 extends Template {
         if (hasCatalogAttributes(context)) {
 
         }
+    }
 
 
     private Boolean isLeaf(Context context) {
@@ -149,7 +150,7 @@ public class Step1 extends Template {
                         ctx.addConfig(DATA_VALUE, selection.getCatalogProductId());
                     }));
 
-                    execAfter.add(AchieveLoader.class,dependencies,(context, execution) -> {
+                    execAfter.add(AchieveLoader.class, dependencies, (context, execution) -> {
                         new CatalogUtils().getSellCatalogSelection(context, new ListCategoryAttributeUtils().getCategoryAttributesClient())
                                 .map(s -> s.getCategoryId()).ifPresent(categoryId -> {
                             execution.add(GetCategory.class,    // TODO: ¿ agregar checkpoint ?
@@ -205,3 +206,4 @@ public class Step1 extends Template {
 
 
     }
+}

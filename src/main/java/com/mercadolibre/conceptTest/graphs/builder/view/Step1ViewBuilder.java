@@ -27,7 +27,6 @@ public class Step1ViewBuilder {
     private <MODEL_TASK extends TaskModel> void addTaskView(ViewBuilder<Step1Model, Step1Model> stepView, Class<MODEL_TASK> ModelClass, Function<Step1Model, MODEL_TASK> transformer, Function<ViewBuilder, Template> bodyBuilder) {
         final ViewBuilder<MODEL_TASK, Step1Model> branch = stepView.add("task", ModelClass).transform(transformer).id("task").uiType("task")
                 .branch().add("header", "task").id("header").uiType("header").branch();
-        stepView = bodyBuilder.apply(stepView.);
         stepView.add("footer", "task").id("footer").uiType("footer").root();
     }
 
