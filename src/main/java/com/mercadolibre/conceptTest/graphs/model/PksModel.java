@@ -10,6 +10,16 @@ import java.util.List;
 public class PksModel {
 
     List<DataProxy> pksAttributes;
+    String decimalSeparator;
+
+    public String getDecimalSeparator() {
+        return decimalSeparator;
+    }
+
+    public PksModel setDecimalSeparator(String decimalSeparator) {
+        this.decimalSeparator = decimalSeparator;
+        return this;
+    }
 
     public List<DataProxy> getPksAttributes() {
         return pksAttributes;
