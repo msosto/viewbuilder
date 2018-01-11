@@ -25,6 +25,7 @@ import com.mercadolibre.util.providers.CatalogAttributeProvider;
 import com.mercadolibre.util.providers.CategoryProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +49,9 @@ public class Step1 extends Template {
     public static final String CATALOG_PRODUCT_INPUT = "catalog_product_input";
     public static final String CATEGORY_INPUT = "category_input";
     public static final String CATALOG_ATTRIBUTES = "catalog_attributes";
-    final Checkpoint AFTER_INITIAL_CATEGORY = Checkpoint.withId("after_get_category");
+
+    private final Checkpoint AFTER_INITIAL_CATEGORY = Checkpoint.withId("after_get_category");
+    private final Checkpoint AFTER_PRODUCTIZATION = Checkpoint.withId("after_productization");
     private CategoryUtils categoryUtils;
 
     public Step1() {
@@ -89,9 +92,8 @@ public class Step1 extends Template {
                 .setAction(AchieveLoader.class)
                 .addDependence(AFTER_INITIAL_CATEGORY)
                 .setBefore((context, execution) -> {
-                    List<ActionDependency> dependencies = new ArrayList<>();
                     if (isLeaf(context)) {
-                        addProductization(context, execution);
+                        addProductizationAchieves(context, execution);
                     } else {
                         addGetSellCatalogSelectionAchieve(execution);
                     }
@@ -102,10 +104,26 @@ public class Step1 extends Template {
 
     }
 
-    private void addProductization(Context context, ActionExecution execution) {
-        if (hasCatalogAttributes(context)) {
+    private void addProductizationAchieves(Context context, ActionExecution execution) {
 
+        List<ActionDependency> dependencies = new ArrayList<>();
+        if (hasCatalogAttributes(context)) {
+            dependencies.add(tryToProductize(execution));
         }
+        List<ActionDependency> checkPointDependencies = Arrays.asList(
+                addGetCategory(execution, dependencies),
+                addGetCategoryAttributes(execution, dependencies)
+        );
+        execution.add(
+                AchieveLoader.class,
+                checkPointDependencies,
+                (ctx, e) -> e.checkpointReached(AFTER_PRODUCTIZATION)
+        );
+    }
+
+    private Achieve tryToProductize(ActionExecution execution) {
+        return null;
+    }
 
 
     private Boolean isLeaf(Context context) {
@@ -149,7 +167,7 @@ public class Step1 extends Template {
                         ctx.addConfig(DATA_VALUE, selection.getCatalogProductId());
                     }));
 
-                    execAfter.add(AchieveLoader.class,dependencies,(context, execution) -> {
+                    execAfter.add(AchieveLoader.class, dependencies, (context, execution) -> {
                         new CatalogUtils().getSellCatalogSelection(context, new ListCategoryAttributeUtils().getCategoryAttributesClient())
                                 .map(s -> s.getCategoryId()).ifPresent(categoryId -> {
                             execution.add(GetCategory.class,    // TODO: ¿ agregar checkpoint ?
@@ -161,6 +179,20 @@ public class Step1 extends Template {
 
         return getSellCatalogSelection;
     }
+
+
+    protected Achieve addGetCategory(ActionExecution execution, List<ActionDependency> dependencies) {
+        return execution.add(GetCategory.class,dependencies,(ctx, exec) -> {
+            ctx.addConfig(GetCategory.CATEGORY_ID, CategoryProvider.DATA_ITEM.getId(ctx));
+        });
+    }
+
+    protected Achieve addGetCategoryAttributes(ActionExecution execute,List<ActionDependency> dependencies) {
+        return execute.add(GetCategoryAttribute.class,dependencies,(context, execution) -> {
+            new ListCategoryAttributeUtils().setGetCategoryAttributesConfig(CategoryProvider.DATA_ITEM, context);
+        });
+    }
+
 
 
     public class ListCategoryAttributeUtils {
@@ -205,3 +237,4 @@ public class Step1 extends Template {
 
 
     }
+}
