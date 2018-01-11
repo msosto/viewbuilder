@@ -1,6 +1,7 @@
 package com.mercadolibre.conceptTest.graphs.builder.model;
 
 import com.mercadolibre.conceptTest.graphs.builder.model.attribute.pks.PksModelBuilder;
+import com.mercadolibre.conceptTest.graphs.builder.model.category.CategorySelectionModelBuilder;
 import com.mercadolibre.conceptTest.graphs.builder.model.finder.FinderModelBuilder;
 import com.mercadolibre.conceptTest.graphs.model.Step1Model;
 import com.mercadolibre.flux.flow.graph.navigation.Context;

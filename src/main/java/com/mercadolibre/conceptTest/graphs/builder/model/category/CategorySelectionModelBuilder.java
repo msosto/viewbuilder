@@ -1,4 +1,4 @@
-package com.mercadolibre.conceptTest.graphs.builder.model;
+package com.mercadolibre.conceptTest.graphs.builder.model.category;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
