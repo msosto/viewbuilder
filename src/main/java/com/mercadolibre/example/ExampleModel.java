@@ -6,6 +6,7 @@ import java.util.List;
  * Created by abertolo on 03/01/18.
  */
 public class ExampleModel {
+
     String searchPlaceholder;
     String searchIcon;
     Integer active;

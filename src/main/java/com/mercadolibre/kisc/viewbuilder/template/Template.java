@@ -1,7 +1,6 @@
 package com.mercadolibre.kisc.viewbuilder.template;
 
 import com.mercadolibre.kisc.viewbuilder.Component;
-import com.mercadolibre.kisc.viewbuilder.ViewBuilder;
 import com.mercadolibre.kisc.viewbuilder.ViewContract;
 
 import java.util.ArrayList;
@@ -14,13 +13,11 @@ import java.util.function.Function;
  */
 public class Template<Model, OriginalModel> {
 
-    final ViewBuilder<?, OriginalModel> viewBuilder;
+    final Template<OriginalModel, ?> parent;
 
     final Class<Model> modelType;
 
     final Class<OriginalModel> originalModelType;
-
-    final String templateId;
 
     final List<Template> templates;
 
@@ -39,11 +36,10 @@ public class Template<Model, OriginalModel> {
     Optional<Function<OriginalModel, List<Model>>> spread;
 
 
-    public Template(ViewBuilder<?, OriginalModel> viewBuilder, Class<Model> modelType, Class<OriginalModel> originalModelType, String templateId) {
-        this.viewBuilder = viewBuilder;
+    protected Template(Template<OriginalModel, ?> parent, Class<Model> modelType, Class<OriginalModel> originalModelType) {
+        this.parent = parent;
         this.modelType = modelType;
         this.originalModelType = originalModelType;
-        this.templateId = templateId;
 
         templates = new ArrayList<>();
         idBuilder = Optional.empty();
@@ -55,8 +51,44 @@ public class Template<Model, OriginalModel> {
         spread = Optional.empty();
     }
 
-    public String getTemplateId() {
-        return templateId;
+    public static <T> Template<T, T> create(Class<T> clazz) {
+        return new Template<>(null, clazz, clazz);
+    }
+
+    public static <M, O> Template<M, O> create(Template parent, Class<M> mClazz, Class<O> oClazz) {
+        return new Template<>(parent, mClazz, oClazz);
+    }
+
+    public Template<OriginalModel, OriginalModel> addSibling() {
+        return parent.addChild();
+    }
+
+    public <NewModel> Template<NewModel, OriginalModel> addSibling(Class<NewModel> clazz, Function<OriginalModel, NewModel> transformer) {
+        return parent.addChild(clazz, transformer);
+    }
+
+    public Template<Model, Model> addChild() {
+        templates.add(create())
+    }
+
+    public <NewModel> Template<NewModel, Model> addChild(Class<NewModel> clazz, Function<Model, NewModel> transformer) {
+        return new Template<NewModel, Model>()
+    }
+
+    public <NewModel> Template<NewModel, Model> addChildren(Class<NewModel> clazz, Function<Model, List<NewModel>> transformer) {
+
+    }
+
+    public Template<OriginalModel, OriginalModel> parent() {
+        return (Template<OriginalModel, OriginalModel>) parent;
+    }
+
+    public <T> Template<OriginalModel, T> parent(Class<T> tClass) {
+        final Class<?> parentOriginalModelType = parent.getOriginalModelType();
+        if (!parentOriginalModelType.equals(tClass)) {
+            throw new RuntimeException("The class " + tClass + " is not compatible with the parent original type " + parentOriginalModelType);
+        }
+        return (Template<OriginalModel, T>) parent;
     }
 
     public List<Template> getTemplates() {
@@ -113,7 +145,7 @@ public class Template<Model, OriginalModel> {
             List<Component> components = new ArrayList<>();
 
             List<Model> models = getModels(model, father);
-            System.out.println("---template: " + templateId + "| father: " + father +" | models: " + models);
+            System.out.println("father: " + father + " | models: " + models);
 
             models.forEach(newModel -> {
                 final String cmpId = id
@@ -137,11 +169,11 @@ public class Template<Model, OriginalModel> {
     }
 
     private List<Model> getModels(OriginalModel model, Component<Model> father) {
-        System.out.println( originalModelType + " == " + model.getClass());
+        System.out.println(originalModelType + " == " + model.getClass());
 
         final Model fatherModel = Optional.ofNullable(father).map(Component::getModel).orElse(null);
 
-        System.out.println( "father.getModel():" + fatherModel + " | model:" + model);
+        System.out.println("father.getModel():" + fatherModel + " | model:" + model);
 
         final Object m = !model.getClass().equals(fatherModel) ? fatherModel : model;
 
@@ -157,29 +189,8 @@ public class Template<Model, OriginalModel> {
         return models;
     }
 
-    public ViewBuilder<OriginalModel, OriginalModel> root() {
-        templateValidations();
-        final ViewBuilder<OriginalModel, OriginalModel> parent = viewBuilder.getParent();
-        return parent != null ? parent : (ViewBuilder<OriginalModel, OriginalModel>) viewBuilder;
+
+    public Class<OriginalModel> getOriginalModelType() {
+        return originalModelType;
     }
-
-
-    public ViewBuilder<?, OriginalModel> keep() {
-        return viewBuilder;
-    }
-
-    public ViewBuilder<Model, OriginalModel> branch() {
-        templateValidations();
-        return new ViewBuilder<>(modelType, originalModelType, (ViewBuilder<OriginalModel, OriginalModel>) viewBuilder);
-    }
-
-    private void templateValidations() {
-        /*
-        if (!modelType.equals(originalModelType) && !transform.isPresent() && !spread.isPresent()) {
-            throw new RuntimeException("A transformer is required to map " + originalModelType + " into " + modelType);
-        }
-         */
-    }
-
-
 }
