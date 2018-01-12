@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by msosto on 1/11/18.
  */
-public class PksModel {
+public class PksModel extends TaskModel {
 
     List<DataProxy> pksAttributes;
     String decimalSeparator;
