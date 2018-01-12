@@ -11,6 +11,7 @@ public class InputComponent {
     private Boolean required;
     private Boolean disabled;
     private List<Map<String, Object>> validationErrors;
+    private String output;
 
     public Boolean getRequired() {
         return required;
@@ -41,6 +42,15 @@ public class InputComponent {
 
     public InputComponent clearValidationErrors() {
         this.validationErrors = null;
+        return this;
+    }
+
+    public String getOutput() {
+        return output;
+    }
+
+    public InputComponent withOutput(String output) {
+        this.output = output;
         return this;
     }
 }
