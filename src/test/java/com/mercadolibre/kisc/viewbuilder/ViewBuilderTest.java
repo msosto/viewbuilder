@@ -32,16 +32,17 @@ public class ViewBuilderTest {
                 .add("search", "page").id("search").mapper(m -> new AutocompleteInput()
                         .withPlaceholder(m.getSearchPlaceholder())
                         .withIcon(m.getSearchIcon())
-                        .withFormName("q")).id("search").root()
+                        .withFormName("q")).root()
                 .add("grid", "page").id("grid").uiType("desktop_grid").root()
                 .add("row", "grid", ExampleModelItem.class).id("row").spread(ExampleModel::getItems).branch()
                 .add("picture", "row").id("picture").mapper(m -> m.getPictures().stream().findFirst().orElse(null)).branch()
                 .add("title", "row").id("title").mapper(m -> new Label().withText(m.getTitle())).root()
                 .add("footer", "grid").id("footer").root()
-                .add("footer_page", "page", OtherModel.class).id("page_footer").transform(ExampleModel::getOther).root();
+                .add("footer_page", "page", OtherModel.class).id("page_footer").transform(ExampleModel::getOther)
+                    .mapper(otherModel -> otherModel).root();
+
 
         final ExampleModel model = getModel();
-
         final Component view = viewBuilder.build(model);
 
         assertNotNull(view);
