@@ -1,6 +1,8 @@
 package com.mercadolibre.conceptTest.graphs.builder.model.attribute.pks;
 
 import com.mercadolibre.conceptTest.graphs.builder.model.attribute.AttributeModelBuilder;
+import com.mercadolibre.conceptTest.graphs.model.FooterModel;
+import com.mercadolibre.conceptTest.graphs.model.HeaderModel;
 import com.mercadolibre.conceptTest.graphs.model.PksModel;
 import com.mercadolibre.dto.category.CategoryAttribute;
 import com.mercadolibre.dto.category.Vertical;
@@ -15,6 +17,9 @@ import java.util.List;
  */
 public class PksModelBuilder extends AttributeModelBuilder {
 
+    public static final String HEADER_TITLE = "PKS_HEADER_TITLE";
+    public static final String FOOTER_BTN_TEXT = "PKS_FOOTER_BUTTON_TEXT";
+
 
     public PksModel build(Context context) {
         PksModel model = new PksModel();
@@ -26,6 +31,8 @@ public class PksModelBuilder extends AttributeModelBuilder {
 
         model.setPksAttributes(modelPksAttributes);
         model.setDecimalSeparator(obtainDecimalSeparator(context));
+        addHeader(model.getHeaderModel());
+        addFooter(model.getFooterModel());
 
         return model;
     }
@@ -38,4 +45,15 @@ public class PksModelBuilder extends AttributeModelBuilder {
         final List<CategoryAttribute> pkAttributes = categoryAttributeUtils.getPKsCategoryAttributesFromCategory(context, categoryProvider);
         return categoryAttributeService.sortAttributes(pkAttributes);
     }
+
+    private void addHeader(HeaderModel headerModel) {
+        headerModel.withTitle(HEADER_TITLE);
+
+    }
+
+    private void addFooter(FooterModel footerModel) {
+        footerModel.withButtonText(FOOTER_BTN_TEXT);
+        footerModel.withButtonConnection("continue");
+    }
+
 }
