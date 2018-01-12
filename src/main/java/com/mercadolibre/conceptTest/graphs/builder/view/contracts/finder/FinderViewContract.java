@@ -1,11 +1,11 @@
 package com.mercadolibre.conceptTest.graphs.builder.view.contracts.finder;
 
-import com.mercadolibre.kisc.viewbuilder.ViewContract;
+import com.mercadolibre.conceptTest.graphs.builder.view.InputComponent;
 
 /**
  * Created by msosto on 1/10/18.
  */
-public class FinderViewContract implements ViewContract {
+public class FinderViewContract extends InputComponent {
 
     String value;
 
