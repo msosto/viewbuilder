@@ -1,7 +1,7 @@
 package com.mercadolibre.kisc.viewbuilder.template;
 
 import com.mercadolibre.kisc.viewbuilder.Component;
-import com.mercadolibre.kisc.viewbuilder.ViewContract;
+import com.mercadolibre.kisc.viewbuilder.Object;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +29,9 @@ public class Template<Model, OriginalModel> {
 
     Optional<Function<OriginalModel, Boolean>> apply;
 
-    Optional<Function<Model, ViewContract>> mapper;
+    Optional<Function<Model, Object>> dataBuilder;
 
-    Optional<Function<OriginalModel, Model>> transform;
+    Optional<Function<OriginalModel, Model>> modelSupplier;
 
     Optional<Function<OriginalModel, List<Model>>> spread;
 
@@ -46,8 +46,8 @@ public class Template<Model, OriginalModel> {
         id = Optional.empty();
         uiType = Optional.empty();
         apply = Optional.empty();
-        mapper = Optional.empty();
-        transform = Optional.empty();
+        dataBuilder = Optional.empty();
+        modelSupplier = Optional.empty();
         spread = Optional.empty();
     }
 
@@ -68,15 +68,30 @@ public class Template<Model, OriginalModel> {
     }
 
     public Template<Model, Model> addChild() {
-        templates.add(create())
+        final Template<Model, Model> t = create(this, modelType, modelType);
+        templates.add(t);
+        return t;
     }
 
     public <NewModel> Template<NewModel, Model> addChild(Class<NewModel> clazz, Function<Model, NewModel> transformer) {
-        return new Template<NewModel, Model>()
+        final Template<NewModel, Model> t = create(this, clazz, modelType);
+        t.modelSupplier(transformer);
+        templates.add(t);
+        return t;
     }
 
-    public <NewModel> Template<NewModel, Model> addChildren(Class<NewModel> clazz, Function<Model, List<NewModel>> transformer) {
+    public <NewModel> Template<NewModel, Model> addChild(Template<NewModel, Model> t){
+        t.setParent(this);
+        templates.add(t);
+        return t;
+    }
 
+
+    public <NewModel> Template<NewModel, Model> addChildren(Class<NewModel> clazz, Function<Model, List<NewModel>> transformer) {
+        final Template<NewModel, Model> t = create(this, clazz, modelType);
+        t.spread(transformer);
+        templates.add(t);
+        return t;
     }
 
     public Template<OriginalModel, OriginalModel> parent() {
@@ -91,13 +106,8 @@ public class Template<Model, OriginalModel> {
         return (Template<OriginalModel, T>) parent;
     }
 
-    public List<Template> getTemplates() {
+    public List<Template> getChildren() {
         return templates;
-    }
-
-    public Template<Model, OriginalModel> add(Template template) {
-        templates.add(template);
-        return this;
     }
 
 
@@ -116,8 +126,8 @@ public class Template<Model, OriginalModel> {
         return this;
     }
 
-    public Template<Model, OriginalModel> mapper(Function<Model, ViewContract> mapper) {
-        this.mapper = Optional.ofNullable(mapper);
+    public Template<Model, OriginalModel> dataBuilder(Function<Model, Object> mapper) {
+        this.dataBuilder = Optional.ofNullable(mapper);
         return this;
     }
 
@@ -126,8 +136,8 @@ public class Template<Model, OriginalModel> {
         return this;
     }
 
-    public Template<Model, OriginalModel> transform(Function<OriginalModel, Model> transform) {
-        this.transform = Optional.ofNullable(transform);
+    public Template<Model, OriginalModel> modelSupplier(Function<OriginalModel, Model> transform) {
+        this.modelSupplier = Optional.ofNullable(transform);
         return this;
     }
 
@@ -152,7 +162,7 @@ public class Template<Model, OriginalModel> {
                         .orElseGet(() -> idBuilder.map(f -> f.apply(newModel))
                                 .orElse(null));
 
-                final ViewContract viewContract = mapper.map(f -> f.apply(newModel)).orElse(null);
+                final Object viewContract = dataBuilder.map(f -> f.apply(newModel)).orElse(null);
 
                 components.add(
                         new Component<Model>()
@@ -175,10 +185,10 @@ public class Template<Model, OriginalModel> {
 
         System.out.println("father.getModel():" + fatherModel + " | model:" + model);
 
-        final Object m = !model.getClass().equals(fatherModel) ? fatherModel : model;
+        final java.lang.Object m = !model.getClass().equals(fatherModel) ? fatherModel : model;
 
         return spread.map(f -> f.apply((OriginalModel) m))
-                .orElseGet(() -> transform.map(f -> toList(f.apply((OriginalModel) m)))
+                .orElseGet(() -> modelSupplier.map(f -> toList(f.apply((OriginalModel) m)))
                         .orElseGet(() -> toList((Model) m)));
 
     }
