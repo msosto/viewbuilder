@@ -51,11 +51,17 @@ public class Pulmon {
      */
     protected List<Component> showTasks(List<Component> tasks, List<String> componentNavigation) {
         List<Component> newTasks = getTaskUntilLastCurrentStep(tasks, componentNavigation);
-        if (!containsValidationErrors((Component) newTasks)) {
+        if (allStepsInNavigation(newTasks, componentNavigation) && !containsValidationErrors((Component) newTasks)) {
             addNewTask(tasks, newTasks, componentNavigation);
         }
 
         return newTasks;
+    }
+
+    protected Boolean allStepsInNavigation(List<Component> newTasks, List<String> componentNavigation) {
+        return newTasks.stream()
+                .map(Component::getId)
+                .allMatch(id -> componentNavigation.contains(id));
     }
 
     /**
@@ -80,9 +86,13 @@ public class Pulmon {
         }
     }
 
+    /*
+     * Si estas en el paso 2 y viste A,C y luego por modificar algo del paso 1 tasks son A,B,C,D,E
+     * Tenemos que mostrarle A,B porque B no esta en el navigation.
+     */
     private List<Component> getTaskUntilLastCurrentStep(List<Component> tasks, List<String> componentNavigation) {
         String lastCurrentStep = Iterables.getLast(componentNavigation);
-        //TODO: Atajar si no encuentro al ultimo!!!!
+        //TODO: Si hay alguno que no está en el navigation hay que devolver de 0 a ese
         return tasks.subList(0, getIndexOf(tasks, lastCurrentStep));
     }
 
