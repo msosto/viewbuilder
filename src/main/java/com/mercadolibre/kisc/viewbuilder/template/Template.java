@@ -1,7 +1,7 @@
 package com.mercadolibre.kisc.viewbuilder.template;
 
 import com.mercadolibre.kisc.viewbuilder.Component;
-import com.mercadolibre.kisc.viewbuilder.Object;
+import com.mercadolibre.kisc.viewbuilder.Final;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.function.Function;
  */
 public class Template<Model, OriginalModel> {
 
-    final Template<OriginalModel, ?> parent;
+    final Final<Template<OriginalModel, ?>> parent;
 
     final Class<Model> modelType;
 
@@ -37,7 +37,7 @@ public class Template<Model, OriginalModel> {
 
 
     protected Template(Template<OriginalModel, ?> parent, Class<Model> modelType, Class<OriginalModel> originalModelType) {
-        this.parent = parent;
+        this.parent = new Final(parent);
         this.modelType = modelType;
         this.originalModelType = originalModelType;
 
@@ -60,11 +60,11 @@ public class Template<Model, OriginalModel> {
     }
 
     public Template<OriginalModel, OriginalModel> addSibling() {
-        return parent.addChild();
+        return parent.get().addChild();
     }
 
     public <NewModel> Template<NewModel, OriginalModel> addSibling(Class<NewModel> clazz, Function<OriginalModel, NewModel> transformer) {
-        return parent.addChild(clazz, transformer);
+        return parent.get().addChild(clazz, transformer);
     }
 
     public Template<Model, Model> addChild() {
@@ -81,7 +81,7 @@ public class Template<Model, OriginalModel> {
     }
 
     public <NewModel> Template<NewModel, Model> addChild(Template<NewModel, Model> t){
-        t.setParent(this);
+        t.parent.set(this);
         templates.add(t);
         return t;
     }
@@ -94,16 +94,20 @@ public class Template<Model, OriginalModel> {
         return t;
     }
 
+    private void setParent(Template<OriginalModel, ?> p){
+        parent.set(p);
+    }
+
     public Template<OriginalModel, OriginalModel> parent() {
-        return (Template<OriginalModel, OriginalModel>) parent;
+        return (Template<OriginalModel, OriginalModel>) parent.get();
     }
 
     public <T> Template<OriginalModel, T> parent(Class<T> tClass) {
-        final Class<?> parentOriginalModelType = parent.getOriginalModelType();
+        final Class<?> parentOriginalModelType = parent.get().getOriginalModelType();
         if (!parentOriginalModelType.equals(tClass)) {
             throw new RuntimeException("The class " + tClass + " is not compatible with the parent original type " + parentOriginalModelType);
         }
-        return (Template<OriginalModel, T>) parent;
+        return (Template<OriginalModel, T>) parent.get();
     }
 
     public List<Template> getChildren() {
