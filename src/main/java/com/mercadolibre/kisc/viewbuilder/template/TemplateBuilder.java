@@ -20,7 +20,7 @@ public class TemplateBuilder<Model, OriginalModel, ParentOriginalModel> {
         this.modelType = modelType;
         this.originalModelType = originalModelType;
         this.parentOriginalModelType = parentOriginalModelType;
-        this.template = new Template<Model, OriginalModel>();
+        this.template = null;//new Template<Model, OriginalModel>();
     }
 
 
