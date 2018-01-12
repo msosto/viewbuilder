@@ -1,14 +1,12 @@
 package com.mercadolibre.conceptTest.graphs.builder.view;
 
-import com.mercadolibre.kisc.viewbuilder.ViewContract;
-
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by mforte on 1/11/18.
  */
-public class InputComponent implements ViewContract {
+public class InputComponent {
 
     private Boolean required;
     private Boolean disabled;
@@ -18,7 +16,7 @@ public class InputComponent implements ViewContract {
         return required;
     }
 
-    public InputComponent setRequired(Boolean required) {
+    public InputComponent withRequired(Boolean required) {
         this.required = required;
         return this;
     }
@@ -27,7 +25,7 @@ public class InputComponent implements ViewContract {
         return disabled;
     }
 
-    public InputComponent setDisabled(Boolean disabled) {
+    public InputComponent withDisabled(Boolean disabled) {
         this.disabled = disabled;
         return this;
     }
@@ -36,7 +34,7 @@ public class InputComponent implements ViewContract {
         return validationErrors;
     }
 
-    public InputComponent setValidationErrors(List<Map<String, Object>> validationErrors) {
+    public InputComponent withValidationErrors(List<Map<String, Object>> validationErrors) {
         this.validationErrors = validationErrors;
         return this;
     }

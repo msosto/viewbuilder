@@ -1,7 +1,6 @@
 package com.mercadolibre.kisc.viewbuilder.template;
 
 import com.mercadolibre.kisc.viewbuilder.Component;
-import com.mercadolibre.kisc.viewbuilder.Object;
 
 import java.util.ArrayList;
 import java.util.List;
