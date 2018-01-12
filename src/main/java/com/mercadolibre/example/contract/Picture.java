@@ -1,11 +1,9 @@
 package com.mercadolibre.example.contract;
 
-import com.mercadolibre.kisc.viewbuilder.Object;
-
 /**
  * Created by abertolo on 03/01/18.
  */
-public class Picture implements Object {
+public class Picture {
 
     Integer height;
     Integer width;
