@@ -4,14 +4,14 @@ import com.google.inject.Inject;
 import com.mercadolibre.actions.CatalogUtils;
 import com.mercadolibre.actions.CategoryAttributeUtils;
 import com.mercadolibre.actions.CategoryUtils;
+import com.mercadolibre.actions.api.catalog.PostSellCatalogProduct;
 import com.mercadolibre.actions.api.catalog.PostSellCatalogSelection;
 import com.mercadolibre.actions.api.category.GetCategory;
 import com.mercadolibre.actions.api.category.GetCategoryAttribute;
 import com.mercadolibre.config.Config;
 import com.mercadolibre.dto.Category;
-import com.mercadolibre.dto.catalog.CatalogProductAttribute;
-import com.mercadolibre.dto.catalog.SellCatalogSelection;
-import com.mercadolibre.dto.catalog.SellCatalogSelectionParams;
+import com.mercadolibre.dto.catalog.*;
+import com.mercadolibre.dto.item.ItemAttribute;
 import com.mercadolibre.flux.flow.action.AddGoalData;
 import com.mercadolibre.flux.flow.action.execution.AchieveLoader;
 import com.mercadolibre.flux.flow.action.execution.ActionDependency;
@@ -22,15 +22,18 @@ import com.mercadolibre.flux.flow.graph.node.Step;
 import com.mercadolibre.flux.flow.graph.relationship.Achieve;
 import com.mercadolibre.flux.flow.graph.template.Template;
 import com.mercadolibre.util.providers.CatalogAttributeProvider;
+import com.mercadolibre.util.providers.CatalogProductProvider;
 import com.mercadolibre.util.providers.CategoryProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.mercadolibre.actions.api.category.GetCategory.CATEGORY_ID;
 import static com.mercadolibre.flux.flow.action.AddDataAction.*;
+import static com.mercadolibre.util.ContextUtils.getUserId;
 import static java.util.Objects.nonNull;
 
 /**
@@ -122,7 +125,41 @@ public class Step1 extends Template {
     }
 
     private Achieve tryToProductize(ActionExecution execution) {
-        return null;
+        return execution.add(PostSellCatalogProduct.class,
+                ((context, actionExecution) -> {
+
+                    final String catalogProductId = CatalogProductProvider.DATA_ITEM.getId(context);
+                    final String categoryId = CategoryProvider.DATA_ITEM.getId(context);
+                    final List<ItemAttribute> attributes = new CategoryAttributeUtils().getItemAttributes(context);
+                    final SellCatalogProductParams sellCatalogProductParams = new SellCatalogProductParams(catalogProductId, categoryId, new ListCategoryAttributeUtils().getCategoryAttributesClient(), attributes, null);
+
+                    //TODO: Sacar este hack cuando este resuelto que la api soporte null
+                    if (sellCatalogProductParams.getAttributes() != null) {
+                        sellCatalogProductParams.getAttributes().forEach(itemAttribute -> {
+                            if (itemAttribute.getValueId() == null) itemAttribute.setValueId("");
+                        });
+                    }
+
+                    context.addConfig(PostSellCatalogProduct.CONFIG_CATALOG_PRODUCT_DETAIL, sellCatalogProductParams);
+                    context.addConfig(PostSellCatalogProduct.USER_ID, getUserId(context));
+
+                }),
+                (context, actionExecution) -> {
+
+                    final Map map = context.getDataProxy().getSafe(PostSellCatalogProduct.MODEL_SELL_CATALOG_PRODUCT_DETAIL).getSafeMapValue();
+                    if (nonNull(map)) {
+                        SellCatalogProduct product = (SellCatalogProduct) map.values().stream().findFirst().get();
+                        if (nonNull(product.getAttributes())) {
+                            context.getDataProxy().putAt(CategoryAttributeUtils.CATEGORY_ATTRIBUTE_ID_PATH, product.getAttributes().stream()
+                                    .map(ItemAttribute::toMap)
+                                    .collect(Collectors.toList())
+                            );
+                        }
+                        context.getDataProxy().putAt(CatalogProductProvider.Constants.CATALOG_ID_PATH, product.getProductId());
+                        context.getDataProxy().putAt(CategoryProvider.Constants.CATEGORY_ID_PATH, product.getCategoryId());
+                    }
+
+                });
     }
 
 
@@ -182,17 +219,16 @@ public class Step1 extends Template {
 
 
     protected Achieve addGetCategory(ActionExecution execution, List<ActionDependency> dependencies) {
-        return execution.add(GetCategory.class,dependencies,(ctx, exec) -> {
+        return execution.add(GetCategory.class, dependencies, (ctx, exec) -> {
             ctx.addConfig(GetCategory.CATEGORY_ID, CategoryProvider.DATA_ITEM.getId(ctx));
         });
     }
 
-    protected Achieve addGetCategoryAttributes(ActionExecution execute,List<ActionDependency> dependencies) {
-        return execute.add(GetCategoryAttribute.class,dependencies,(context, execution) -> {
+    protected Achieve addGetCategoryAttributes(ActionExecution execute, List<ActionDependency> dependencies) {
+        return execute.add(GetCategoryAttribute.class, dependencies, (context, execution) -> {
             new ListCategoryAttributeUtils().setGetCategoryAttributesConfig(CategoryProvider.DATA_ITEM, context);
         });
     }
-
 
 
     public class ListCategoryAttributeUtils {
