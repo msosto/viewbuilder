@@ -9,10 +9,13 @@ import com.mercadolibre.example.OtherModel;
 import com.mercadolibre.example.contract.AutocompleteInput;
 import com.mercadolibre.example.contract.Label;
 import com.mercadolibre.example.contract.Picture;
+import com.mercadolibre.kisc.viewbuilder.template.Template;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -26,28 +29,33 @@ public class ViewBuilderTest {
     @Test
     public void build() throws Exception {
 
+        final Template<ExampleModel, ExampleModel> template = Template.create(ExampleModel.class);
 
-        ViewBuilder viewBuilder = new ViewBuilder<ExampleModel, ExampleModel>(ExampleModel.class)
-                .add("page").id("page").uiType("desktop_page").root()
-                .add("search", "page").id("search").mapper(m -> new AutocompleteInput()
+        template
+                .addChild().id("page").uiType("desktop_page")
+                .addChild().id("search").dataBuilder(m -> new AutocompleteInput()
                         .withPlaceholder(m.getSearchPlaceholder())
                         .withIcon(m.getSearchIcon())
-                        .withFormName("q")).root()
-                .add("grid", "page").id("grid").uiType("desktop_grid").root()
-                .add("row", "grid", ExampleModelItem.class).id("row").spread(ExampleModel::getItems).branch()
-                .add("picture", "row").id("picture").mapper(m -> m.getPictures().stream().findFirst().orElse(null)).branch()
-                .add("title", "row").id("title").mapper(m -> new Label().withText(m.getTitle())).root()
-                .add("footer", "grid").id("footer").root()
-                .add("footer_page", "page", OtherModel.class).id("page_footer").transform(ExampleModel::getOther)
-                    .mapper(otherModel -> otherModel).root();
+                        .withFormName("q"))
+                .addSibling().id("grid").uiType("desktop_grid")
+                .addChildren(ExampleModelItem.class, ExampleModel::getItems)
+                .addChild().id("picture").dataBuilder(m -> m.getPictures().stream().findFirst().orElse(null))
+                .addSibling().id("title").dataBuilder(m -> new Label().withText(m.getTitle()))
+                .parent(ExampleModel.class)
+                .parent()
+                .addChild().id("footer")
+                .parent()
+                .parent()
+                .addChild(OtherModel.class, ExampleModel::getOther).id("page_footer");
 
 
         final ExampleModel model = getModel();
-        final Component view = viewBuilder.build(model);
+        final Optional<List<Component>> components = template.toComponents(model, null);
 
-        assertNotNull(view);
+        final List<Component> list = components.get();
+        assertNotNull(list);
 
-        System.out.println(gson.toJson(view));
+        System.out.println(gson.toJson(list));
 
         /*
 {
