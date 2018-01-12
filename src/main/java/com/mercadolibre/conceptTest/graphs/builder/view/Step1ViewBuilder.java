@@ -8,6 +8,7 @@ import com.mercadolibre.conceptTest.graphs.builder.view.contracts.finder.FinderV
 import com.mercadolibre.conceptTest.graphs.model.*;
 import com.mercadolibre.kisc.viewbuilder.Component;
 import com.mercadolibre.kisc.viewbuilder.template.Template;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 
@@ -45,10 +46,10 @@ public class Step1ViewBuilder {
 
     protected Template<CategorySelectionModel, Step1Model> getCategorySelectionTask() {
         final Template<CategorySelectionModel, CategorySelectionModel> body = Template.create(CategorySelectionModel.class).id("BODY").uiType("BODY");
-        body.addChild().id("BREADCRUMB").uiType("BREADCRUMB").dataBuilder(categorySelectionModel ->
+        body.addChild().id("BREADCRUMB").uiType("BREADCRUMB").apply(CategorySelectionModel::isShowCategoryBreadcrumbComponent).dataBuilder(categorySelectionModel ->
                 new CategoryBreadcrumbViewContract().withCategories(categorySelectionModel.getBreadcrumbCategories())
         );
-        body.addChild().id("CATEGORY_SELECTION").uiType("CATEGORY_SELECTION").dataBuilder(categorySelectionModel -> new CategorySelectionViewContract().withColumn(categorySelectionModel.getColumn()).withAdultContent(categorySelectionModel.getAdultContent()));
+        body.addChild().id("CATEGORY_SELECTION").uiType("CATEGORY_SELECTION").apply(CategorySelectionModel::isShowCategorySelectionComponent).dataBuilder(categorySelectionModel -> new CategorySelectionViewContract().withColumn(categorySelectionModel.getColumn()).withAdultContent(categorySelectionModel.getAdultContent()));
         body.addChild().id("HIDDEN_CATEGORY_ID").uiType("HIDDEN").dataBuilder(categorySelectionModel -> new InputHiddenViewContract().withOutput(CategorySelectionModel.ITEM_CATEGORY_ID_OUTPUT).withValue(categorySelectionModel.getCategoryId()));
         body.addChild().id("HIDDEN_CATALOG_PRODUCT_ID").uiType("HIDDEN").dataBuilder(categorySelectionModel -> new InputHiddenViewContract().withOutput(CategorySelectionModel.ITEM_CATALOG_PRODUCT_ID_OUTPUT).withValue(categorySelectionModel.getCatalogProductId()));
         return getTask(Step1Model.class, CategorySelectionModel.class, body);
@@ -56,7 +57,7 @@ public class Step1ViewBuilder {
 
     protected Template<PksModel, Step1Model> getPKsTask() {
         final Template<PksModel, PksModel> body = Template.create(PksModel.class).id("BODY").uiType("BODY");
-        body.addChild().id("PKS").uiType("PKS").dataBuilder(pksModel -> new PksInput().withPksAttributes(pksModel.getPksAttributes()).withDecimalSeparator(pksModel.getDecimalSeparator()));
+        body.addChild().id("PKS").uiType("PKS").apply(pksModel -> !CollectionUtils.isEmpty(pksModel.getPksAttributes())).dataBuilder(pksModel -> new PksInput().withPksAttributes(pksModel.getPksAttributes()).withDecimalSeparator(pksModel.getDecimalSeparator()));
         return getTask(Step1Model.class, PksModel.class, body);
     }
 }
