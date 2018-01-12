@@ -10,19 +10,17 @@ import com.mercadolibre.kisc.viewbuilder.Component;
 import com.mercadolibre.kisc.viewbuilder.template.Template;
 import org.apache.commons.collections.CollectionUtils;
 
-import java.util.List;
-
 /**
  * Created by msosto on 1/10/18.
  */
 public class Step1ViewBuilder {
 
-    public List<Component> build(Step1Model step1Model) {
+    public Component build(Step1Model step1Model) {
         final Template<Step1Model, Step1Model> step1Template = Template.create(Step1Model.class).id("STEP_1").uiType("STEP");
         step1Template.addChild(getFinderTask());
         step1Template.addChild(getCategorySelectionTask());
         step1Template.addChild(getPKsTask());
-        return step1Template.toComponents(step1Model, null).get();
+        return step1Template.toComponents(step1Model, null).get().get(0);
     }
 
     protected <TASK_MODEL extends TaskModel, STEP_MODEL> Template<TASK_MODEL, STEP_MODEL> getTask(Class<STEP_MODEL> stepModelClass, Class<TASK_MODEL> taskModelClass, Template<TASK_MODEL, TASK_MODEL> body) {
