@@ -6,14 +6,8 @@ package com.mercadolibre.conceptTest.graphs.model;
 public class Step1Model {
 
     FinderModel finderModel;
-    PksModel pksModel;
-
-    public Step1Model() {
-        this.finderModel = new FinderModel(); // TODO: quitar esta instancia de aca
-        this.categorySelectionModel = new CategorySelectionModel();
-    }
-
     CategorySelectionModel categorySelectionModel;
+    PksModel pksModel;
 
     public FinderModel getFinderModel() { return finderModel;  }
 
