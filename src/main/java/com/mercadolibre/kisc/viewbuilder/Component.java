@@ -12,7 +12,7 @@ public class Component<Model> {
 
     String uiType;
 
-    ViewContract data;
+    Object data;
 
     List<Component> components;
 
@@ -38,11 +38,11 @@ public class Component<Model> {
         return this;
     }
 
-    public ViewContract getData() {
+    public Object getData() {
         return data;
     }
 
-    public Component withData(ViewContract data) {
+    public Component withData(Object data) {
         this.data = data;
         return this;
     }

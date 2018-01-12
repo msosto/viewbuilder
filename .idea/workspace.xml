@@ -133,12 +133,12 @@
             <state relative-caret-position="435">
               <caret line="79" column="30" selection-start-line="79" selection-start-column="30" selection-end-line="79" selection-end-column="30" />
               <folding>
-                <element signature="e#343#344#0" expanded="true" />
-                <element signature="e#368#369#0" expanded="true" />
-                <element signature="e#907#908#0" expanded="true" />
-                <element signature="e#935#936#0" expanded="true" />
-                <element signature="e#1073#1074#0" expanded="true" />
-                <element signature="e#1102#1103#0" expanded="true" />
+                <element signature="e#337#338#0" expanded="true" />
+                <element signature="e#362#363#0" expanded="true" />
+                <element signature="e#889#890#0" expanded="true" />
+                <element signature="e#917#918#0" expanded="true" />
+                <element signature="e#1055#1056#0" expanded="true" />
+                <element signature="e#1084#1085#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -159,22 +159,20 @@
       <file leaf-file-name="Template.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/template/Template.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-435">
-              <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+            <state relative-caret-position="255">
+              <caret line="89" column="39" selection-start-line="89" selection-start-column="39" selection-end-line="89" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1463#1464#0" expanded="true" />
-                <element signature="e#1520#1521#0" expanded="true" />
-                <element signature="e#1748#1749#0" expanded="true" />
-                <element signature="e#1788#1789#0" expanded="true" />
-                <element signature="e#2034#2035#0" expanded="true" />
-                <element signature="e#2072#2073#0" expanded="true" />
-                <element signature="e#2447#2448#0" expanded="true" />
-                <element signature="e#2517#2518#0" expanded="true" />
-                <element signature="e#2976#2977#0" expanded="true" />
-                <element signature="e#3008#3009#0" expanded="true" />
-                <element signature="e#6322#6323#0" expanded="true" />
-                <element signature="e#6362#6363#0" expanded="true" />
+                <element signature="e#1469#1470#0" expanded="true" />
+                <element signature="e#1526#1527#0" expanded="true" />
+                <element signature="e#1754#1755#0" expanded="true" />
+                <element signature="e#1794#1795#0" expanded="true" />
+                <element signature="e#2969#2970#0" expanded="true" />
+                <element signature="e#3039#3040#0" expanded="true" />
+                <element signature="e#3497#3498#0" expanded="true" />
+                <element signature="e#3529#3530#0" expanded="true" />
+                <element signature="e#6740#6741#0" expanded="true" />
+                <element signature="e#6780#6781#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1364,13 +1362,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/template/Template.java</url>
-          <line>154</line>
+          <line>164</line>
           <properties />
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/template/Template.java</url>
-          <line>179</line>
+          <line>189</line>
           <properties />
           <option name="timeStamp" value="6" />
         </line-breakpoint>
@@ -1671,8 +1669,8 @@
         <state relative-caret-position="105">
           <caret line="7" column="42" selection-start-line="7" selection-start-column="42" selection-end-line="7" selection-end-column="42" />
           <folding>
-            <element signature="e#236#237#0" expanded="true" />
-            <element signature="e#263#264#0" expanded="true" />
+            <element signature="e#224#225#0" expanded="true" />
+            <element signature="e#251#252#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1682,8 +1680,8 @@
         <state relative-caret-position="76">
           <caret line="7" column="44" selection-start-line="7" selection-start-column="44" selection-end-line="7" selection-end-column="44" />
           <folding>
-            <element signature="e#279#280#0" expanded="true" />
-            <element signature="e#308#309#0" expanded="true" />
+            <element signature="e#267#268#0" expanded="true" />
+            <element signature="e#296#297#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1696,7 +1694,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/ViewContract.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/Object.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="5" column="29" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="29" />
@@ -1764,12 +1762,12 @@
         <state relative-caret-position="435">
           <caret line="79" column="30" selection-start-line="79" selection-start-column="30" selection-end-line="79" selection-end-column="30" />
           <folding>
-            <element signature="e#343#344#0" expanded="true" />
-            <element signature="e#368#369#0" expanded="true" />
-            <element signature="e#907#908#0" expanded="true" />
-            <element signature="e#935#936#0" expanded="true" />
-            <element signature="e#1073#1074#0" expanded="true" />
-            <element signature="e#1102#1103#0" expanded="true" />
+            <element signature="e#337#338#0" expanded="true" />
+            <element signature="e#362#363#0" expanded="true" />
+            <element signature="e#889#890#0" expanded="true" />
+            <element signature="e#917#918#0" expanded="true" />
+            <element signature="e#1055#1056#0" expanded="true" />
+            <element signature="e#1084#1085#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1804,22 +1802,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/template/Template.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-435">
-          <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+        <state relative-caret-position="255">
+          <caret line="89" column="39" selection-start-line="89" selection-start-column="39" selection-end-line="89" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1463#1464#0" expanded="true" />
-            <element signature="e#1520#1521#0" expanded="true" />
-            <element signature="e#1748#1749#0" expanded="true" />
-            <element signature="e#1788#1789#0" expanded="true" />
-            <element signature="e#2034#2035#0" expanded="true" />
-            <element signature="e#2072#2073#0" expanded="true" />
-            <element signature="e#2447#2448#0" expanded="true" />
-            <element signature="e#2517#2518#0" expanded="true" />
-            <element signature="e#2976#2977#0" expanded="true" />
-            <element signature="e#3008#3009#0" expanded="true" />
-            <element signature="e#6322#6323#0" expanded="true" />
-            <element signature="e#6362#6363#0" expanded="true" />
+            <element signature="e#1469#1470#0" expanded="true" />
+            <element signature="e#1526#1527#0" expanded="true" />
+            <element signature="e#1754#1755#0" expanded="true" />
+            <element signature="e#1794#1795#0" expanded="true" />
+            <element signature="e#2969#2970#0" expanded="true" />
+            <element signature="e#3039#3040#0" expanded="true" />
+            <element signature="e#3497#3498#0" expanded="true" />
+            <element signature="e#3529#3530#0" expanded="true" />
+            <element signature="e#6740#6741#0" expanded="true" />
+            <element signature="e#6780#6781#0" expanded="true" />
           </folding>
         </state>
       </provider>
