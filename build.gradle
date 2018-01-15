@@ -2,8 +2,9 @@ plugins {
     id 'java'
     id 'jacoco'
     id 'distribution'
-    id 'com.github.ben-manes.versions' version '0.13.0'
-    id 'us.kirchmeier.capsule' version '1.0.2'
+//    id 'com.github.ben-manes.versions' version '0.13.0'
+//    id 'us.kirchmeier.capsule' version '1.0.2'
+    id 'jvm-component'
 }
 
 sourceCompatibility = 1.8
@@ -20,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compile "com.mercadolibre.sell:actions:1.68.7"
+    compile "com.mercadolibre.sell:actions:1.63.2-flux-13-13"
     testCompile 'com.google.code.gson:gson:2.8.0'
     testCompile 'com.google.guava:guava:23.6-jre'
 
