@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import com.mercadolibre.ActionsModule;
 import com.mercadolibre.actions.CatalogUtils;
 import com.mercadolibre.actions.CategoryUtils;
-import com.mercadolibre.actions.SiteUtils;
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.BreadcrumbCategory;
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.CategorySelectionColumn;
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.CategorySelectionRow;
@@ -17,6 +16,7 @@ import com.mercadolibre.config.Config;
 import com.mercadolibre.dto.Category;
 import com.mercadolibre.dto.catalog.SellCatalogSelection;
 import com.mercadolibre.dto.catalog.SellCatalogSelectionColumn;
+import com.mercadolibre.dto.catalog.SellCatalogSelectionRow;
 import com.mercadolibre.flux.flow.graph.navigation.Context;
 import com.mercadolibre.util.providers.CatalogProductProvider;
 import com.mercadolibre.util.providers.CategoryProvider;
@@ -56,7 +56,8 @@ public class CategorySelectionModelBuilder {
                 .withCatalogProductId(CatalogProductProvider.DATA_ITEM.getId(context))
                 .setLeaf(isLeaf(context))
                 .withAdultContent(getAdultContent(context));
-        addColumnAndBreadcrumbCategories(context);
+        addColumn(context);
+        addBreadcrumbCategories(context);
         addHeader(model.getHeaderModel());
         if (model.getLeaf()) {
             addFooter(model.getFooterModel());
@@ -64,7 +65,28 @@ public class CategorySelectionModelBuilder {
         return model;
     }
 
-    private void addColumnAndBreadcrumbCategories(Context context) {
+    private void addBreadcrumbCategories(Context context) {
+        SellCatalogSelection selection = getSelection(context);
+        List<BreadcrumbCategory> breadcrumbCategories = Lists.newArrayList();
+        selection.getColumns().forEach(column -> {
+            SellCatalogSelectionRow selectedRow = column.getRows()
+                    .stream()
+                    .filter(sellCatalogSelectionRow -> Boolean.TRUE.equals(sellCatalogSelectionRow.getSelected()))
+                    .findFirst()
+                    .orElse(null);
+            if (selectedRow != null) {
+                String categoryId = (String) selectedRow.getOutput().get(ITEM_CATEGORY_ID);
+                breadcrumbCategories.add(new BreadcrumbCategory()
+                        .withId(categoryId)
+                        .withName(selectedRow.getName())
+                        .withOutput(withDots(context.getId(), ITEM_CATEGORY_ID)));
+            }
+        });
+        model.withBreadcrumbCategories(breadcrumbCategories);
+        model.withShowCategoryBreadcrumbComponent(!breadcrumbCategories.isEmpty());
+    }
+
+    private void addColumn(Context context) {
         SellCatalogSelection selection = getSelection(context);
         SellCatalogSelectionColumn lastColumn = Iterables.getLast(selection.getColumns());
         boolean shouldContinue = Boolean.TRUE.equals(selection.getShouldContinue());
@@ -109,7 +131,6 @@ public class CategorySelectionModelBuilder {
      */
     private List<CategorySelectionRow> processRows(String contextId, SellCatalogSelectionColumn column) {
         List<CategorySelectionRow> rows = Lists.newArrayList();
-        List<BreadcrumbCategory> breadcrumbCategories = Lists.newArrayList();
         column.getRows().forEach(sellCatalogSelectionRow -> {
             CategorySelectionRow row = new CategorySelectionRow()
                     .withName(sellCatalogSelectionRow.getName())
@@ -117,17 +138,7 @@ public class CategorySelectionModelBuilder {
                     .withCustomOutput(nonNull(sellCatalogSelectionRow.getCustomOutput()) ? withDots(sellCatalogSelectionRow.getCustomOutput()) : null)
                     .withTags(sellCatalogSelectionRow.getTags());
             rows.add(row);
-
-            if(Boolean.TRUE.equals(sellCatalogSelectionRow.getSelected())) {
-                String categoryId = (String) sellCatalogSelectionRow.getOutput().get(ITEM_CATEGORY_ID);
-                breadcrumbCategories.add(new BreadcrumbCategory()
-                        .withId(categoryId)
-                        .withName(sellCatalogSelectionRow.getName())
-                        .withOutput(withDots(contextId, ITEM_CATEGORY_ID)));
-            }
         });
-        model.withBreadcrumbCategories(breadcrumbCategories);
-        model.withShowCategoryBreadcrumbComponent(!breadcrumbCategories.isEmpty());
         return rows;
     }
 
