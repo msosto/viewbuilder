@@ -70,7 +70,7 @@ public class CategorySelectionModelBuilder {
         boolean shouldContinue = Boolean.TRUE.equals(selection.getShouldContinue());
 
         CategorySelectionColumn column = new CategorySelectionColumn();
-        processRows(context.getId(), lastColumn);
+        column.withRows(processRows(context.getId(), lastColumn));
         column.withFilter(shouldContinue ? false : isFilterAvailable(lastColumn));
         column.setLeaf(shouldContinue);
 
@@ -107,7 +107,7 @@ public class CategorySelectionModelBuilder {
      *
      * @param column
      */
-    private void processRows(String contextId, SellCatalogSelectionColumn column) {
+    private List<CategorySelectionRow> processRows(String contextId, SellCatalogSelectionColumn column) {
         List<CategorySelectionRow> rows = Lists.newArrayList();
         List<BreadcrumbCategory> breadcrumbCategories = Lists.newArrayList();
         column.getRows().forEach(sellCatalogSelectionRow -> {
@@ -128,6 +128,7 @@ public class CategorySelectionModelBuilder {
         });
         model.withBreadcrumbCategories(breadcrumbCategories);
         model.withShowCategoryBreadcrumbComponent(!breadcrumbCategories.isEmpty());
+        return rows;
     }
 
     /**
