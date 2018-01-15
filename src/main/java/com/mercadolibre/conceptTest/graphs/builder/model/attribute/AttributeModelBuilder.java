@@ -54,11 +54,11 @@ public class AttributeModelBuilder {
     protected final CatalogUtils catalogUtils;
 
     public AttributeModelBuilder() {
-        this.siteUtils = new SiteUtils();
-        this.categoryAttributeUtils = new CategoryAttributeUtils();
-        this.categoryAttributeService = new DefaultCategoryAttributeService();
-        this.categoryUtils = new CategoryUtils();
-        this.catalogUtils = new CatalogUtils();
+        this.siteUtils = ActionsModule.get().getInstance(SiteUtils.class);
+        this.categoryAttributeUtils = ActionsModule.get().getInstance(CategoryAttributeUtils.class);
+        this.categoryAttributeService = ActionsModule.get().getInstance(DefaultCategoryAttributeService.class);
+        this.categoryUtils = ActionsModule.get().getInstance(CategoryUtils.class);
+        this.catalogUtils = ActionsModule.get().getInstance(CatalogUtils.class);
         this.categoryProvider = CategoryProvider.DATA_ITEM;
     }
 
