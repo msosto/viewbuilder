@@ -15,6 +15,10 @@ import org.apache.commons.collections.CollectionUtils;
  */
 public class Step1ViewBuilder {
 
+    public static final String PKS_TASK_ID = "PKS";
+    public static final String CATEGORY_SELECTION_TASK_ID = "CATEGORY_SELECTION";
+    public static final String FINDER_TASK_ID = "FINDER";
+
     public Component build(Step1Model step1Model) {
         final Template<Step1Model, Step1Model> step1Template = Template.create(Step1Model.class).id("STEP_1").uiType("STEP");
         step1Template.addChild(getFinderTask());
@@ -23,8 +27,8 @@ public class Step1ViewBuilder {
         return step1Template.toComponents(step1Model, null).get().get(0);
     }
 
-    protected <TASK_MODEL extends TaskModel, STEP_MODEL> Template<TASK_MODEL, STEP_MODEL> getTask(Class<STEP_MODEL> stepModelClass, Class<TASK_MODEL> taskModelClass, Template<TASK_MODEL, TASK_MODEL> body) {
-        final Template<TASK_MODEL, STEP_MODEL> task = Template.create(null, taskModelClass, stepModelClass).id("CATEGORY_SELECTION" + "TASK").uiType("TASK");
+    protected <TASK_MODEL extends TaskModel, STEP_MODEL> Template<TASK_MODEL, STEP_MODEL> getTask(Class<STEP_MODEL> stepModelClass, Class<TASK_MODEL> taskModelClass, Template<TASK_MODEL, TASK_MODEL> body, String taskId) {
+        final Template<TASK_MODEL, STEP_MODEL> task = Template.create(null, taskModelClass, stepModelClass).id(taskId + "_TASK").uiType("TASK");
         task.addChild(HeaderModel.class, TaskModel::getHeaderModel).id("HEADER").uiType("HEADER");
         task.addChild(body);
         task.addChild(FooterModel.class, TaskModel::getFooterModel).id("FOOTER").uiType("FOOTER");
@@ -39,7 +43,7 @@ public class Step1ViewBuilder {
                         .withDisabled(finderModel.getDisabled())
                         .withValidationErrors(finderModel.getValidationErrors())
         );
-        return getTask(Step1Model.class, FinderModel.class, body);
+        return getTask(Step1Model.class, FinderModel.class, body, FINDER_TASK_ID);
     }
 
     protected Template<CategorySelectionModel, Step1Model> getCategorySelectionTask() {
@@ -50,12 +54,12 @@ public class Step1ViewBuilder {
         body.addChild().id("CATEGORY_SELECTION").uiType("CATEGORY_SELECTION").apply(CategorySelectionModel::isShowCategorySelectionComponent).dataBuilder(categorySelectionModel -> new CategorySelectionViewContract().withColumn(categorySelectionModel.getColumn()).withAdultContent(categorySelectionModel.getAdultContent()));
         body.addChild().id("HIDDEN_CATEGORY_ID").uiType("HIDDEN").dataBuilder(categorySelectionModel -> new InputHiddenViewContract().withOutput(CategorySelectionModel.ITEM_CATEGORY_ID_OUTPUT).withValue(categorySelectionModel.getCategoryId()));
         body.addChild().id("HIDDEN_CATALOG_PRODUCT_ID").uiType("HIDDEN").dataBuilder(categorySelectionModel -> new InputHiddenViewContract().withOutput(CategorySelectionModel.ITEM_CATALOG_PRODUCT_ID_OUTPUT).withValue(categorySelectionModel.getCatalogProductId()));
-        return getTask(Step1Model.class, CategorySelectionModel.class, body);
+        return getTask(Step1Model.class, CategorySelectionModel.class, body, CATEGORY_SELECTION_TASK_ID);
     }
 
     protected Template<PksModel, Step1Model> getPKsTask() {
         final Template<PksModel, PksModel> body = Template.create(PksModel.class).id("BODY").uiType("BODY");
         body.addChild().id("PKS").uiType("PKS").apply(pksModel -> !CollectionUtils.isEmpty(pksModel.getPksAttributes())).dataBuilder(pksModel -> new PksInput().withPksAttributes(pksModel.getPksAttributes()).withDecimalSeparator(pksModel.getDecimalSeparator()));
-        return getTask(Step1Model.class, PksModel.class, body);
+        return getTask(Step1Model.class, PksModel.class, body, PKS_TASK_ID);
     }
 }
