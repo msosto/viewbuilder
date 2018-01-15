@@ -3,7 +3,6 @@ package com.mercadolibre.conceptTest.graphs.builder.view.contracts.attribute.pks
 import com.mercadolibre.conceptTest.graphs.builder.view.InputComponent;
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.attribute.AttributeInput;
 import com.mercadolibre.flux.flow.graph.navigation.DataProxy;
-import com.mercadolibre.kisc.viewbuilder.ViewContract;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,11 +15,12 @@ public class PksInput extends InputComponent {
     private List<AttributeInput> pksAttributes;
     private String decimalSeparator;
 
-    public void withPksAttributes(List<DataProxy> attributes){
+    public PksInput withPksAttributes(List<DataProxy> attributes) {
         this.pksAttributes = getListOfAttributes(attributes);
+        return this;
     }
 
-    public PksInput setDecimalSeparator(String decimalSeparator) {
+    public PksInput withDecimalSeparator(String decimalSeparator) {
         this.decimalSeparator = decimalSeparator;
         return this;
     }

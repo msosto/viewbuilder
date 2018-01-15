@@ -1,11 +1,9 @@
 package com.mercadolibre.conceptTest.graphs.builder.view.contracts;
 
-import com.mercadolibre.kisc.viewbuilder.ViewContract;
-
 /**
  * Created by mlizarraga on 11/1/18
  */
-public class FooterViewContract implements ViewContract {
+public class FooterViewContract {
 
     private String buttonText;
     private String buttonConnection;

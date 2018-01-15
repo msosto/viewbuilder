@@ -1,42 +1,61 @@
 package com.mercadolibre.conceptTest.graphs.builder.view;
 
+import com.mercadolibre.conceptTest.graphs.builder.view.contracts.InputHiddenViewContract;
+import com.mercadolibre.conceptTest.graphs.builder.view.contracts.attribute.pks.PksInput;
+import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.CategoryBreadcrumbViewContract;
+import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.CategorySelectionViewContract;
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.finder.FinderViewContract;
-import com.mercadolibre.conceptTest.graphs.model.FinderModel;
-import com.mercadolibre.conceptTest.graphs.model.Step1Model;
-import com.mercadolibre.conceptTest.graphs.model.TaskModel;
+import com.mercadolibre.conceptTest.graphs.model.*;
 import com.mercadolibre.kisc.viewbuilder.Component;
-import com.mercadolibre.kisc.viewbuilder.ViewBuilder;
 import com.mercadolibre.kisc.viewbuilder.template.Template;
-
-import java.util.function.Function;
+import org.apache.commons.collections.CollectionUtils;
 
 /**
  * Created by msosto on 1/10/18.
  */
 public class Step1ViewBuilder {
 
-    public Component build(Step1Model model) {
-
-        ViewBuilder step1View = new ViewBuilder<Step1Model, Step1Model>(Step1Model.class);
-        addFinderTaskStep1(step1View);
-
-
-        return step1View.build(model);
+    public Component build(Step1Model step1Model) {
+        final Template<Step1Model, Step1Model> step1Template = Template.create(Step1Model.class).id("STEP_1").uiType("STEP");
+        step1Template.addChild(getFinderTask());
+        step1Template.addChild(getCategorySelectionTask());
+        step1Template.addChild(getPKsTask());
+        return step1Template.toComponents(step1Model, null).get().get(0);
     }
 
-    private <MODEL_TASK extends TaskModel> void addTaskView(ViewBuilder<Step1Model, Step1Model> stepView, Class<MODEL_TASK> ModelClass, Function<Step1Model, MODEL_TASK> transformer, Function<ViewBuilder, Template> bodyBuilder) {
-        final ViewBuilder<MODEL_TASK, Step1Model> branch = stepView.add("task", ModelClass).transform(transformer).id("task").uiType("task")
-                .branch().add("header", "task").id("header").uiType("header").branch();
-        stepView.add("footer", "task").id("footer").uiType("footer").root();
+    protected <TASK_MODEL extends TaskModel, STEP_MODEL> Template<TASK_MODEL, STEP_MODEL> getTask(Class<STEP_MODEL> stepModelClass, Class<TASK_MODEL> taskModelClass, Template<TASK_MODEL, TASK_MODEL> body) {
+        final Template<TASK_MODEL, STEP_MODEL> task = Template.create(null, taskModelClass, stepModelClass).id("CATEGORY_SELECTION" + "TASK").uiType("TASK");
+        task.addChild(HeaderModel.class, TaskModel::getHeaderModel).id("HEADER").uiType("HEADER");
+        task.addChild(body);
+        task.addChild(FooterModel.class, TaskModel::getFooterModel).id("FOOTER").uiType("FOOTER");
+        return task;
     }
 
-    private Template<FinderModel, FinderModel> addFinderTaks(ViewBuilder<FinderModel, FinderModel> stepView) {
-        return stepView.add("finder", "task").uiType("finder").id("finder_ID")
-                .mapper(m -> new FinderViewContract().withValue(m.getTitle()));
+    protected Template<FinderModel, Step1Model> getFinderTask() {
+        final Template<FinderModel, FinderModel> body = Template.create(FinderModel.class).id("BODY").uiType("BODY");
+        body.addChild().id("FINDER").uiType("FINDER").dataBuilder(finderModel ->
+                new FinderViewContract()
+                        .withValue(finderModel.getTitle())
+                        .withDisabled(finderModel.getDisabled())
+                        .withValidationErrors(finderModel.getValidationErrors())
+        );
+        return getTask(Step1Model.class, FinderModel.class, body);
     }
 
-    private void addFinderTaskStep1(ViewBuilder<Step1Model, Step1Model> stepView) {
-        addTaskView(stepView, FinderModel.class, Step1Model::getFinderModel, this::addFinderTaks);
+    protected Template<CategorySelectionModel, Step1Model> getCategorySelectionTask() {
+        final Template<CategorySelectionModel, CategorySelectionModel> body = Template.create(CategorySelectionModel.class).id("BODY").uiType("BODY");
+        body.addChild().id("BREADCRUMB").uiType("BREADCRUMB").apply(CategorySelectionModel::isShowCategoryBreadcrumbComponent).dataBuilder(categorySelectionModel ->
+                new CategoryBreadcrumbViewContract().withCategories(categorySelectionModel.getBreadcrumbCategories())
+        );
+        body.addChild().id("CATEGORY_SELECTION").uiType("CATEGORY_SELECTION").apply(CategorySelectionModel::isShowCategorySelectionComponent).dataBuilder(categorySelectionModel -> new CategorySelectionViewContract().withColumn(categorySelectionModel.getColumn()).withAdultContent(categorySelectionModel.getAdultContent()));
+        body.addChild().id("HIDDEN_CATEGORY_ID").uiType("HIDDEN").dataBuilder(categorySelectionModel -> new InputHiddenViewContract().withOutput(CategorySelectionModel.ITEM_CATEGORY_ID_OUTPUT).withValue(categorySelectionModel.getCategoryId()));
+        body.addChild().id("HIDDEN_CATALOG_PRODUCT_ID").uiType("HIDDEN").dataBuilder(categorySelectionModel -> new InputHiddenViewContract().withOutput(CategorySelectionModel.ITEM_CATALOG_PRODUCT_ID_OUTPUT).withValue(categorySelectionModel.getCatalogProductId()));
+        return getTask(Step1Model.class, CategorySelectionModel.class, body);
     }
 
+    protected Template<PksModel, Step1Model> getPKsTask() {
+        final Template<PksModel, PksModel> body = Template.create(PksModel.class).id("BODY").uiType("BODY");
+        body.addChild().id("PKS").uiType("PKS").apply(pksModel -> !CollectionUtils.isEmpty(pksModel.getPksAttributes())).dataBuilder(pksModel -> new PksInput().withPksAttributes(pksModel.getPksAttributes()).withDecimalSeparator(pksModel.getDecimalSeparator()));
+        return getTask(Step1Model.class, PksModel.class, body);
+    }
 }

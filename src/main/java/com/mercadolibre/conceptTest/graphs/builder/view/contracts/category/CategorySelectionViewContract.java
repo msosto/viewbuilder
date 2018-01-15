@@ -1,14 +1,14 @@
 package com.mercadolibre.conceptTest.graphs.builder.view.contracts.category;
 
-import com.mercadolibre.kisc.viewbuilder.ViewContract;
-
 /**
  * Created by mlizarraga on 11/1/18
  */
-public class CategorySelectionViewContract implements ViewContract {
+public class CategorySelectionViewContract {
 
     private CategorySelectionColumn column;
     private Boolean adultContent;
+    private String categoryId;
+    private String catalogProductId;
 
     public CategorySelectionColumn getColumn() {
         return column;
@@ -23,8 +23,26 @@ public class CategorySelectionViewContract implements ViewContract {
         return adultContent;
     }
 
-    public CategorySelectionViewContract setAdultContent(Boolean adultContent) {
+    public CategorySelectionViewContract withAdultContent(Boolean adultContent) {
         this.adultContent = adultContent;
+        return this;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public CategorySelectionViewContract withCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+        return this;
+    }
+
+    public String getCatalogProductId() {
+        return catalogProductId;
+    }
+
+    public CategorySelectionViewContract withCatalogProductId(String catalogProductId) {
+        this.catalogProductId = catalogProductId;
         return this;
     }
 }

@@ -10,6 +10,9 @@ import java.util.List;
  */
 public class CategorySelectionModel extends TaskModel {
 
+    public static final String ITEM_CATEGORY_ID_OUTPUT = "item.category_id";
+    public static final String ITEM_CATALOG_PRODUCT_ID_OUTPUT = "item.catalog_product_id";
+
     private CategorySelectionColumn column;
     private Boolean adultContent;
     private Boolean leaf;

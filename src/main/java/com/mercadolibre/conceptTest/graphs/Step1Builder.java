@@ -21,7 +21,6 @@ public class Step1Builder extends Action {
     @Override
     protected void runAction() throws GraphNavigationException {
         Step1Model step1Model = new Step1ModelBuilder().getModel(context);
-        Component step1View = new Step1ViewBuilder().build(step1Model);
-        //TODO Que hacemos con este component?
+        //Component step1View = new Step1ViewBuilder().build(step1Model);
     }
 }

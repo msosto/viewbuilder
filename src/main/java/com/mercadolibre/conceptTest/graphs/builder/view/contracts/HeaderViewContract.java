@@ -1,13 +1,11 @@
 package com.mercadolibre.conceptTest.graphs.builder.view.contracts;
 
-import com.mercadolibre.kisc.viewbuilder.ViewContract;
-
 import java.util.List;
 
 /**
  * Created by mlizarraga on 11/1/18
  */
-public class HeaderViewContract implements ViewContract {
+public class HeaderViewContract {
 
     private String title;
     private List<String> titleParams;
