@@ -7,17 +7,7 @@ import com.mercadolibre.conceptTest.graphs.builder.view.InputComponent;
  */
 public class InputHiddenViewContract extends InputComponent {
 
-    private String output;
     private String value;
-
-    public String getOutput() {
-        return output;
-    }
-
-    public InputHiddenViewContract withOutput(String output) {
-        this.output = output;
-        return this;
-    }
 
     public String getValue() {
         return value;

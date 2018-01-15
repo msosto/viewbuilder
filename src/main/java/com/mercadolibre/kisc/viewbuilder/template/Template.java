@@ -28,7 +28,7 @@ public class Template<Model, OriginalModel> {
 
     Optional<Function<Model, String>> idBuilder;
 
-    Optional<Function<OriginalModel, Boolean>> apply;
+    Optional<Function<Model, Boolean>> apply;
 
     Optional<Function<Model, Object>> dataBuilder;
 
@@ -81,7 +81,7 @@ public class Template<Model, OriginalModel> {
         return t;
     }
 
-    public <NewModel> Template<NewModel, Model> addChild(Template<NewModel, Model> t){
+    public <NewModel> Template<NewModel, Model> addChild(Template<NewModel, Model> t) {
         t.parent.set(this);
         templates.add(t);
         return t;
@@ -95,7 +95,7 @@ public class Template<Model, OriginalModel> {
         return t;
     }
 
-    private void setParent(Template<OriginalModel, ?> p){
+    private void setParent(Template<OriginalModel, ?> p) {
         parent.set(p);
     }
 
@@ -126,7 +126,7 @@ public class Template<Model, OriginalModel> {
         return this;
     }
 
-    public Template<Model, OriginalModel> apply(Function<OriginalModel, Boolean> apply) {
+    public Template<Model, OriginalModel> apply(Function<Model, Boolean> apply) {
         this.apply = Optional.ofNullable(apply);
         return this;
     }
@@ -152,21 +152,20 @@ public class Template<Model, OriginalModel> {
     }
 
 
-    public List<Component> buildList(final OriginalModel model){
+    public List<Component> buildList(final OriginalModel model) {
         return toComponents(model, null).orElse(null);
     }
 
-    public Component build(final OriginalModel model){
+    public Component build(final OriginalModel model) {
         return toComponents(model, null).map(components -> components.stream().findFirst().orElse(null)).orElse(null);
     }
 
     protected Optional<List<Component>> toComponents(final OriginalModel model, final Component<Model> father) {
-        final Boolean shouldApply = apply
-                .map(f -> f.apply(model))
-                .orElse(true);
+        List<Model> models = getModels(model, father).stream().filter(m -> apply
+                .map(f -> f.apply(m))
+                .orElse(true)).collect(Collectors.toList());
 
-        if (shouldApply) {
-            List<Model> models = getModels(model, father);
+        if (!models.isEmpty()) {
             System.out.println("father: " + father + " | models: " + models);
 
             List<Component> components = getComponents(models);
@@ -193,10 +192,10 @@ public class Template<Model, OriginalModel> {
             final Object viewContract = dataBuilder.map(f -> f.apply(newModel)).orElse(null);
 
             return new Component<Model>()
-                            .withId(cmpId)
-                            .withData(viewContract)
-                            .withUiType(uiType.orElse(null))
-                            .withModel(newModel);
+                    .withId(cmpId)
+                    .withData(viewContract)
+                    .withUiType(uiType.orElse(null))
+                    .withModel(newModel);
         }).collect(Collectors.toList());
     }
 
