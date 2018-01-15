@@ -14,8 +14,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -34,9 +32,9 @@ public class ViewBuilderTest {
         template
                 .addChild().id("page").uiType("desktop_page")
                 .addChild().id("search").dataBuilder(m -> new AutocompleteInput()
-                        .withPlaceholder(m.getSearchPlaceholder())
-                        .withIcon(m.getSearchIcon())
-                        .withFormName("q"))
+                .withPlaceholder(m.getSearchPlaceholder())
+                .withIcon(m.getSearchIcon())
+                .withFormName("q"))
                 .addSibling().id("grid").uiType("desktop_grid")
                 .addChildren(ExampleModelItem.class, ExampleModel::getItems)
                 .addChild().id("picture").dataBuilder(m -> m.getPictures().stream().findFirst().orElse(null))
@@ -50,12 +48,12 @@ public class ViewBuilderTest {
 
 
         final ExampleModel model = getModel();
-        final Optional<List<Component>> components = template.toComponents(model, null);
 
-        final List<Component> list = components.get();
-        assertNotNull(list);
+        final Component component = template.build(model);
 
-        System.out.println(gson.toJson(list));
+        assertNotNull(component);
+
+        System.out.println(gson.toJson(component));
 
         /*
 {

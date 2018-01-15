@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Created by abertolo on 29/12/17.
@@ -150,32 +151,25 @@ public class Template<Model, OriginalModel> {
         return this;
     }
 
-    public Optional<List<Component>> toComponents(final OriginalModel model, Component<Model> father) {
+
+    public List<Component> buildList(final OriginalModel model){
+        return toComponents(model, null).orElse(null);
+    }
+
+    public Component build(final OriginalModel model){
+        return toComponents(model, null).map(components -> components.stream().findFirst().orElse(null)).orElse(null);
+    }
+
+    protected Optional<List<Component>> toComponents(final OriginalModel model, final Component<Model> father) {
         final Boolean shouldApply = apply
                 .map(f -> f.apply(model))
                 .orElse(true);
 
         if (shouldApply) {
-            List<Component> components = new ArrayList<>();
-
             List<Model> models = getModels(model, father);
             System.out.println("father: " + father + " | models: " + models);
 
-            models.forEach(newModel -> {
-                final String cmpId = id
-                        .orElseGet(() -> idBuilder.map(f -> f.apply(newModel))
-                                .orElse(null));
-
-                final Object viewContract = dataBuilder.map(f -> f.apply(newModel)).orElse(null);
-
-                components.add(
-                        new Component<Model>()
-                                .withId(cmpId)
-                                .withData(viewContract)
-                                .withUiType(uiType.orElse(null))
-                                .withModel(newModel)
-                );
-            });
+            List<Component> components = getComponents(models);
 
             components.forEach(component -> templates.forEach(template -> {
                 final Optional<List<Component>> toComponents = template.toComponents(model, component);
@@ -188,6 +182,22 @@ public class Template<Model, OriginalModel> {
             return Optional.of(components);
         }
         return Optional.empty();
+    }
+
+    private List<Component> getComponents(List<Model> models) {
+        return models.stream().map(newModel -> {
+            final String cmpId = id
+                    .orElseGet(() -> idBuilder.map(f -> f.apply(newModel))
+                            .orElse(null));
+
+            final Object viewContract = dataBuilder.map(f -> f.apply(newModel)).orElse(null);
+
+            return new Component<Model>()
+                            .withId(cmpId)
+                            .withData(viewContract)
+                            .withUiType(uiType.orElse(null))
+                            .withModel(newModel);
+        }).collect(Collectors.toList());
     }
 
     private List<Model> getModels(OriginalModel model, Component<Model> father) {
