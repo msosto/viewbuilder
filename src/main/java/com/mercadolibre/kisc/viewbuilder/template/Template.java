@@ -177,6 +177,14 @@ public class Template<Model, OriginalModel> {
                 );
             });
 
+            components.forEach(component -> templates.forEach(template -> {
+                final Optional<List<Component>> toComponents = template.toComponents(model, component);
+
+                toComponents.ifPresent(thisComponents -> thisComponents.forEach(c -> {
+                    component.add(c);
+                }));
+            }));
+
             return Optional.of(components);
         }
         return Optional.empty();
@@ -189,7 +197,7 @@ public class Template<Model, OriginalModel> {
 
         System.out.println("father.getModel():" + fatherModel + " | model:" + model);
 
-        final java.lang.Object m = !model.getClass().equals(fatherModel) ? fatherModel : model;
+        final Object m = (fatherModel != null && !model.getClass().equals(fatherModel)) ? fatherModel : model;
 
         return spread.map(f -> f.apply((OriginalModel) m))
                 .orElseGet(() -> modelSupplier.map(f -> toList(f.apply((OriginalModel) m)))

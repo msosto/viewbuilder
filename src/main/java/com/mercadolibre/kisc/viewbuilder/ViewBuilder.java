@@ -10,7 +10,10 @@ import java.util.Optional;
 /**
  * Created by abertolo on 22/12/17.
  */
-public class ViewBuilder<Model, OriginalModel> {
+public class ViewBuilder {
+
+
+
     /*
         final ViewBuilder<OriginalModel, OriginalModel> parent;
 
