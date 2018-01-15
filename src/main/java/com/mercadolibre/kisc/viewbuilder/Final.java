@@ -7,8 +7,7 @@ public class Final<T> {
 
     T instance;
 
-    public Final() {
-    }
+    public Final() {}
 
     public Final(T instance) {
         this.instance = instance;
