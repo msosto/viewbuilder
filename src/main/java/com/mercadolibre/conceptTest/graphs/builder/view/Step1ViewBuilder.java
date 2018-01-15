@@ -24,7 +24,7 @@ public class Step1ViewBuilder {
         step1Template.addChild(getFinderTask());
         step1Template.addChild(getCategorySelectionTask());
         step1Template.addChild(getPKsTask());
-        return step1Template.toComponents(step1Model, null).get().get(0);
+        return step1Template.build(step1Model);
     }
 
     protected <TASK_MODEL extends TaskModel, STEP_MODEL> Template<TASK_MODEL, STEP_MODEL> getTask(Class<STEP_MODEL> stepModelClass, Class<TASK_MODEL> taskModelClass, Template<TASK_MODEL, TASK_MODEL> body, String taskId) {
