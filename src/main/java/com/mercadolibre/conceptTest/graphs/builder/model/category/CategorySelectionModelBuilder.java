@@ -2,8 +2,10 @@ package com.mercadolibre.conceptTest.graphs.builder.model.category;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.mercadolibre.ActionsModule;
 import com.mercadolibre.actions.CatalogUtils;
 import com.mercadolibre.actions.CategoryUtils;
+import com.mercadolibre.actions.SiteUtils;
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.BreadcrumbCategory;
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.CategorySelectionColumn;
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.CategorySelectionRow;
@@ -45,8 +47,8 @@ public class CategorySelectionModelBuilder {
 
     public CategorySelectionModelBuilder() {
         this.model = new CategorySelectionModel();
-        this.categoryUtils = new CategoryUtils();
-        this.catalogUtils = new CatalogUtils();
+        this.categoryUtils = ActionsModule.get().getInstance(CategoryUtils.class);
+        this.catalogUtils = ActionsModule.get().getInstance(CatalogUtils.class);
     }
 
     public CategorySelectionModel build(Context context) {
