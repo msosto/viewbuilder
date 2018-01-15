@@ -32,9 +32,9 @@ public class ViewBuilderTest {
         template
                 .addChild().id("page").uiType("desktop_page")
                 .addChild().id("search").dataBuilder(m -> new AutocompleteInput()
-                .withPlaceholder(m.getSearchPlaceholder())
-                .withIcon(m.getSearchIcon())
-                .withFormName("q"))
+                    .withPlaceholder(m.getSearchPlaceholder())
+                    .withIcon(m.getSearchIcon())
+                    .withFormName("q"))
                 .addSibling().id("grid").uiType("desktop_grid")
                 .addChildren(ExampleModelItem.class, ExampleModel::getItems)
                 .addChild().id("picture").dataBuilder(m -> m.getPictures().stream().findFirst().orElse(null))
