@@ -66,22 +66,16 @@ public class CategorySelectionModelBuilder {
     }
 
     private void addBreadcrumbCategories(Context context) {
-        SellCatalogSelection selection = getSelection(context);
         List<BreadcrumbCategory> breadcrumbCategories = Lists.newArrayList();
-        selection.getColumns().forEach(column -> {
-            SellCatalogSelectionRow selectedRow = column.getRows()
-                    .stream()
-                    .filter(sellCatalogSelectionRow -> Boolean.TRUE.equals(sellCatalogSelectionRow.getSelected()))
-                    .findFirst()
-                    .orElse(null);
-            if (selectedRow != null) {
-                String categoryId = (String) selectedRow.getOutput().get(ITEM_CATEGORY_ID);
-                breadcrumbCategories.add(new BreadcrumbCategory()
-                        .withId(categoryId)
-                        .withName(selectedRow.getName())
-                        .withOutput(withDots(context.getId(), ITEM_CATEGORY_ID)));
-            }
-        });
+        Category category = categoryUtils.getCategory(context, CategoryProvider.DATA_ITEM);
+        if(nonNull(category)){
+            category.getPathFromRoot().forEach(cat -> {
+                    breadcrumbCategories.add(new BreadcrumbCategory()
+                            .withId(cat.getId())
+                            .withName(cat.getName())
+                            .withOutput(withDots(context.getId(), ITEM_CATEGORY_ID)));
+            });
+        }
         model.withBreadcrumbCategories(breadcrumbCategories);
         model.withShowCategoryBreadcrumbComponent(!breadcrumbCategories.isEmpty());
     }

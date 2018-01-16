@@ -25,7 +25,7 @@ public class Step1ViewBuilder {
         final Template<Step1Model, Step1Model> step1Template = Template.create(Step1Model.class).id("STEP_1").uiType("STEP");
         step1Template.addChild(getFinderTask());
         step1Template.addChild(getCategorySelectionTask());
-        //step1Template.addChild(getPKsTask());
+        step1Template.addChild(getPKsTask());
         return step1Template.build(step1Model);
     }
 
