@@ -21,4 +21,12 @@ public class TaskModel {
     public FooterModel getFooterModel() {
         return footerModel;
     }
+
+    public void setHeaderModel(HeaderModel headerModel) {
+        this.headerModel = headerModel;
+    }
+
+    public void setFooterModel(FooterModel footerModel) {
+        this.footerModel = footerModel;
+    }
 }
