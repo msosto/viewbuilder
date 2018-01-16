@@ -7,6 +7,7 @@ import com.mercadolibre.conceptTest.graphs.model.CategorySelectionModel;
 import com.mercadolibre.conceptTest.graphs.model.FinderModel;
 import com.mercadolibre.conceptTest.graphs.model.PksModel;
 import com.mercadolibre.conceptTest.graphs.model.Step1Model;
+import com.mercadolibre.conceptTest.template.Step1Template;
 import com.mercadolibre.dto.category.AttributeValueType;
 import com.mercadolibre.dto.category.CategoryAttribute;
 import com.mercadolibre.dto.category.CategoryAttributeHierarchy;
@@ -28,7 +29,7 @@ public class Step1ViewBuilderTest {
     @Test
     public void testStep1() {
         Step1Model model = buildModel();
-        final Component build = new Step1ViewBuilder().build(model);
+        final Component build = new Step1Template().build(model);
 
         System.out.println(gson.toJson(build));
     }

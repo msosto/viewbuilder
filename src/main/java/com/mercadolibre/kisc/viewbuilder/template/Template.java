@@ -54,7 +54,7 @@ public abstract class Template<Model> {
         createTemplate();
     }
 
-    public abstract void createTemplate();
+    protected abstract void createTemplate();
 
     public <T> Template<T> create(Class<T> clazz) {
         return new TemplateStruct<>(null, clazz);
