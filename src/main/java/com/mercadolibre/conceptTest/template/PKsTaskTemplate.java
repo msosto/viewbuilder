@@ -15,7 +15,7 @@ public class PKsTaskTemplate extends TaskTemplate<PksModel> {
 
     @Override
     protected String getTaskId() {
-        return "FINDER";
+        return "PKS";
     }
 
     @Override
