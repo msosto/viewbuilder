@@ -12,13 +12,11 @@ import java.util.stream.Collectors;
 /**
  * Created by abertolo on 29/12/17.
  */
-public class Template<Model, OriginalModel> {
+public abstract class Template<Model> {
 
-    final Final<Template<OriginalModel, ?>> parent;
+    final Final<Template> parent;
 
     final Class<Model> modelType;
-
-    final Class<OriginalModel> originalModelType;
 
     final List<Template> templates;
 
@@ -32,15 +30,17 @@ public class Template<Model, OriginalModel> {
 
     Optional<Function<Model, Object>> dataBuilder;
 
-    Optional<Function<OriginalModel, Model>> modelSupplier;
+    Optional<Function<Object, Model>> modelSupplier;
 
-    Optional<Function<OriginalModel, List<Model>>> spread;
+    Optional<Function<Object, List<Model>>> spread;
 
+    protected Template(Class<Model> modelType){
+        this(null, modelType);
+    }
 
-    protected Template(Template<OriginalModel, ?> parent, Class<Model> modelType, Class<OriginalModel> originalModelType) {
+    protected Template(Template parent, Class<Model> modelType) {
         this.parent = new Final(parent);
         this.modelType = modelType;
-        this.originalModelType = originalModelType;
 
         templates = new ArrayList<>();
         idBuilder = Optional.empty();
@@ -50,65 +50,77 @@ public class Template<Model, OriginalModel> {
         dataBuilder = Optional.empty();
         modelSupplier = Optional.empty();
         spread = Optional.empty();
+
+        createTemplate();
     }
 
-    public static <T> Template<T, T> create(Class<T> clazz) {
-        return new Template<>(null, clazz, clazz);
+    protected abstract void createTemplate();
+
+    public <T> Template<T> create(Class<T> clazz) {
+        return new TemplateStruct<>(null, clazz);
     }
 
-    public static <M, O> Template<M, O> create(Template parent, Class<M> mClazz, Class<O> oClazz) {
-        return new Template<>(parent, mClazz, oClazz);
+    public <M> Template<M> create(Template parent, Class<M> mClazz) {
+        return new TemplateStruct<>(parent, mClazz);
     }
 
-    public Template<OriginalModel, OriginalModel> addSibling() {
+    public Template<Model> addSibling() {
         return parent.get().addChild();
     }
 
-    public <NewModel> Template<NewModel, OriginalModel> addSibling(Class<NewModel> clazz, Function<OriginalModel, NewModel> transformer) {
+    public <NewModel> Template<NewModel> addSibling(Class<NewModel> clazz, Function<Model, NewModel> transformer) {
         return parent.get().addChild(clazz, transformer);
     }
 
-    public Template<Model, Model> addChild() {
-        final Template<Model, Model> t = create(this, modelType, modelType);
+    public Template<Model> addChild() {
+        final Template<Model> t = create(this, modelType);
         templates.add(t);
         return t;
     }
 
-    public <NewModel> Template<NewModel, Model> addChild(Class<NewModel> clazz, Function<Model, NewModel> transformer) {
-        final Template<NewModel, Model> t = create(this, clazz, modelType);
-        t.modelSupplier(transformer);
+    public <NewModel> Template<NewModel> addChild(Class<NewModel> clazz, Function<Model, NewModel> transformer) {
+        final Template<NewModel> t = create(this, clazz);
+        t.modelSupplier((Function<Object, NewModel>) transformer);
         templates.add(t);
         return t;
     }
 
-    public <NewModel> Template<NewModel, Model> addChild(Template<NewModel, Model> t) {
+    public <NewModel> Template<NewModel> addChild(Template<NewModel> t) {
         t.parent.set(this);
         templates.add(t);
         return t;
     }
 
 
-    public <NewModel> Template<NewModel, Model> addChildren(Class<NewModel> clazz, Function<Model, List<NewModel>> transformer) {
-        final Template<NewModel, Model> t = create(this, clazz, modelType);
-        t.spread(transformer);
+    public <NewModel> Template<NewModel> addChild(Template<NewModel> t, Function<Model, NewModel> transformer) {
+        t.modelSupplier((Function<Object, NewModel>) transformer);
+        t.parent.set(this);
         templates.add(t);
         return t;
     }
 
-    private void setParent(Template<OriginalModel, ?> p) {
+
+    public <NewModel> Template<NewModel> addChildren(Class<NewModel> clazz, Function<Model, List<NewModel>> transformer) {
+        final Template<NewModel> t = create(this, clazz);
+        t.spread((Function<Object, List<NewModel>>) transformer);
+        templates.add(t);
+        return t;
+    }
+
+    private void setParent(Template<?> p) {
         parent.set(p);
     }
 
-    public Template<OriginalModel, OriginalModel> parent() {
-        return (Template<OriginalModel, OriginalModel>) parent.get();
+    public Template<Model> parent() {
+        return (Template<Model>) parent.get();
     }
 
-    public <T> Template<OriginalModel, T> parent(Class<T> tClass) {
-        final Class<?> parentOriginalModelType = parent.get().getOriginalModelType();
-        if (!parentOriginalModelType.equals(tClass)) {
-            throw new RuntimeException("The class " + tClass + " is not compatible with the parent original type " + parentOriginalModelType);
+    public <T> Template<T> parent(Class<T> tClass) {
+        final Class<?> parentModelType = parent.get().getModelType();
+        if (!parentModelType.equals(tClass)) {
+            throw new RuntimeException("The class " + tClass + " is not compatible with the parent original type " + parentModelType);
         }
-        return (Template<OriginalModel, T>) parent.get();
+        return (Template<T>) parent.get();
     }
 
     public List<Template> getChildren() {
@@ -116,51 +128,51 @@ public class Template<Model, OriginalModel> {
     }
 
 
-    public Template<Model, OriginalModel> id(String id) {
+    public Template<Model> id(String id) {
         this.id = Optional.ofNullable(id);
         return this;
     }
 
-    public Template<Model, OriginalModel> uiType(String uiType) {
+    public Template<Model> uiType(String uiType) {
         this.uiType = Optional.ofNullable(uiType);
         return this;
     }
 
-    public Template<Model, OriginalModel> apply(Function<Model, Boolean> apply) {
+    public Template<Model> apply(Function<Model, Boolean> apply) {
         this.apply = Optional.ofNullable(apply);
         return this;
     }
 
-    public Template<Model, OriginalModel> dataBuilder(Function<Model, Object> mapper) {
+    public Template<Model> dataBuilder(Function<Model, Object> mapper) {
         this.dataBuilder = Optional.ofNullable(mapper);
         return this;
     }
 
-    public Template<Model, OriginalModel> idBuilder(Function<Model, String> idBuilder) {
+    public Template<Model> idBuilder(Function<Model, String> idBuilder) {
         this.idBuilder = Optional.ofNullable(idBuilder);
         return this;
     }
 
-    public Template<Model, OriginalModel> modelSupplier(Function<OriginalModel, Model> transform) {
+    public Template<Model> modelSupplier(Function<Object, Model> transform) {
         this.modelSupplier = Optional.ofNullable(transform);
         return this;
     }
 
-    public Template<Model, OriginalModel> spread(Function<OriginalModel, List<Model>> spread) {
+    public Template<Model> spread(Function<Object, List<Model>> spread) {
         this.spread = Optional.ofNullable(spread);
         return this;
     }
 
 
-    public List<Component> buildList(final OriginalModel model) {
+    public List<Component> buildList(final Model model) {
         return toComponents(model, null).orElse(null);
     }
 
-    public Component build(final OriginalModel model) {
+    public Component build(final Model model) {
         return toComponents(model, null).map(components -> components.stream().findFirst().orElse(null)).orElse(null);
     }
 
-    protected Optional<List<Component>> toComponents(final OriginalModel model, final Component<Model> father) {
+    protected Optional<List<Component>> toComponents(final Model model, final Component<Model> father) {
         List<Model> models = getModels(model, father).stream().filter(m -> apply
                 .map(f -> f.apply(m))
                 .orElse(true)).collect(Collectors.toList());
@@ -199,8 +211,8 @@ public class Template<Model, OriginalModel> {
         }).collect(Collectors.toList());
     }
 
-    private List<Model> getModels(OriginalModel model, Component<Model> father) {
-        System.out.println(originalModelType + " == " + model.getClass());
+    private List<Model> getModels(Model model, Component<Model> father) {
+        System.out.println(modelType + " == " + model.getClass());
 
         final Model fatherModel = Optional.ofNullable(father).map(Component::getModel).orElse(null);
 
@@ -208,8 +220,8 @@ public class Template<Model, OriginalModel> {
 
         final Object m = (fatherModel != null && !model.getClass().equals(fatherModel)) ? fatherModel : model;
 
-        return spread.map(f -> f.apply((OriginalModel) m))
-                .orElseGet(() -> modelSupplier.map(f -> toList(f.apply((OriginalModel) m)))
+        return spread.map(f -> f.apply( m))
+                .orElseGet(() -> modelSupplier.map(f -> toList(f.apply((Model) m)))
                         .orElseGet(() -> toList((Model) m)));
 
     }
@@ -221,7 +233,22 @@ public class Template<Model, OriginalModel> {
     }
 
 
-    public Class<OriginalModel> getOriginalModelType() {
-        return originalModelType;
+    protected Class<Model> getModelType() {
+        return modelType;
+    }
+
+
+    private static class TemplateStruct<Model> extends Template<Model>{
+
+        protected TemplateStruct(Class<Model> modelType) {
+            super(modelType);
+        }
+
+        protected TemplateStruct(Template parent, Class<Model> modelType) {
+            super(parent, modelType);
+        }
+
+        @Override
+        public void createTemplate() {}
     }
 }

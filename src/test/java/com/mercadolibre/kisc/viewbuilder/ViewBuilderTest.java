@@ -27,25 +27,26 @@ public class ViewBuilderTest {
     @Test
     public void build() throws Exception {
 
-        final Template<ExampleModel, ExampleModel> template = Template.create(ExampleModel.class);
-
-        template
-                .addChild().id("page").uiType("desktop_page")
-                .addChild().id("search").dataBuilder(m -> new AutocompleteInput()
-                .withPlaceholder(m.getSearchPlaceholder())
-                .withIcon(m.getSearchIcon())
-                .withFormName("q"))
-                .addSibling().id("grid").uiType("desktop_grid")
-                .addChildren(ExampleModelItem.class, ExampleModel::getItems)
-                .addChild().id("picture").dataBuilder(m -> m.getPictures().stream().findFirst().orElse(null))
-                .addSibling().id("title").dataBuilder(m -> new Label().withText(m.getTitle()))
-                .parent(ExampleModel.class)
-                .parent()
-                .addChild().id("footer")
-                .parent()
-                .parent()
-                .addChild(OtherModel.class, ExampleModel::getOther).id("page_footer");
-
+        final Template<ExampleModel> template = new Template<ExampleModel>(ExampleModel.class) {
+            @Override
+            public void createTemplate() {
+                addChild().id("page").uiType("desktop_page")
+                        .addChild().id("search").dataBuilder(m -> new AutocompleteInput()
+                        .withPlaceholder(m.getSearchPlaceholder())
+                        .withIcon(m.getSearchIcon())
+                        .withFormName("q"))
+                        .addSibling().id("grid").uiType("desktop_grid")
+                        .addChildren(ExampleModelItem.class, ExampleModel::getItems)
+                        .addChild().id("picture").dataBuilder(m -> m.getPictures().stream().findFirst().orElse(null))
+                        .addSibling().id("title").dataBuilder(m -> new Label().withText(m.getTitle()))
+                        .parent()
+                        .parent(ExampleModel.class)
+                        .addChild().id("footer")
+                        .parent()
+                        .parent()
+                        .addChild(OtherModel.class, ExampleModel::getOther).id("page_footer");
+            }
+        };
 
         final ExampleModel model = getModel();
 
