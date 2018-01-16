@@ -1,5 +1,6 @@
 package com.mercadolibre.conceptTest.graphs.builder.view;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mercadolibre.conceptTest.graphs.builder.model.attribute.pks.PksModelBuilder;
@@ -69,9 +70,8 @@ public class Step1ViewBuilderTest {
     }
 
     private List<DataProxy> getListOfAttributes() {
-        SimpleDataProxy list = SimpleDataProxy.newListDataProxy();
 
-
+        List list = Lists.newArrayList();
         CategoryAttribute modelAttr = new CategoryAttribute()
                 .setId("MODEL")
                 .setName("Modelo")
@@ -82,8 +82,8 @@ public class Step1ViewBuilderTest {
                 .setAttributeGroupId("MAIN")
                 .setAttributeGroupName("Principales");
 
-        DataProxy modelDp = new SimpleDataProxy(modelAttr.toMap());
+        list.add(modelAttr.toMap());
 
-        return list.addToList(modelDp).getListValue();
+        return list;
     }
 }
