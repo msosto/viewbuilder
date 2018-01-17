@@ -5,6 +5,7 @@ import com.mercadolibre.conceptTest.graphs.builder.data.category.CategorySelecti
 import com.mercadolibre.conceptTest.graphs.builder.data.category.InputHiddenDataBuilder;
 import com.mercadolibre.conceptTest.graphs.model.CategorySelectionModel;
 import com.mercadolibre.dto.Category;
+import com.mercadolibre.dto.catalog.SellCatalogSelection;
 import org.apache.commons.collections.CollectionUtils;
 
 import static java.util.Objects.isNull;
@@ -60,28 +61,27 @@ public class CategorySelectionTaskTemplate extends TaskTemplate<CategorySelectio
         addChild()
                 .id("HIDDEN_CATEGORY_ID")
                 .uiType("HIDDEN")
-                .apply(categorySelectionModel -> isLeaf(categorySelectionModel.getCategory()))
+                .apply(categorySelectionModel -> isLeaf(categorySelectionModel.getSellCatalogSelection()))
                 .dataBuilder(categorySelectionModel -> inputHiddenDataBuilder.build(ITEM_CATEGORY_ID_OUTPUT, categorySelectionModel.getCategoryId()));
 
         addChild()
                 .id("HIDDEN_CATALOG_PRODUCT_ID")
                 .uiType("HIDDEN")
-                .apply(categorySelectionModel -> isLeaf(categorySelectionModel.getCategory()))
+                .apply(categorySelectionModel -> isLeaf(categorySelectionModel.getSellCatalogSelection()))
                 .dataBuilder(categorySelectionModel -> inputHiddenDataBuilder.build(ITEM_CATALOG_PRODUCT_ID_OUTPUT, categorySelectionModel.getCatalogProductId()));
 
     }
 
     private boolean showCategoryBreadcrumb(CategorySelectionModel categorySelectionModel) {
         Category category = categorySelectionModel.getCategory();
-        return nonNull(category) && !CollectionUtils.isEmpty(categorySelectionModel.getCategory().getChildrenCategories());
+        return nonNull(category) && !CollectionUtils.isEmpty(categorySelectionModel.getCategory().getPathFromRoot());
     }
 
     private boolean showCategorySelection(CategorySelectionModel categorySelectionModel) {
-        Category category = categorySelectionModel.getCategory();
-        return isNull(category) || isLeaf(category);
+        return !isLeaf(categorySelectionModel.getSellCatalogSelection());
     }
 
-    private boolean isLeaf(Category category) {
-        return nonNull(category) && !category.isLeaf();
+    private boolean isLeaf(SellCatalogSelection selection) {
+        return nonNull(selection) && Boolean.TRUE.equals(selection.getShouldContinue());
     }
 }
