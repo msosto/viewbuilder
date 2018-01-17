@@ -3,7 +3,7 @@ package com.mercadolibre.conceptTest.graphs.builder.view;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mercadolibre.conceptTest.graphs.builder.model.attribute.pks.PksModelBuilder;
+import com.mercadolibre.conceptTest.graphs.builder.model.attribute.PksModelBuilder;
 import com.mercadolibre.conceptTest.graphs.model.CategorySelectionModel;
 import com.mercadolibre.conceptTest.graphs.model.FinderModel;
 import com.mercadolibre.conceptTest.graphs.model.PksModel;
@@ -13,7 +13,6 @@ import com.mercadolibre.dto.category.AttributeValueType;
 import com.mercadolibre.dto.category.CategoryAttribute;
 import com.mercadolibre.dto.category.CategoryAttributeHierarchy;
 import com.mercadolibre.flux.flow.graph.navigation.DataProxy;
-import com.mercadolibre.flux.flow.graph.navigation.SimpleDataProxy;
 import com.mercadolibre.kisc.viewbuilder.Component;
 import org.junit.Test;
 

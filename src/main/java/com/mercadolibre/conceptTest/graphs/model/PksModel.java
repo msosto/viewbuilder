@@ -1,6 +1,8 @@
 package com.mercadolibre.conceptTest.graphs.model;
 
-import com.mercadolibre.flux.flow.graph.navigation.DataProxy;
+import com.mercadolibre.dto.category.CategoryAttribute;
+import com.mercadolibre.dto.category.Vertical;
+import com.mercadolibre.dto.item.ItemAttribute;
 
 import java.util.List;
 
@@ -9,8 +11,21 @@ import java.util.List;
  */
 public class PksModel extends TaskModel {
 
-    List<DataProxy> pksAttributes;
+    List<CategoryAttribute> pksCategoryAttributes;
+    List<ItemAttribute> itemAttributes;
+    String siteId;
+    Vertical vertical;
+    String categoryId;
     String decimalSeparator;
+
+    public String getSiteId() {
+        return siteId;
+    }
+
+    public PksModel setSiteId(String siteId) {
+        this.siteId = siteId;
+        return this;
+    }
 
     public String getDecimalSeparator() {
         return decimalSeparator;
@@ -21,13 +36,39 @@ public class PksModel extends TaskModel {
         return this;
     }
 
-    public List<DataProxy> getPksAttributes() {
-        return pksAttributes;
+    public List<CategoryAttribute> getPksCategoryAttributes() {
+        return pksCategoryAttributes;
     }
 
-    public PksModel setPksAttributes(List<DataProxy> pksAttributes) {
-        this.pksAttributes = pksAttributes;
+    public PksModel setPksCategoryAttributes(List<CategoryAttribute> pksCategoryAttributes) {
+        this.pksCategoryAttributes = pksCategoryAttributes;
         return this;
     }
 
+    public List<ItemAttribute> getItemAttributes() {
+        return itemAttributes;
+    }
+
+    public PksModel setItemAttributes(List<ItemAttribute> itemAttributes) {
+        this.itemAttributes = itemAttributes;
+        return this;
+    }
+
+    public Vertical getVertical() {
+        return vertical;
+    }
+
+    public PksModel setVertical(Vertical vertical) {
+        this.vertical = vertical;
+        return this;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public PksModel setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+        return this;
+    }
 }
