@@ -1,10 +1,7 @@
 package com.mercadolibre.conceptTest.graphs.model;
 
-import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.BreadcrumbCategory;
-import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.CategorySelectionColumn;
 import com.mercadolibre.dto.Category;
-
-import java.util.List;
+import com.mercadolibre.dto.catalog.SellCatalogSelection;
 
 /**
  * Created by mlizarraga on 11/1/18
@@ -12,9 +9,12 @@ import java.util.List;
 public class CategorySelectionModel extends TaskModel {
 
     private Category category;
+    private SellCatalogSelection sellCatalogSelection;
     private String contextId;
+    private String categoryId;
+    private String catalogProductId;
 
-    public CategorySelectionModel(){
+    public CategorySelectionModel() {
         super();
     }
 
@@ -35,4 +35,32 @@ public class CategorySelectionModel extends TaskModel {
         this.contextId = contextId;
         return this;
     }
+
+    public SellCatalogSelection getSellCatalogSelection() {
+        return sellCatalogSelection;
+    }
+
+    public CategorySelectionModel setSellCatalogSelection(SellCatalogSelection sellCatalogSelection) {
+        this.sellCatalogSelection = sellCatalogSelection;
+        return this;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public CategorySelectionModel setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+        return this;
+    }
+
+    public String getCatalogProductId() {
+        return catalogProductId;
+    }
+
+    public CategorySelectionModel setCatalogProductId(String catalogProductId) {
+        this.catalogProductId = catalogProductId;
+        return this;
+    }
+
 }

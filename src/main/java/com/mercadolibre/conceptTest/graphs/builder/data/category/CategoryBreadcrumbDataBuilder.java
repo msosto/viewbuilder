@@ -5,7 +5,6 @@ import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.Bread
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.CategoryBreadcrumbViewContract;
 import com.mercadolibre.conceptTest.graphs.model.CategorySelectionModel;
 import com.mercadolibre.dto.Category;
-import com.mercadolibre.util.providers.CategoryProvider;
 
 import java.util.List;
 
@@ -19,16 +18,20 @@ public class CategoryBreadcrumbDataBuilder {
 
     public static final String ITEM_CATEGORY_ID = "item.category_id";
 
-    CategoryBreadcrumbViewContract build(CategorySelectionModel model){
+    public CategoryBreadcrumbViewContract build(CategorySelectionModel model) {
+        CategoryBreadcrumbViewContract viewContract = new CategoryBreadcrumbViewContract();
         List<BreadcrumbCategory> breadcrumbCategories = Lists.newArrayList();
         Category category = model.getCategory();
-        if(nonNull(category)){
-            category.getPathFromRoot().forEach(cat -> {
-                breadcrumbCategories.add(new BreadcrumbCategory()
-                        .withId(cat.getId())
-                        .withName(cat.getName())
-                        .withOutput(withDots(model.getContextId(), ITEM_CATEGORY_ID)));
-            });
+        if (nonNull(category)) {
+            category.getPathFromRoot().forEach(cat ->
+                    breadcrumbCategories.add(new BreadcrumbCategory()
+                            .withId(cat.getId())
+                            .withName(cat.getName())
+                            .withOutput(withDots(model.getContextId(), ITEM_CATEGORY_ID)))
+            );
         }
+        viewContract.withCategories(breadcrumbCategories);
+        return viewContract;
     }
+
 }

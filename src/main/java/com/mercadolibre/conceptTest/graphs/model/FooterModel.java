@@ -1,7 +1,5 @@
 package com.mercadolibre.conceptTest.graphs.model;
 
-import com.mercadolibre.conceptTest.graphs.builder.view.contracts.FooterViewContract;
-
 /**
  * Created by mlizarraga on 11/1/18
  */
