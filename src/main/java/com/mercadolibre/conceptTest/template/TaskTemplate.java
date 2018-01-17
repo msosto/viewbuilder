@@ -42,13 +42,13 @@ public abstract class TaskTemplate<Model extends TaskModel> extends Template<Mod
     protected abstract String getFooterUIType();
 
     protected void addFooter() {
-        addChild(FooterModel.class, TaskModel::getFooterModel).id(getTaskId() + "FOOTER").uiType(getFooterUIType())
+        addChild(FooterModel.class, TaskModel::getFooterModel).id(getTaskId() + "_FOOTER").uiType(getFooterUIType())
                 .dataBuilder(footerModel -> footerDataBuilder.build(footerModel))
                 .apply(footerModel -> footerModel.show());
     }
 
     protected void addHeader() {
-        addChild(HeaderModel.class, TaskModel::getHeaderModel).id(getTaskId() + "HEADER").uiType(getHeaderUIType())
+        addChild(HeaderModel.class, TaskModel::getHeaderModel).id(getTaskId() + "_HEADER").uiType(getHeaderUIType())
                 .dataBuilder(headerModel -> headerDataBuilder.build(headerModel));
     }
 
