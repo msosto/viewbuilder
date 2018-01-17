@@ -11,7 +11,7 @@ public class FinderModel extends TaskModel {
     private String title;
     private Boolean required;
     private Boolean disabled;
-    private List<Map<String, Object>> validationErrors;
+
 
     public String getTitle() {
         return title;
@@ -40,12 +40,4 @@ public class FinderModel extends TaskModel {
         return this;
     }
 
-    public List<Map<String, Object>> getValidationErrors() {
-        return validationErrors;
-    }
-
-    public FinderModel setValidationErrors(List<Map<String, Object>> validationErrors) {
-        this.validationErrors = validationErrors;
-        return this;
-    }
 }
