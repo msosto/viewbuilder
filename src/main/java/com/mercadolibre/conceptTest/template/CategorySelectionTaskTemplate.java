@@ -43,7 +43,7 @@ public class CategorySelectionTaskTemplate extends TaskTemplate<CategorySelectio
                 .uiType("CATEGORY_SELECTION")
                 //TODO Lógica de showComponent
                 .apply(categorySelectionModel -> true)
-                .dataBuilder(categorySelectionModel -> categoryBreadcrumbDataBuilder.build(categorySelectionModel));
+                .dataBuilder(categorySelectionModel -> categorySelectionDataBuilder.build(categorySelectionModel));
         addChild()
                 .id("HIDDEN_CATEGORY_ID")
                 .uiType("HIDDEN").dataBuilder(categorySelectionModel -> inputHiddenDataBuilder.build(ITEM_CATEGORY_ID_OUTPUT, categorySelectionModel.getCategoryId()));
