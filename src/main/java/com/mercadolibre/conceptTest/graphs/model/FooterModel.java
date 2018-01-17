@@ -7,6 +7,7 @@ public class FooterModel {
 
     private String buttonText;
     private String buttonConnection;
+    private boolean showFooter;
 
     public String getButtonText() {
         return buttonText;
@@ -24,5 +25,14 @@ public class FooterModel {
     public FooterModel withButtonConnection(String buttonConnection) {
         this.buttonConnection = buttonConnection;
         return this;
+    }
+
+    public FooterModel setShowFooter(boolean showFooter){
+        this.showFooter = showFooter;
+        return this;
+    }
+
+    public boolean show() {
+        return showFooter;
     }
 }

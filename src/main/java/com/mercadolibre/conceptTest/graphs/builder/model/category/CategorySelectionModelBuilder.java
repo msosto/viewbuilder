@@ -10,10 +10,17 @@ import com.mercadolibre.flux.flow.graph.navigation.Context;
 import com.mercadolibre.util.providers.CatalogProductProvider;
 import com.mercadolibre.util.providers.CategoryProvider;
 
+import static java.util.Objects.nonNull;
+
 /**
  * Created by mlizarraga on 11/1/18
  */
 public class CategorySelectionModelBuilder {
+
+    public static final String HEADER_TITLE = "CATEGORY_SELECTION_HEADER_TITLE";
+    public static final String FOOTER_BUTTON_TEXT = "CATEGORY_SELECTION_FOOTER_BUTTON_TEXT";
+    //TODO Mover a un builder abstracto o a una clase mas generica.
+    public static final String CONTINUE_CONNECTION_ID = "continue";
 
     private CategorySelectionModel model;
     private CategoryUtils categoryUtils;
@@ -33,10 +40,18 @@ public class CategorySelectionModelBuilder {
         model.setContextId(context.getId());
         model.setCategoryId(CategoryProvider.DATA_ITEM.getId(context));
         model.setCatalogProductId(CatalogProductProvider.DATA_ITEM.getId(context));
+        model.getHeaderModel().withTitle(HEADER_TITLE);
+        model.getFooterModel().withButtonText(FOOTER_BUTTON_TEXT);
+        model.getFooterModel().withButtonConnection(CONTINUE_CONNECTION_ID);
+        model.getFooterModel().setShowFooter(isLeaf(category));
         return model;
     }
 
     public SellCatalogSelection getSelection(Context context) {
         return catalogUtils.getFirstSellCatalogSelectionInModel(context).orElse(null);
+    }
+
+    public boolean isLeaf(Category category) {
+        return nonNull(category) && !category.isLeaf();
     }
 }

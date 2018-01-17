@@ -19,6 +19,16 @@ public class PKsTaskTemplate extends TaskTemplate<PksModel> {
     }
 
     @Override
+    protected String getHeaderUIType() {
+        return HEADER_UI_TYPE;
+    }
+
+    @Override
+    protected String getFooterUIType() {
+        return FOOTER_IN_UI_TYPE;
+    }
+
+    @Override
     protected void addBody() {
         addChild()
                 .id("PKS").uiType("PKS")
