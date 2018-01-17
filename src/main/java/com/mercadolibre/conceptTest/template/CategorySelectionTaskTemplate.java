@@ -4,6 +4,11 @@ import com.mercadolibre.conceptTest.graphs.builder.data.category.CategoryBreadcr
 import com.mercadolibre.conceptTest.graphs.builder.data.category.CategorySelectionDataBuilder;
 import com.mercadolibre.conceptTest.graphs.builder.data.category.InputHiddenDataBuilder;
 import com.mercadolibre.conceptTest.graphs.model.CategorySelectionModel;
+import com.mercadolibre.dto.Category;
+import org.apache.commons.collections.CollectionUtils;
+
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 /**
  * Created by mforte on 1/15/18.
@@ -31,26 +36,52 @@ public class CategorySelectionTaskTemplate extends TaskTemplate<CategorySelectio
     }
 
     @Override
+    protected String getHeaderUIType() {
+        return HEADER_UI_TYPE;
+    }
+
+    @Override
+    protected String getFooterUIType() {
+        return FOOTER_IN_UI_TYPE;
+    }
+
+    @Override
     protected void addBody() {
         addChild()
                 .id("BREADCRUMB")
                 .uiType("BREADCRUMB")
-                //TODO Lógica de showComponent
-                .apply(categorySelectionModel -> true)
+                .apply(this::showCategoryBreadcrumb)
                 .dataBuilder(categorySelectionModel -> categoryBreadcrumbDataBuilder.build(categorySelectionModel));
         addChild()
                 .id("CATEGORY_SELECTION")
                 .uiType("CATEGORY_SELECTION")
-                //TODO Lógica de showComponent
-                .apply(categorySelectionModel -> true)
+                .apply(this::showCategorySelection)
                 .dataBuilder(categorySelectionModel -> categorySelectionDataBuilder.build(categorySelectionModel));
         addChild()
                 .id("HIDDEN_CATEGORY_ID")
-                .uiType("HIDDEN").dataBuilder(categorySelectionModel -> inputHiddenDataBuilder.build(ITEM_CATEGORY_ID_OUTPUT, categorySelectionModel.getCategoryId()));
+                .uiType("HIDDEN")
+                .apply(categorySelectionModel -> isLeaf(categorySelectionModel.getCategory()))
+                .dataBuilder(categorySelectionModel -> inputHiddenDataBuilder.build(ITEM_CATEGORY_ID_OUTPUT, categorySelectionModel.getCategoryId()));
 
         addChild()
                 .id("HIDDEN_CATALOG_PRODUCT_ID")
-                .uiType("HIDDEN").dataBuilder(categorySelectionModel -> inputHiddenDataBuilder.build(ITEM_CATALOG_PRODUCT_ID_OUTPUT, categorySelectionModel.getCatalogProductId()));
+                .uiType("HIDDEN")
+                .apply(categorySelectionModel -> isLeaf(categorySelectionModel.getCategory()))
+                .dataBuilder(categorySelectionModel -> inputHiddenDataBuilder.build(ITEM_CATALOG_PRODUCT_ID_OUTPUT, categorySelectionModel.getCatalogProductId()));
 
+    }
+
+    private boolean showCategoryBreadcrumb(CategorySelectionModel categorySelectionModel) {
+        Category category = categorySelectionModel.getCategory();
+        return nonNull(category) && !CollectionUtils.isEmpty(categorySelectionModel.getCategory().getChildrenCategories());
+    }
+
+    private boolean showCategorySelection(CategorySelectionModel categorySelectionModel) {
+        Category category = categorySelectionModel.getCategory();
+        return isNull(category) || isLeaf(category);
+    }
+
+    private boolean isLeaf(Category category) {
+        return nonNull(category) && !category.isLeaf();
     }
 }

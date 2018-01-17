@@ -18,6 +18,16 @@ public class FinderTaskTemplate extends TaskTemplate<FinderModel> {
     }
 
     @Override
+    protected String getHeaderUIType() {
+        return HEADER_UI_TYPE;
+    }
+
+    @Override
+    protected String getFooterUIType() {
+        return FOOTER_IN_UI_TYPE;
+    }
+
+    @Override
     protected void addBody() {
         addChild().id("FINDER").uiType("FINDER").dataBuilder(finderModel ->
                 new FinderViewContract()
