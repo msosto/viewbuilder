@@ -10,17 +10,17 @@ import java.util.stream.Collectors;
 /**
  * Created by msosto on 1/11/18.
  */
-public class PksInput extends InputComponent {
+public class PksViewContract extends InputComponent {
 
     private List<AttributeInput> pksAttributes;
     private String decimalSeparator;
 
-    public PksInput withPksAttributes(List<DataProxy> attributes) {
+    public PksViewContract setPksAttributes(List<DataProxy> attributes) {
         this.pksAttributes = getListOfAttributes(attributes);
         return this;
     }
 
-    public PksInput withDecimalSeparator(String decimalSeparator) {
+    public PksViewContract setDecimalSeparator(String decimalSeparator) {
         this.decimalSeparator = decimalSeparator;
         return this;
     }
