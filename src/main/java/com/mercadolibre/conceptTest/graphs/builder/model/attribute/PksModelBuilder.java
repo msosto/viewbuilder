@@ -31,11 +31,9 @@ public class PksModelBuilder extends AttributeModelBuilder {
         return model;
     }
 
-
     private List<CategoryAttribute> getPksCategoryAttributes(Context context) {
         final List<CategoryAttribute> pkAttributes = categoryAttributeUtils.getPKsCategoryAttributesFromCategory(context, categoryProvider);
         return categoryAttributeService.sortAttributes(pkAttributes);
     }
-
 
 }
