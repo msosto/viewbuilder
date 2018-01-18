@@ -78,8 +78,14 @@ public class CategorySelectionTaskTemplate extends TaskTemplate<CategorySelectio
     }
 
     private boolean showCategorySelection(CategorySelectionModel categorySelectionModel) {
-        return !isLeaf(categorySelectionModel.getSellCatalogSelection());
+        Category category = categorySelectionModel.getCategory();
+        if(nonNull(category)){
+            return !category.isLeaf();
+        }
+        return true;
     }
+
+
 
     private boolean isLeaf(SellCatalogSelection selection) {
         return nonNull(selection) && Boolean.TRUE.equals(selection.getShouldContinue());

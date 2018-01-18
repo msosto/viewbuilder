@@ -7,6 +7,8 @@ import com.mercadolibre.flux.flow.graph.navigation.Context;
 
 import java.util.List;
 
+import static java.util.Objects.nonNull;
+
 /**
  * ModelBuilder is in charge of creating a MOdel with all the neccessary data for the dataBuilder. This class knows how to get the data from the
  * context. It's coupled to flux.
@@ -16,13 +18,16 @@ public class PksModelBuilder extends AttributeModelBuilder {
 
     public PksModel build(Context context) {
         PksModel model = new PksModel();
-        model.setCategoryId(getCategoryProvider().getId(context));
-        model.setPksCategoryAttributes(getPksCategoryAttributes(context));
-        model.setItemAttributes(categoryAttributeUtils.getItemAttributes(context));
-        model.setVertical(getVertical(context));
-        model.setSiteId(getSite(context).getId());
-        model.setDecimalSeparator(obtainDecimalSeparator(context));
-        model.setValidationErrors(obtainValidationErrors(context,"pks_attribute"));
+        final String categoryId = getCategoryProvider().getId(context);
+        if(nonNull(categoryId)){    // In case Finder couldn't predict any category.
+            model.setCategoryId(categoryId);
+            model.setPksCategoryAttributes(getPksCategoryAttributes(context));
+            model.setItemAttributes(categoryAttributeUtils.getItemAttributes(context));
+            model.setVertical(getVertical(context));
+            model.setSiteId(getSite(context).getId());
+            model.setDecimalSeparator(obtainDecimalSeparator(context));
+            model.setValidationErrors(obtainValidationErrors(context,"pks_attribute"));
+        }
         return model;
     }
 
