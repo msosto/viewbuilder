@@ -7,6 +7,8 @@ import com.mercadolibre.flux.flow.graph.navigation.Context;
 
 import java.util.List;
 
+import static java.util.Objects.nonNull;
+
 /**
  * Created by msosto on 1/11/18.
  */
@@ -14,12 +16,15 @@ public class PksModelBuilder extends AttributeModelBuilder {
 
     public PksModel build(Context context) {
         PksModel model = new PksModel();
-        model.setCategoryId(getCategoryProvider().getId(context));
-        model.setPksCategoryAttributes(getPksCategoryAttributes(context));
-        model.setItemAttributes(categoryAttributeUtils.getItemAttributes(context));
-        model.setVertical(getVertical(context));
-        model.setSiteId(getSite(context).getId());
-        model.setDecimalSeparator(obtainDecimalSeparator(context));
+        String categoryId = getCategoryProvider().getId(context);
+        if (nonNull(categoryId)) {
+            model.setCategoryId(categoryId);
+            model.setPksCategoryAttributes(getPksCategoryAttributes(context));
+            model.setItemAttributes(categoryAttributeUtils.getItemAttributes(context));
+            model.setVertical(getVertical(context));
+            model.setSiteId(getSite(context).getId());
+            model.setDecimalSeparator(obtainDecimalSeparator(context));
+        }
         return model;
     }
 
