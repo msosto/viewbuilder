@@ -199,11 +199,9 @@ public abstract class Template<Model> {
 
     protected Optional<List<Component>> toComponents(final Model model, final Component father, final Map<Component, Object> cmpModels, final Map<Group, Boolean> groupApplies) {
 
-        //groupApplies.put()
-
         groupApply.forEach((group, modelBooleanFunction) -> groupApplies.put(group, modelBooleanFunction.apply(model)));
 
-
+        System.out.println("groupApplies:" + groupApplies + " | groups: " + groups);
 
         List<Model> models = getModels(model, cmpModels.get(father)).stream()
                 .filter(m -> apply
@@ -213,7 +211,7 @@ public abstract class Template<Model> {
                 .filter(m -> {
                     final boolean present = groups.stream().filter(group -> {
                         final Boolean aBoolean = groupApplies.get(group);
-                        return aBoolean != null ? aBoolean : false;
+                        return aBoolean != null ? !aBoolean : false;
                     })
                     .findAny()
                     .isPresent();

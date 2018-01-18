@@ -88,8 +88,8 @@
       <file leaf-file-name="Template.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/template/Template.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="225" column="51" selection-start-line="225" selection-start-column="51" selection-end-line="225" selection-end-column="51" />
+            <state relative-caret-position="349">
+              <caret line="222" column="32" selection-start-line="222" selection-start-column="32" selection-end-line="222" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#890#891#0" expanded="true" />
@@ -105,8 +105,8 @@
       <file leaf-file-name="Group.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/template/Group.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+            <state relative-caret-position="360">
+              <caret line="24" column="37" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
               <folding>
                 <element signature="e#170#171#0" expanded="true" />
                 <element signature="e#198#199#0" expanded="true" />
@@ -556,8 +556,8 @@
         <option value="$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/Final.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mercadolibre/example/ExampleModel.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/mercadolibre/kisc/viewbuilder/ViewBuilderTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/template/Group.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/Component.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/template/Group.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/template/Template.java" />
       </list>
     </option>
@@ -1278,18 +1278,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ViewBuilderTest_build - 2018.01.15 at 18h 02m 42s.xml">
-      <configuration name="ViewBuilderTest.build" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ViewBuilderTest_build - 2018.01.17 at 10h 43m 25s.xml">
-      <configuration name="ViewBuilderTest.build" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ViewBuilderTest_build - 2018.01.17 at 10h 44m 57s.xml">
-      <configuration name="ViewBuilderTest.build" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ViewBuilderTest_build - 2018.01.17 at 10h 54m 45s.xml">
-      <configuration name="ViewBuilderTest.build" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="ViewBuilderTest_build - 2018.01.17 at 11h 08m 17s.xml">
       <configuration name="ViewBuilderTest.build" configurationId="JUnit" />
     </history-entry>
@@ -1306,6 +1294,18 @@
       <configuration name="ViewBuilderTest.build" configurationId="JUnit" />
     </history-entry>
     <history-entry file="ViewBuilderTest_build - 2018.01.18 at 14h 29m 48s.xml">
+      <configuration name="ViewBuilderTest.build" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ViewBuilderTest_build - 2018.01.18 at 14h 34m 06s.xml">
+      <configuration name="ViewBuilderTest.build" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ViewBuilderTest_build - 2018.01.18 at 14h 34m 43s.xml">
+      <configuration name="ViewBuilderTest.build" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ViewBuilderTest_build - 2018.01.18 at 14h 42m 18s.xml">
+      <configuration name="ViewBuilderTest.build" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ViewBuilderTest_build - 2018.01.18 at 14h 53m 18s.xml">
       <configuration name="ViewBuilderTest.build" configurationId="JUnit" />
     </history-entry>
   </component>
@@ -1765,21 +1765,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/template/Group.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding>
-            <element signature="e#170#171#0" expanded="true" />
-            <element signature="e#198#199#0" expanded="true" />
-            <element signature="e#337#338#0" expanded="true" />
-            <element signature="e#373#374#0" expanded="true" />
-            <element signature="e#682#683#0" expanded="true" />
-            <element signature="e#735#736#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/Component.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
@@ -1798,10 +1783,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/template/Group.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="37" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
+          <folding>
+            <element signature="e#170#171#0" expanded="true" />
+            <element signature="e#198#199#0" expanded="true" />
+            <element signature="e#337#338#0" expanded="true" />
+            <element signature="e#373#374#0" expanded="true" />
+            <element signature="e#682#683#0" expanded="true" />
+            <element signature="e#735#736#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mercadolibre/kisc/viewbuilder/template/Template.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="225" column="51" selection-start-line="225" selection-start-column="51" selection-end-line="225" selection-end-column="51" />
+        <state relative-caret-position="349">
+          <caret line="222" column="32" selection-start-line="222" selection-start-column="32" selection-end-line="222" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#890#891#0" expanded="true" />
