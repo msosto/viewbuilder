@@ -1,7 +1,5 @@
 package com.mercadolibre.conceptTest.graphs.model;
 
-import com.mercadolibre.conceptTest.graphs.builder.view.contracts.FooterViewContract;
-
 /**
  * Created by mlizarraga on 11/1/18
  */
@@ -9,6 +7,7 @@ public class FooterModel {
 
     private String buttonText;
     private String buttonConnection;
+    private boolean showFooter = true;
 
     public String getButtonText() {
         return buttonText;
@@ -26,5 +25,14 @@ public class FooterModel {
     public FooterModel withButtonConnection(String buttonConnection) {
         this.buttonConnection = buttonConnection;
         return this;
+    }
+
+    public FooterModel setShowFooter(boolean showFooter){
+        this.showFooter = showFooter;
+        return this;
+    }
+
+    public boolean show() {
+        return showFooter;
     }
 }

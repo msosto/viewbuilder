@@ -1,51 +1,47 @@
 package com.mercadolibre.conceptTest.graphs.model;
 
-import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.BreadcrumbCategory;
-import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.CategorySelectionColumn;
-
-import java.util.List;
+import com.mercadolibre.dto.Category;
+import com.mercadolibre.dto.catalog.SellCatalogSelection;
 
 /**
  * Created by mlizarraga on 11/1/18
  */
 public class CategorySelectionModel extends TaskModel {
 
-    public static final String ITEM_CATEGORY_ID_OUTPUT = "item.category_id";
-    public static final String ITEM_CATALOG_PRODUCT_ID_OUTPUT = "item.catalog_product_id";
-
-    private CategorySelectionColumn column;
-    private Boolean adultContent;
-    private Boolean leaf;
+    private Category category;
+    private SellCatalogSelection sellCatalogSelection;
+    private String contextId;
     private String categoryId;
     private String catalogProductId;
-    private List<BreadcrumbCategory> breadcrumbCategories;
-    private boolean showCategorySelectionComponent;
-    private boolean showCategoryBreadcrumbComponent;
 
-    public CategorySelectionColumn getColumn() {
-        return column;
+    public CategorySelectionModel() {
+        super();
     }
 
-    public CategorySelectionModel withColumn(CategorySelectionColumn column) {
-        this.column = column;
+    public Category getCategory() {
+        return category;
+    }
+
+    public CategorySelectionModel setCategory(Category category) {
+        this.category = category;
         return this;
     }
 
-    public Boolean getAdultContent() {
-        return adultContent;
+    public String getContextId() {
+        return contextId;
     }
 
-    public CategorySelectionModel withAdultContent(Boolean adultContent) {
-        this.adultContent = adultContent;
+    public CategorySelectionModel setContextId(String contextId) {
+        this.contextId = contextId;
         return this;
     }
 
-    public Boolean getLeaf() {
-        return leaf;
+    public SellCatalogSelection getSellCatalogSelection() {
+        return sellCatalogSelection;
     }
 
-    public CategorySelectionModel setLeaf(Boolean leaf) {
-        this.leaf = leaf;
+    public CategorySelectionModel setSellCatalogSelection(SellCatalogSelection sellCatalogSelection) {
+        this.sellCatalogSelection = sellCatalogSelection;
         return this;
     }
 
@@ -53,7 +49,7 @@ public class CategorySelectionModel extends TaskModel {
         return categoryId;
     }
 
-    public CategorySelectionModel withCategoryId(String categoryId) {
+    public CategorySelectionModel setCategoryId(String categoryId) {
         this.categoryId = categoryId;
         return this;
     }
@@ -62,34 +58,9 @@ public class CategorySelectionModel extends TaskModel {
         return catalogProductId;
     }
 
-    public CategorySelectionModel withCatalogProductId(String catalogProductId) {
+    public CategorySelectionModel setCatalogProductId(String catalogProductId) {
         this.catalogProductId = catalogProductId;
         return this;
     }
 
-    public boolean isShowCategorySelectionComponent() {
-        return showCategorySelectionComponent;
-    }
-
-    public CategorySelectionModel withShowCategorySelectionComponent(boolean showCategorySelectionComponent) {
-        this.showCategorySelectionComponent = showCategorySelectionComponent;
-        return this;
-    }
-
-    public boolean isShowCategoryBreadcrumbComponent() {
-        return showCategoryBreadcrumbComponent;
-    }
-
-    public CategorySelectionModel withShowCategoryBreadcrumbComponent(boolean showCategoryBreadcrumbComponent) {
-        this.showCategoryBreadcrumbComponent = showCategoryBreadcrumbComponent;
-        return this;
-    }
-
-    public List<BreadcrumbCategory> getBreadcrumbCategories() {
-        return breadcrumbCategories;
-    }
-
-    public void withBreadcrumbCategories(List<BreadcrumbCategory> breadcrumbCategories) {
-        this.breadcrumbCategories = breadcrumbCategories;
-    }
 }

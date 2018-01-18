@@ -12,7 +12,7 @@ public class HeaderViewContract {
     private String subtitle;
     private String linkText;
     private String linkConnection;
-    private String imageURL;
+    private String imageUrl;
 
     public String getTitle() {
         return title;
@@ -59,12 +59,12 @@ public class HeaderViewContract {
         return this;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public HeaderViewContract withImageURL(String imageURL) {
-        this.imageURL = imageURL;
+        this.imageUrl = imageURL;
         return this;
     }
 

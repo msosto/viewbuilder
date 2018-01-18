@@ -7,17 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Objects.nonNull;
+
 /**
- * Created by msosto on 1/16/18.
+ * Created by msosto on 1/17/18.
  */
 public abstract class ModelBuilder {
 
-    protected List<Map<String, Object>> obtainValidationErrors(Context context, String id){
-        List<Map<String,Object>> validationErrors = new ArrayList<>();
+    protected List<Map<String, Object>> obtainValidationErrors(Context context, String id) {
+        List<Map<String, Object>> validationErrors = new ArrayList<>();
         context.getStepProxy().getSingleStep().getComponent(id).getInstances().forEach(instance -> {
             List<Map<String, Object>> errors = ((InputComponentInstanceDTO) instance).getValidationErrors();
-            validationErrors.addAll(errors);
+            if (nonNull(errors))
+                validationErrors.addAll(errors);
         });
         return validationErrors;
     }
+
 }
