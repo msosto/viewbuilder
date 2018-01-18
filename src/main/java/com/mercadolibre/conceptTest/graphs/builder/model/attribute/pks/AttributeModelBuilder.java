@@ -4,6 +4,7 @@ import com.mercadolibre.ActionsModule;
 import com.mercadolibre.actions.CategoryAttributeUtils;
 import com.mercadolibre.actions.CategoryUtils;
 import com.mercadolibre.actions.SiteUtils;
+import com.mercadolibre.conceptTest.graphs.builder.model.ModelBuilder;
 import com.mercadolibre.dto.Category;
 import com.mercadolibre.dto.Country;
 import com.mercadolibre.dto.Site;
@@ -16,7 +17,7 @@ import com.mercadolibre.util.providers.CategoryProvider;
 /**
  * Created by msosto on 1/11/18.
  */
-public class AttributeModelBuilder {
+public class AttributeModelBuilder extends ModelBuilder{
 
 
     protected final SiteUtils siteUtils;

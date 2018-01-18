@@ -32,6 +32,7 @@ public class PksDataBuilder extends AttributeDataBuilder {
 
             pksView.setPksAttributes(modelPksAttributes);
             pksView.setDecimalSeparator(pksModel.getDecimalSeparator());
+            pksView.withValidationErrors(pksModel.getValidationErrors());
         }
         return pksView;
     }

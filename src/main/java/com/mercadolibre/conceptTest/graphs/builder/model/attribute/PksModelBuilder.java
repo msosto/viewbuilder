@@ -10,6 +10,8 @@ import java.util.List;
 import static java.util.Objects.nonNull;
 
 /**
+ * ModelBuilder is in charge of creating a MOdel with all the neccessary data for the dataBuilder. This class knows how to get the data from the
+ * context. It's coupled to flux.
  * Created by msosto on 1/11/18.
  */
 public class PksModelBuilder extends AttributeModelBuilder {
@@ -24,15 +26,14 @@ public class PksModelBuilder extends AttributeModelBuilder {
             model.setVertical(getVertical(context));
             model.setSiteId(getSite(context).getId());
             model.setDecimalSeparator(obtainDecimalSeparator(context));
+            model.setValidationErrors(obtainValidationErrors(context,"pks_attribute"));
         }
         return model;
     }
-
-
+    
     private List<CategoryAttribute> getPksCategoryAttributes(Context context) {
         final List<CategoryAttribute> pkAttributes = categoryAttributeUtils.getPKsCategoryAttributesFromCategory(context, categoryProvider);
         return categoryAttributeService.sortAttributes(pkAttributes);
     }
-
 
 }
