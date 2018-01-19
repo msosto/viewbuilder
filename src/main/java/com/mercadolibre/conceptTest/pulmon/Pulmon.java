@@ -77,7 +77,7 @@ public class Pulmon {
 
     private void addNewTask(List<Component> tasks, List<Component> newTasks, List<String> componentNavigation) {
         final Component last = Iterables.getLast(newTasks);
-        final List<Component> tasksToAdd = tasks.subList(tasks.indexOf(last) + 1, tasks.size()); //TODO: Ver si no es hasta size -1
+        final List<Component> tasksToAdd = tasks.subList(tasks.indexOf(last) + 1, tasks.size());
         for (int i = 0; i < tasksToAdd.size(); i++) {
             final Component task = tasksToAdd.get(i);
             newTasks.add(task);
