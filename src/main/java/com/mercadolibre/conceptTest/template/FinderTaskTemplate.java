@@ -1,15 +1,16 @@
 package com.mercadolibre.conceptTest.template;
 
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.finder.FinderViewContract;
-import com.mercadolibre.conceptTest.graphs.model.FinderModel;
+import com.mercadolibre.conceptTest.graphs.model.component.TitleModel;
+import com.mercadolibre.conceptTest.graphs.model.inter.TitleInputProvider;
 
 /**
  * Created by mforte on 1/15/18.
  */
-public class FinderTaskTemplate extends TaskTemplate<FinderModel> {
+public class FinderTaskTemplate extends TaskTemplate<TitleInputProvider> {
 
     public FinderTaskTemplate() {
-        super(FinderModel.class);
+        super(TitleInputProvider.class);
     }
 
     @Override
@@ -29,10 +30,13 @@ public class FinderTaskTemplate extends TaskTemplate<FinderModel> {
 
     @Override
     protected void addBody() {
-        addChild().id("FINDER").uiType("FINDER").dataBuilder(finderModel ->
-                new FinderViewContract()
-                        .withValue(finderModel.getTitle())
-                        .withDisabled(finderModel.getDisabled())
-                        .withValidationErrors(finderModel.getValidationErrors()));
+        //TODO: Agregar DataBuilder
+        addChild().id("FINDER").uiType("FINDER").dataBuilder(model -> {
+            final TitleModel titleInputModel = model.getTitleInput();
+            return new FinderViewContract()
+                    .withValue(titleInputModel.getTitle())
+                    .withDisabled(titleInputModel.getDisabled())
+                    .withValidationErrors(titleInputModel.getValidationErrors());
+        });
     }
 }

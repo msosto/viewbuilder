@@ -2,6 +2,7 @@ package com.mercadolibre.conceptTest.graphs.builder.data.pks;
 
 import com.mercadolibre.ActionsModule;
 import com.mercadolibre.actions.CategoryAttributeUtils;
+import com.mercadolibre.conceptTest.graphs.model.component.CategorySelectionTaskModel;
 import com.mercadolibre.config.Config;
 import com.mercadolibre.dto.catalog.CatalogProductAttribute;
 import com.mercadolibre.dto.category.CategoryAttribute;
@@ -39,6 +40,11 @@ public class AttributeDataBuilder {
 
     public AttributeDataBuilder() {
         this.categoryAttributeUtils = ActionsModule.get().getInstance(CategoryAttributeUtils.class);
+    }
+
+
+    protected String getDecimalSeparator(CategorySelectionTaskModel model) {
+        return model.getCountry().getDecimalSeparator();
     }
 
     /**

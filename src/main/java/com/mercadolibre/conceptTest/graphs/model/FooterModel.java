@@ -7,7 +7,7 @@ public class FooterModel {
 
     private String buttonText;
     private String buttonConnection;
-    private boolean showFooter = true;
+    private Boolean showFooter = true;
 
     public String getButtonText() {
         return buttonText;

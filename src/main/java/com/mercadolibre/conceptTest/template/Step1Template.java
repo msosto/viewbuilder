@@ -1,5 +1,6 @@
 package com.mercadolibre.conceptTest.template;
 
+import com.mercadolibre.conceptTest.graphs.model.component.SingleVariationModel;
 import com.mercadolibre.conceptTest.graphs.model.Step1Model;
 import com.mercadolibre.kisc.viewbuilder.template.Template;
 
@@ -15,8 +16,23 @@ public class Step1Template extends Template<Step1Model> {
     @Override
     protected void createTemplate() {
         id("STEP_1").uiType("STEP");
-        addChild(new FinderTaskTemplate(), Step1Model::getFinderModel);
-        addChild(new CategorySelectionTaskTemplate(), Step1Model::getCategorySelectionModel);
-        addChild(new PKsTaskTemplate(), Step1Model::getPksModel);
+        addChild(new FinderTaskTemplate());
+        addChild(new CategorySelectionTaskTemplate());
+        addChild(new PKsTaskTemplate());
+        //addChild(Pregunta Variaciones).apply(new)
+        addNoVariationGroup();
+        addVariationGroup();
+    }
+
+    private void addNoVariationGroup() {
+        addChild(new QuantityTaskTemplate(), Step1Model::getQuantityModelWithoutVariation);
+        //addChild(pictures);
+    }
+
+    private void addVariationGroup() {
+        addChild(SingleVariationModel.class, Step1Model::getMainSingleVariationModel); // new SingleVariationTaskTemplate()?????
+        addChildren(SingleVariationModel.class, Step1Model::getSecondarySingleVariationModel); // new SingleVariationTaskTemplate()?????
+        addChild(new QuantityTaskTemplate(), Step1Model::getQuantityModelWithVariation);
+        //addChild(pictures);
     }
 }

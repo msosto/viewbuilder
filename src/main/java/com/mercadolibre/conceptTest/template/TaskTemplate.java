@@ -2,16 +2,12 @@ package com.mercadolibre.conceptTest.template;
 
 import com.mercadolibre.conceptTest.graphs.builder.data.FooterDataBuilder;
 import com.mercadolibre.conceptTest.graphs.builder.data.HeaderDataBuilder;
-import com.mercadolibre.conceptTest.graphs.builder.view.contracts.FooterViewContract;
-import com.mercadolibre.conceptTest.graphs.model.FooterModel;
-import com.mercadolibre.conceptTest.graphs.model.HeaderModel;
-import com.mercadolibre.conceptTest.graphs.model.TaskModel;
 import com.mercadolibre.kisc.viewbuilder.template.Template;
 
 /**
  * Created by mforte on 1/15/18.
  */
-public abstract class TaskTemplate<Model extends TaskModel> extends Template<Model> {
+public abstract class TaskTemplate<Model> extends Template<Model> {
 
     public static final String HEADER_UI_TYPE = "header";
     public static final String HEADER_LINE_UI_TYPE = "header_line";
@@ -42,14 +38,13 @@ public abstract class TaskTemplate<Model extends TaskModel> extends Template<Mod
     protected abstract String getFooterUIType();
 
     protected void addFooter() {
-        addChild(FooterModel.class, TaskModel::getFooterModel).id(getTaskId() + "_FOOTER").uiType(getFooterUIType())
-                .dataBuilder(footerModel -> footerDataBuilder.build(footerModel))
-                .apply(footerModel -> footerModel.show());
+        addChild().id(getTaskId() + "_FOOTER").uiType(getFooterUIType())
+                .dataBuilder(footerModel -> footerDataBuilder.build(getTaskId(), null)); //TODO: Ver lo del Footer y Header;
     }
 
     protected void addHeader() {
-        addChild(HeaderModel.class, TaskModel::getHeaderModel).id(getTaskId() + "_HEADER").uiType(getHeaderUIType())
-                .dataBuilder(headerModel -> headerDataBuilder.build(headerModel));
+        addChild().id(getTaskId() + "_HEADER").uiType(getHeaderUIType())
+                .dataBuilder(headerModel -> headerDataBuilder.buildDefaultHeader(getTaskId()));
     }
 
     protected abstract void addBody();

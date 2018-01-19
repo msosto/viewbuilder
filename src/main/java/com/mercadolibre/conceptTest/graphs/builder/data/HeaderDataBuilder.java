@@ -1,21 +1,24 @@
 package com.mercadolibre.conceptTest.graphs.builder.data;
 
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.HeaderViewContract;
-import com.mercadolibre.conceptTest.graphs.model.HeaderModel;
 
 /**
  * Created by mlizarraga on 17/1/18
  */
 public class HeaderDataBuilder {
 
-    public HeaderViewContract build(HeaderModel model) {
+    public static final String HEADER_TITLE_BASE = "_HEADER_TITLE";
+    public static final String HEADER_SUBTITLE_BASE = "_HEADER_SUBTITLE";
+
+    //TODO: Armar otros builders que soporten params y el resto de sus variantes
+    public HeaderViewContract buildDefaultHeader(String taskId) {
         HeaderViewContract viewContract = new HeaderViewContract()
-                .withTitle(model.getTitle())
-                .withTitleParams(model.getTitleParams())
-                .withSubtitle(model.getSubtitle())
-                .withLinkText(model.getLinkText())
-                .withLinkConnection(model.getLinkConnection())
-                .withImageURL(model.getImageURL());
+                .withTitle(taskId + HEADER_TITLE_BASE)
+                //.withTitleParams()
+                .withSubtitle(taskId + HEADER_SUBTITLE_BASE);
+        //.withLinkText(model.getLinkText())
+        //.withLinkConnection(model.getLinkConnection())
+        //.withImageURL(model.getImageURL());
         return viewContract;
     }
 }

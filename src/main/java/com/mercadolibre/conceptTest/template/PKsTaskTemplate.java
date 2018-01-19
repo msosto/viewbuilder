@@ -1,16 +1,16 @@
 package com.mercadolibre.conceptTest.template;
 
 import com.mercadolibre.conceptTest.graphs.builder.data.pks.PksDataBuilder;
-import com.mercadolibre.conceptTest.graphs.model.PksModel;
+import com.mercadolibre.conceptTest.graphs.model.PksTaskModel;
 import org.apache.commons.collections.CollectionUtils;
 
 /**
  * Created by mforte on 1/15/18.
  */
-public class PKsTaskTemplate extends TaskTemplate<PksModel> {
+public class PKsTaskTemplate extends TaskTemplate<PksTaskModel> {
 
     public PKsTaskTemplate() {
-        super(PksModel.class);
+        super(PksTaskModel.class);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class PKsTaskTemplate extends TaskTemplate<PksModel> {
     protected void addBody() {
         addChild()
                 .id("PKS").uiType("PKS")
-                .apply(pksModel -> !CollectionUtils.isEmpty(pksModel.getPksCategoryAttributes()))
+                .apply(pksModel -> !CollectionUtils.isEmpty(pksModel.getCategoryAttributes()))
                 .dataBuilder(pksModel -> new PksDataBuilder().build(pksModel));
     }
 }

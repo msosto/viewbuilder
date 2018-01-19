@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.CategorySelectionColumn;
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.CategorySelectionRow;
 import com.mercadolibre.conceptTest.graphs.builder.view.contracts.category.CategorySelectionViewContract;
-import com.mercadolibre.conceptTest.graphs.model.CategorySelectionModel;
+import com.mercadolibre.conceptTest.graphs.model.component.CategorySelectionTaskModel;
 import com.mercadolibre.config.Config;
 import com.mercadolibre.dto.Category;
 import com.mercadolibre.dto.catalog.SellCatalogSelection;
@@ -28,7 +28,7 @@ public class CategorySelectionDataBuilder {
     public static final String CATALOG = "catalog";
     public static final String MIN_QUANTITY_FOR_FILTER = "min_quantity_for_filter";
 
-    public CategorySelectionViewContract build(CategorySelectionModel model) {
+    public CategorySelectionViewContract build(CategorySelectionTaskModel model) {
         SellCatalogSelection selection = model.getSellCatalogSelection();
         SellCatalogSelectionColumn lastColumn = Iterables.getLast(selection.getColumns());
         boolean shouldContinue = Boolean.TRUE.equals(selection.getShouldContinue());

@@ -8,10 +8,12 @@ import com.mercadolibre.conceptTest.graphs.model.FooterModel;
  */
 public class FooterDataBuilder {
 
-    public FooterViewContract build(FooterModel model) {
+    public static final String FOOTER_BTN_TEXT_BASE = "_FOOTER_BUTTON_TEXT";
+
+    public FooterViewContract build(String taskId, String connection) {
         FooterViewContract viewContract = new FooterViewContract()
-                .withButtonText(model.getButtonText())
-                .withButtonConnection(model.getButtonConnection());
+                .withButtonText(taskId + FOOTER_BTN_TEXT_BASE)
+                .withButtonConnection(connection);
         return viewContract;
     }
 }

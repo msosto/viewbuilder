@@ -1,7 +1,5 @@
 package com.mercadolibre.conceptTest.graphs.model;
 
-import com.mercadolibre.conceptTest.graphs.builder.view.contracts.HeaderViewContract;
-
 import java.util.List;
 
 /**
