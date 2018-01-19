@@ -42,7 +42,7 @@ public class PulmonTest {
         view1.add(b);
         view1.add(c);
 
-        withErrors = new Component().withId("cmp_with_error");
+        withErrors = new Component().withId("cmp_with_errors");
         InputComponent inputComponent = new InputComponent();
         inputComponent.withValidationErrors(Lists.newArrayList(TestUtils.newMap("required", true)));
         withErrors.withData(inputComponent);
