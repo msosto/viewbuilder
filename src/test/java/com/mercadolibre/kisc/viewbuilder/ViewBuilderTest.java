@@ -9,6 +9,7 @@ import com.mercadolibre.example.OtherModel;
 import com.mercadolibre.example.contract.AutocompleteInput;
 import com.mercadolibre.example.contract.Label;
 import com.mercadolibre.example.contract.Picture;
+import com.mercadolibre.kisc.viewbuilder.template.Group;
 import com.mercadolibre.kisc.viewbuilder.template.Template;
 import org.junit.Test;
 
@@ -23,28 +24,42 @@ import static org.junit.Assert.assertNotNull;
 public class ViewBuilderTest {
 
     final Gson gson = new GsonBuilder().create();
+    public static final Group LALA = Group.withId("LALA");
 
     @Test
     public void build() throws Exception {
 
+        final Template<OtherModel> comm = new Template<OtherModel>(OtherModel.class) {
+
+            @Override
+            protected void createTemplate() {
+                addChild().id("comunicacion")
+                    .addSibling().id("hno de comu");
+
+            }
+        };
+
         final Template<ExampleModel> template = new Template<ExampleModel>(ExampleModel.class) {
             @Override
-            public void createTemplate() {
+            protected void createTemplate() {
+
+                addChild(comm, ExampleModel::getOther).groups(LALA);
                 addChild().id("page").uiType("desktop_page")
-                        .addChild().id("search").dataBuilder(m -> new AutocompleteInput()
-                        .withPlaceholder(m.getSearchPlaceholder())
-                        .withIcon(m.getSearchIcon())
-                        .withFormName("q"))
+                        .addChild().id("search")
+                            .dataBuilder(m -> new AutocompleteInput()
+                                .withPlaceholder(m.getSearchPlaceholder())
+                                .withIcon(m.getSearchIcon())
+                                .withFormName("q"))
                         .addSibling().id("grid").uiType("desktop_grid")
                         .addChildren(ExampleModelItem.class, ExampleModel::getItems)
                         .addChild().id("picture").dataBuilder(m -> m.getPictures().stream().findFirst().orElse(null))
                         .addSibling().id("title").dataBuilder(m -> new Label().withText(m.getTitle()))
                         .parent()
                         .parent(ExampleModel.class)
-                        .addChild().id("footer")
-                        .parent()
-                        .parent()
-                        .addChild(OtherModel.class, ExampleModel::getOther).id("page_footer");
+                        .addChild().id("footer");
+                addChild(OtherModel.class, ExampleModel::getOther).id("page_footer").groups(LALA);
+
+                apply(LALA, exampleModel -> false);
             }
         };
 

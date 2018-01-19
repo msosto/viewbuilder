@@ -3,9 +3,7 @@ package com.mercadolibre.kisc.viewbuilder.template;
 import com.mercadolibre.kisc.viewbuilder.Component;
 import com.mercadolibre.kisc.viewbuilder.Final;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -14,11 +12,16 @@ import java.util.stream.Collectors;
  */
 public abstract class Template<Model> {
 
+
     final Final<Template> parent;
 
     final Class<Model> modelType;
 
     final List<Template> templates;
+
+    final List<Group> groups;
+
+    final Map<Group, Function<Model, Boolean>> groupApply;
 
     Optional<String> id;
 
@@ -34,7 +37,7 @@ public abstract class Template<Model> {
 
     Optional<Function<Object, List<Model>>> spread;
 
-    protected Template(Class<Model> modelType){
+    protected Template(Class<Model> modelType) {
         this(null, modelType);
     }
 
@@ -43,6 +46,8 @@ public abstract class Template<Model> {
         this.modelType = modelType;
 
         templates = new ArrayList<>();
+        groups = new ArrayList<>();
+        groupApply = new HashMap<>();
         idBuilder = Optional.empty();
         id = Optional.empty();
         uiType = Optional.empty();
@@ -86,11 +91,22 @@ public abstract class Template<Model> {
     }
 
     public <NewModel> Template<NewModel> addChild(Template<NewModel> t) {
-        t.parent.set(this);
+        setParent(t);
         templates.add(t);
         return t;
     }
 
+    private <NewModel> void setParent(Template<NewModel> t) {
+        t.parent.set(this);
+    }
+
+
+    public Template<Model> groups(Group... groups) {
+        for (Group group : groups) {
+            this.groups.add(group);
+        }
+        return this;
+    }
 
     public <NewModel> Template<NewModel> addChild(Template<NewModel> t, Function<Model, NewModel> transformer) {
         t.modelSupplier((Function<Object, NewModel>) transformer);
@@ -107,8 +123,10 @@ public abstract class Template<Model> {
         return t;
     }
 
-    private void setParent(Template<?> p) {
-        parent.set(p);
+    public <NewModel> Template<NewModel> addChildren(Template<NewModel> t, Function<Model, List<NewModel>> transformer) {
+        t.spread((Function<Object, List<NewModel>>) transformer);
+        templates.add(t);
+        return t;
     }
 
     public Template<Model> parent() {
@@ -121,10 +139,6 @@ public abstract class Template<Model> {
             throw new RuntimeException("The class " + tClass + " is not compatible with the parent original type " + parentModelType);
         }
         return (Template<T>) parent.get();
-    }
-
-    public List<Template> getChildren() {
-        return templates;
     }
 
 
@@ -140,6 +154,14 @@ public abstract class Template<Model> {
 
     public Template<Model> apply(Function<Model, Boolean> apply) {
         this.apply = Optional.ofNullable(apply);
+        return this;
+    }
+
+    public Template<Model> apply(Group group, Function<Model, Boolean> apply) {
+        if (group == null) {
+            throw new NullPointerException("Can not add an apply to a null group.");
+        }
+        this.groupApply.put(group, apply);
         return this;
     }
 
@@ -165,25 +187,46 @@ public abstract class Template<Model> {
 
 
     public List<Component> buildList(final Model model) {
-        return toComponents(model, null).orElse(null);
+        return toComponents(model, null, new HashMap<>(), new HashMap<>())
+                .orElse(null);
     }
 
     public Component build(final Model model) {
-        return toComponents(model, null).map(components -> components.stream().findFirst().orElse(null)).orElse(null);
+        return toComponents(model, null, new HashMap<>(), new HashMap<>())
+                .map(components -> components.stream().findFirst().orElse(null))
+                .orElse(null);
     }
 
-    protected Optional<List<Component>> toComponents(final Model model, final Component<Model> father) {
-        List<Model> models = getModels(model, father).stream().filter(m -> apply
-                .map(f -> f.apply(m))
-                .orElse(true)).collect(Collectors.toList());
+    protected Optional<List<Component>> toComponents(final Model model, final Component father, final Map<Component, Object> cmpModels, final Map<Group, Boolean> groupApplies) {
+
+        groupApply.forEach((group, modelBooleanFunction) -> groupApplies.put(group, modelBooleanFunction.apply(model)));
+
+        System.out.println("groupApplies:" + groupApplies + " | groups: " + groups);
+
+        List<Model> models = getModels(model, cmpModels.get(father)).stream()
+                .filter(m -> apply
+                        .map(f -> f.apply(m))
+                        .orElse(true)
+                )
+                .filter(m -> {
+                    final boolean present = groups.stream().filter(group -> {
+                        final Boolean aBoolean = groupApplies.get(group);
+                        return aBoolean != null ? !aBoolean : false;
+                    })
+                    .findAny()
+                    .isPresent();
+                    System.out.println("present = " + present);
+                    return !present;
+                })
+                .collect(Collectors.toList());
 
         if (!models.isEmpty()) {
             System.out.println("father: " + father + " | models: " + models);
 
-            List<Component> components = getComponents(models);
+            List<Component> components = getComponents(models, cmpModels);
 
             components.forEach(component -> templates.forEach(template -> {
-                final Optional<List<Component>> toComponents = template.toComponents(model, component);
+                final Optional<List<Component>> toComponents = template.toComponents(model, component, cmpModels, groupApplies);
 
                 toComponents.ifPresent(thisComponents -> thisComponents.forEach(c -> {
                     component.add(c);
@@ -195,7 +238,7 @@ public abstract class Template<Model> {
         return Optional.empty();
     }
 
-    private List<Component> getComponents(List<Model> models) {
+    private List<Component> getComponents(List<Model> models, Map<Component, Object> cmpModels) {
         return models.stream().map(newModel -> {
             final String cmpId = id
                     .orElseGet(() -> idBuilder.map(f -> f.apply(newModel))
@@ -203,24 +246,24 @@ public abstract class Template<Model> {
 
             final Object viewContract = dataBuilder.map(f -> f.apply(newModel)).orElse(null);
 
-            return new Component<Model>()
+            final Component component = new Component()
                     .withId(cmpId)
                     .withData(viewContract)
-                    .withUiType(uiType.orElse(null))
-                    .withModel(newModel);
+                    .withUiType(uiType.orElse(null));
+
+            cmpModels.put(component, newModel);
+            return component;
         }).collect(Collectors.toList());
     }
 
-    private List<Model> getModels(Model model, Component<Model> father) {
+    private List<Model> getModels(Model model, Object fatherModel) {
         System.out.println(modelType + " == " + model.getClass());
-
-        final Model fatherModel = Optional.ofNullable(father).map(Component::getModel).orElse(null);
 
         System.out.println("father.getModel():" + fatherModel + " | model:" + model);
 
         final Object m = (fatherModel != null && !model.getClass().equals(fatherModel)) ? fatherModel : model;
 
-        return spread.map(f -> f.apply( m))
+        return spread.map(f -> f.apply(m))
                 .orElseGet(() -> modelSupplier.map(f -> toList(f.apply((Model) m)))
                         .orElseGet(() -> toList((Model) m)));
 
@@ -238,7 +281,7 @@ public abstract class Template<Model> {
     }
 
 
-    private static class TemplateStruct<Model> extends Template<Model>{
+    private static class TemplateStruct<Model> extends Template<Model> {
 
         protected TemplateStruct(Class<Model> modelType) {
             super(modelType);
@@ -249,6 +292,7 @@ public abstract class Template<Model> {
         }
 
         @Override
-        public void createTemplate() {}
+        public void createTemplate() {
+        }
     }
 }
