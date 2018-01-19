@@ -5,7 +5,6 @@ import com.mercadolibre.conceptTest.graphs.builder.view.InputComponent;
 import com.mercadolibre.kisc.viewbuilder.Component;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -52,7 +51,7 @@ public class Pulmon {
      */
     protected List<Component> showTasks(List<Component> tasks, List<String> componentNavigation) {
         List<Component> newTasks = new ArrayList<>(getTaskUntilLastCurrentStep(tasks, componentNavigation));
-        if (allStepsInNavigation(newTasks, componentNavigation) && !containsValidationErrors(newTasks)) {
+        if (allStepsInNavigation(newTasks, componentNavigation) && !tasksContainsValidationErrors(newTasks)) {
             addNewTask(tasks, newTasks, componentNavigation);
         }
 
@@ -71,8 +70,8 @@ public class Pulmon {
      * - Esta en Nav y tiene error => Lo agrego y no sigo
      * - No esta en Nav => Le saco los errores de validacion y corto.
      *
-     * @param tasks Generadas por view-builder
-     * @param newTasks Tasks until last current step
+     * @param tasks               Generadas por view-builder
+     * @param newTasks            Tasks until last current step
      * @param componentNavigation
      */
 
@@ -140,6 +139,7 @@ public class Pulmon {
     public void clearValidationErrors(Component taskView) {
         final List<Component> components = taskView.getComponents();
         components.stream()
+                .map(component -> component.getData())
                 .filter(InputComponent.class::isInstance)
                 .map(InputComponent.class::cast)
                 .forEach(InputComponent::clearValidationErrors);
@@ -150,8 +150,20 @@ public class Pulmon {
         return containsValidationErrors(components);
     }
 
+    protected Boolean tasksContainsValidationErrors(List<Component> tasks) {
+        Boolean withError = Boolean.FALSE;
+        for (Component task : tasks) {
+            withError = containsValidationErrors(task);
+            if (withError) {
+                break;
+            }
+        }
+        return withError;
+    }
+
     protected Boolean containsValidationErrors(List<Component> components) {
         return components.stream()
+                .map(component -> component.getData())
                 .filter(InputComponent.class::isInstance)
                 .map(InputComponent.class::cast)
                 .anyMatch(inputComponent ->
