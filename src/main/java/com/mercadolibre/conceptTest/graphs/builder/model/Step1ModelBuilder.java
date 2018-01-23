@@ -20,6 +20,8 @@ import com.mercadolibre.util.ContextUtils;
 import com.mercadolibre.util.providers.CatalogProductProvider;
 import com.mercadolibre.util.providers.CategoryProvider;
 
+import static java.util.Objects.nonNull;
+
 /**
  * Contiene toda la informacion en crudo para mostrar el Paso 1.
  * Implementa distintas interfaces para desacoplar.
@@ -64,9 +66,12 @@ public class Step1ModelBuilder extends ModelBuilder {
     }
 
     private void addAttributesData(Step1Model model, Context context) {
-        model.setCategoryAttributes(categoryAttributeUtils.getCategoryAttributesFromCategory(context, categoryProvider));
-        model.setItemAttributes(categoryAttributeUtils.getItemAttributes(context));
-        model.setVertical(getVertical(context));
+        String categoryId = categoryProvider.getId(context);
+        if (nonNull(categoryId)) {
+            model.setCategoryAttributes(categoryAttributeUtils.getCategoryAttributesFromCategory(context, categoryProvider));
+            model.setItemAttributes(categoryAttributeUtils.getItemAttributes(context));
+            model.setVertical(getVertical(context));
+        }
         model.setSiteId(ContextUtils.getSiteId(context));
     }
 

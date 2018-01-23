@@ -34,7 +34,7 @@ public class VariationAttributesModelBuilder extends ModelBuilder {
     VariationAttributesModel build(Context context) {
         final VariationAttributesModel model = new VariationAttributesModel();
 
-        final List<Map<String, Object>> validationErrors = obtainValidationErrors(context, "VARIATION_ATTRIBUTES_COMPONENT_ID");
+        final List<Map<String, Object>> validationErrors = obtainValidationErrors(context, "single_variation_attribute");
         final List<CategoryAttribute> variationAttributes = getVariationAttributes(context);
 
         CategoryAttribute firstAttribute = Iterables.getFirst(variationAttributes, null);   // proceso el primer atributo por separado para evitarme el if en la iteracion.
