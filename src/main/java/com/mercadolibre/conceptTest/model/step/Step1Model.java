@@ -1,13 +1,13 @@
 package com.mercadolibre.conceptTest.model.step;
 
+import com.mercadolibre.conceptTest.model.component.InputModel;
 import com.mercadolibre.conceptTest.model.component.title.TitleModel;
+import com.mercadolibre.conceptTest.template.task.CategorySelectionTaskModel;
+import com.mercadolibre.conceptTest.template.task.FinderTaskProvider;
+import com.mercadolibre.conceptTest.template.task.PksTaskProvider;
 import com.mercadolibre.conceptTest.todo.QuantityModel;
 import com.mercadolibre.conceptTest.todo.VariationAttributesProvider;
-import com.mercadolibre.conceptTest.todo.component.*;
-import com.mercadolibre.conceptTest.template.task.FinderTaskProvider;
-import com.mercadolibre.conceptTest.model.component.InputModel;
-import com.mercadolibre.conceptTest.template.task.CategorySelectionTaskModel;
-import com.mercadolibre.conceptTest.template.task.PksTaskProvider;
+import com.mercadolibre.conceptTest.todo.component.VariationAttributesModel;
 import com.mercadolibre.dto.Category;
 import com.mercadolibre.dto.Country;
 import com.mercadolibre.dto.catalog.SellCatalogSelection;
@@ -51,9 +51,19 @@ public class Step1Model implements FinderTaskProvider, CategorySelectionTaskMode
         return category;
     }
 
+    public Step1Model setCategory(Category category) {
+        this.category = category;
+        return this;
+    }
+
     @Override
     public String getContextId() {
         return contextId;
+    }
+
+    public Step1Model setContextId(String contextId) {
+        this.contextId = contextId;
+        return this;
     }
 
     @Override
@@ -61,9 +71,19 @@ public class Step1Model implements FinderTaskProvider, CategorySelectionTaskMode
         return sellCatalogSelection;
     }
 
+    public Step1Model setSellCatalogSelection(SellCatalogSelection sellCatalogSelection) {
+        this.sellCatalogSelection = sellCatalogSelection;
+        return this;
+    }
+
     @Override
     public String getCategoryId() {
         return categoryId;
+    }
+
+    public Step1Model setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+        return this;
     }
 
     @Override
@@ -71,9 +91,19 @@ public class Step1Model implements FinderTaskProvider, CategorySelectionTaskMode
         return catalogProductId;
     }
 
+    public Step1Model setCatalogProductId(String catalogProductId) {
+        this.catalogProductId = catalogProductId;
+        return this;
+    }
+
     @Override
     public Country getCountry() {
         return country;
+    }
+
+    public Step1Model setCountry(Country country) {
+        this.country = country;
+        return this;
     }
 
     @Override
@@ -81,9 +111,19 @@ public class Step1Model implements FinderTaskProvider, CategorySelectionTaskMode
         return pksInputModel;
     }
 
+    public Step1Model setPKsInputModel(InputModel inputModel) {
+        this.pksInputModel = inputModel;
+        return this;
+    }
+
     @Override
     public String getSiteId() {
         return siteId;
+    }
+
+    public Step1Model setSiteId(String siteId) {
+        this.siteId = siteId;
+        return this;
     }
 
     @Override
@@ -91,14 +131,29 @@ public class Step1Model implements FinderTaskProvider, CategorySelectionTaskMode
         return vertical;
     }
 
+    public Step1Model setVertical(Vertical vertical) {
+        this.vertical = vertical;
+        return this;
+    }
+
     @Override
     public List<CategoryAttribute> getCategoryAttributes() {
         return categoryAttributes;
     }
 
+    public Step1Model setCategoryAttributes(List<CategoryAttribute> categoryAttributes) {
+        this.categoryAttributes = categoryAttributes;
+        return this;
+    }
+
     @Override
     public List<ItemAttribute> getItemAttributes() {
         return itemAttributes;
+    }
+
+    public Step1Model setItemAttributes(List<ItemAttribute> itemAttributes) {
+        this.itemAttributes = itemAttributes;
+        return this;
     }
 
     @Override
@@ -116,65 +171,8 @@ public class Step1Model implements FinderTaskProvider, CategorySelectionTaskMode
         return this;
     }
 
-    public Step1Model setSiteId(String siteId) {
-        this.siteId = siteId;
-        return this;
-    }
-
-    public Step1Model setVertical(Vertical vertical) {
-        this.vertical = vertical;
-        return this;
-    }
-
-    public Step1Model setCategoryAttributes(List<CategoryAttribute> categoryAttributes) {
-        this.categoryAttributes = categoryAttributes;
-        return this;
-    }
-
-    public Step1Model setItemAttributes(List<ItemAttribute> itemAttributes) {
-        this.itemAttributes = itemAttributes;
-        return this;
-    }
-
     public Step1Model setTitleInputModel(TitleModel titleInputModel) {
         this.titleInputModel = titleInputModel;
-        return this;
-    }
-
-    public Step1Model setPKsInputModel(InputModel inputModel) {
-        this.pksInputModel = inputModel;
-        return this;
-    }
-
-    public Step1Model setCategory(Category category) {
-        this.category = category;
-        return this;
-    }
-
-    public Step1Model setSellCatalogSelection(SellCatalogSelection sellCatalogSelection) {
-        this.sellCatalogSelection = sellCatalogSelection;
-        return this;
-    }
-
-    public Step1Model setContextId(String contextId) {
-        this.contextId = contextId;
-        return this;
-    }
-
-
-    public Step1Model setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
-        return this;
-    }
-
-
-    public Step1Model setCatalogProductId(String catalogProductId) {
-        this.catalogProductId = catalogProductId;
-        return this;
-    }
-
-    public Step1Model setCountry(Country country) {
-        this.country = country;
         return this;
     }
 

@@ -33,7 +33,7 @@ public class SingleVariationTaskTemplate extends TaskTemplate<VariationAttribute
     }
 
     @Override
-    protected void addHeader(){
+    protected void addHeader() {
         //TODO: Agregar el header con un DataBuilder Custom para variaciones
         addChild().id(getTaskId() + "_HEADER").uiType(getHeaderUIType())
                 .dataBuilder(headerModel -> headerDataBuilder.buildDefaultHeader(getTaskId()));

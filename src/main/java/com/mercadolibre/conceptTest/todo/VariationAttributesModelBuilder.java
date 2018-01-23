@@ -3,9 +3,9 @@ package com.mercadolibre.conceptTest.todo;
 import com.google.common.collect.Iterables;
 import com.mercadolibre.ActionsModule;
 import com.mercadolibre.actions.CategoryUtils;
+import com.mercadolibre.conceptTest.model.component.InputModelBuilder;
 import com.mercadolibre.conceptTest.todo.component.VariationAttributeInputModel;
 import com.mercadolibre.conceptTest.todo.component.VariationAttributesModel;
-import com.mercadolibre.conceptTest.model.component.InputModelBuilder;
 import com.mercadolibre.dto.category.CategoryAttribute;
 import com.mercadolibre.dto.item.ItemAttribute;
 import com.mercadolibre.flux.flow.graph.navigation.Context;
@@ -22,10 +22,9 @@ import java.util.stream.Collectors;
  */
 public class VariationAttributesModelBuilder extends InputModelBuilder {
 
+    private static final String SECONDARY_COLOR = "73001";
     private final CategoryUtils categoryUtils;
     private final CategoryProvider categoryProvider;
-
-    private static final String SECONDARY_COLOR = "73001";
 
     public VariationAttributesModelBuilder(CategoryProvider categoryProvider) {
         this.categoryUtils = ActionsModule.get().getInstance(CategoryUtils.class);

@@ -20,16 +20,6 @@ import static java.util.Objects.nonNull;
  */
 public abstract class AttributeDataBuilder {
 
-    public interface Provider {
-        String getSiteId();
-
-        Vertical getVertical();
-
-        List<CategoryAttribute> getCategoryAttributes();
-
-        List<ItemAttribute> getItemAttributes();
-    }
-
     public static final String SELECTED_VALUES = "selected_values";
     public static final String TYPE = "type";
     public static final String ID_TEXT = "id";
@@ -43,16 +33,12 @@ public abstract class AttributeDataBuilder {
     public static final String LIST_EDITABLE = "list_editable";
     public static final String DEFAULT_PRIMARY_COLOR_ID = "83000";
     public static final String COLOR = "COLOR";
-
-
     public static final String SIZE = "size";
-
     protected final CategoryAttributeUtils categoryAttributeUtils;
 
     public AttributeDataBuilder() {
         this.categoryAttributeUtils = ActionsModule.get().getInstance(CategoryAttributeUtils.class);
     }
-
 
     protected String getDecimalSeparator(CategorySelectionTaskModel model) {
         return model.getCountry().getDecimalSeparator();
@@ -250,5 +236,15 @@ public abstract class AttributeDataBuilder {
                 }
             }
         }
+    }
+
+    public interface Provider {
+        String getSiteId();
+
+        Vertical getVertical();
+
+        List<CategoryAttribute> getCategoryAttributes();
+
+        List<ItemAttribute> getItemAttributes();
     }
 }

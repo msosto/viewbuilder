@@ -1,11 +1,11 @@
 package com.mercadolibre.conceptTest.template.step1;
 
-import com.mercadolibre.conceptTest.todo.component.VariationAttributeInputModel;
 import com.mercadolibre.conceptTest.model.step.Step1Model;
 import com.mercadolibre.conceptTest.template.task.CategorySelectionTaskTemplate;
 import com.mercadolibre.conceptTest.template.task.FinderTaskTemplate;
 import com.mercadolibre.conceptTest.template.task.PKsTaskTemplate;
 import com.mercadolibre.conceptTest.template.task.QuantityTaskTemplate;
+import com.mercadolibre.conceptTest.todo.component.VariationAttributeInputModel;
 import com.mercadolibre.kisc.viewbuilder.template.Group;
 import com.mercadolibre.kisc.viewbuilder.template.Template;
 

@@ -1,7 +1,7 @@
 package com.mercadolibre.conceptTest.model.component.pks;
 
-import com.mercadolibre.conceptTest.model.component.InputModelBuilder;
 import com.mercadolibre.conceptTest.model.component.InputModel;
+import com.mercadolibre.conceptTest.model.component.InputModelBuilder;
 import com.mercadolibre.flux.flow.graph.navigation.Context;
 
 /**

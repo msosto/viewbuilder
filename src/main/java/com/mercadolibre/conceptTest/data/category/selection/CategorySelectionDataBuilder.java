@@ -22,25 +22,7 @@ import static java.util.Objects.nonNull;
 
 public class CategorySelectionDataBuilder {
 
-    /**
-     * Created by mforte on 1/23/18.
-     */
-    public interface Provider {
-
-        Category getCategory();
-
-        String getContextId();
-
-        SellCatalogSelection getSellCatalogSelection();
-
-        String getCategoryId();
-
-        String getCatalogProductId();
-    }
-
-
     public static final String CATALOG = "catalog";
-
     public static final String MIN_QUANTITY_FOR_FILTER = "min_quantity_for_filter";
 
     public CategorySelectionViewContract build(Provider model) {
@@ -84,7 +66,6 @@ public class CategorySelectionDataBuilder {
         return rows;
     }
 
-
     /**
      * Getter for the output. Copy map on custom_output to the output.
      *
@@ -123,5 +104,21 @@ public class CategorySelectionDataBuilder {
         if (Objects.isNull(category))
             return false;
         return category.getSettings().getAdultContent();
+    }
+
+    /**
+     * Created by mforte on 1/23/18.
+     */
+    public interface Provider {
+
+        Category getCategory();
+
+        String getContextId();
+
+        SellCatalogSelection getSellCatalogSelection();
+
+        String getCategoryId();
+
+        String getCatalogProductId();
     }
 }

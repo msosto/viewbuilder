@@ -17,21 +17,13 @@ public class InputModel {
         return validationErrors;
     }
 
-    public String getOutput() {
-        return output;
-    }
-
-    public Boolean getRequired() {
-        return required;
-    }
-
-    public Boolean getDisabled() {
-        return disabled;
-    }
-
     public InputModel setValidationErrors(List<Map<String, Object>> validationErrors) {
         this.validationErrors = validationErrors;
         return this;
+    }
+
+    public String getOutput() {
+        return output;
     }
 
     public InputModel setOutput(String output) {
@@ -39,9 +31,17 @@ public class InputModel {
         return this;
     }
 
+    public Boolean getRequired() {
+        return required;
+    }
+
     public InputModel setRequired(Boolean required) {
         this.required = required;
         return this;
+    }
+
+    public Boolean getDisabled() {
+        return disabled;
     }
 
     public InputModel setDisabled(Boolean disabled) {

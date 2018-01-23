@@ -18,14 +18,6 @@ import static java.util.Objects.nonNull;
  */
 public class PksDataBuilder extends AttributeDataBuilder {
 
-    public interface Provider extends AttributeDataBuilder.Provider {
-        InputModel getPKsInputModel();
-
-        String getCategoryId();
-
-        Country getCountry();
-    }
-
     public PksViewContract build(PksTaskProvider pksModel) {
         PksViewContract pksView = new PksViewContract();
         String categoryId = pksModel.getCategoryId();
@@ -41,6 +33,14 @@ public class PksDataBuilder extends AttributeDataBuilder {
             pksView.withValidationErrors(pksModel.getPKsInputModel().getValidationErrors());
         }
         return pksView;
+    }
+
+    public interface Provider extends AttributeDataBuilder.Provider {
+        InputModel getPKsInputModel();
+
+        String getCategoryId();
+
+        Country getCountry();
     }
 
     //TODO: Refactor para independizarlo del contexto
