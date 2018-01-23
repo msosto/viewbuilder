@@ -1,6 +1,5 @@
 package com.mercadolibre.conceptTest.graphs.model;
 
-import com.google.common.collect.Iterables;
 import com.mercadolibre.conceptTest.graphs.model.component.*;
 import com.mercadolibre.conceptTest.graphs.model.inter.TitleInputProvider;
 import com.mercadolibre.dto.Category;
@@ -11,12 +10,11 @@ import com.mercadolibre.dto.category.Vertical;
 import com.mercadolibre.dto.item.ItemAttribute;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by msosto on 1/10/18.
  */
-public class Step1Model implements TitleInputProvider, CategorySelectionTaskModel, PksTaskModel, CategoryAttributesProvider {
+public class Step1Model implements TitleInputProvider, CategorySelectionTaskModel, PksTaskModel, CategoryAttributesProvider, VariationAttributesProvider {
 
 
     private InputModel pksInputModel;
@@ -24,7 +22,6 @@ public class Step1Model implements TitleInputProvider, CategorySelectionTaskMode
 
     //TODO: migrar estos pasos
     private QuantityModel quantityModel;
-    private List<SingleVariationModel> singleVariationModels;
 
     private Category category;
     private SellCatalogSelection sellCatalogSelection;
@@ -36,6 +33,7 @@ public class Step1Model implements TitleInputProvider, CategorySelectionTaskMode
     private Vertical vertical;
     private List<CategoryAttribute> categoryAttributes;
     private List<ItemAttribute> itemAttributes;
+    private VariationAttributesModel variationAttributes;
 
     @Override
     public TitleModel getTitleInput() {
@@ -97,6 +95,16 @@ public class Step1Model implements TitleInputProvider, CategorySelectionTaskMode
         return itemAttributes;
     }
 
+    @Override
+    public VariationAttributesModel getVariationAttributes() {
+        return variationAttributes;
+    }
+
+    public Step1Model setVariationAttributesInput(VariationAttributesModel variationAttributes) {
+        this.variationAttributes = variationAttributes;
+        return this;
+    }
+
     public Step1Model setPksInputModel(InputModel pksInputModel) {
         this.pksInputModel = pksInputModel;
         return this;
@@ -147,6 +155,7 @@ public class Step1Model implements TitleInputProvider, CategorySelectionTaskMode
         return this;
     }
 
+
     public Step1Model setCategoryId(String categoryId) {
         this.categoryId = categoryId;
         return this;
@@ -158,14 +167,6 @@ public class Step1Model implements TitleInputProvider, CategorySelectionTaskMode
         return this;
     }
 
-
-
-
-
-
-
-
-
     public Step1Model setCountry(Country country) {
         this.country = country;
         return this;
@@ -173,29 +174,12 @@ public class Step1Model implements TitleInputProvider, CategorySelectionTaskMode
 
     /*******/
 
-    public List<SingleVariationModel> getSingleVariationModels() {
-        return singleVariationModels;
-    }
-
     public QuantityModel getQuantityModel() {
         return quantityModel;
     }
 
     public Step1Model setQuantityModel(QuantityModel quantityModel) {
         this.quantityModel = quantityModel;
-        return this;
-    }
-
-    public SingleVariationModel getMainSingleVariationModel() {
-        return Iterables.getFirst(singleVariationModels, null);
-    }
-
-    public List<SingleVariationModel> getSecondarySingleVariationModel() {
-        return singleVariationModels.stream().skip(1).collect(Collectors.toList());
-    }
-
-    public Step1Model setSingleVariationModels(List<SingleVariationModel> singleVariationModel) {
-        this.singleVariationModels = singleVariationModel;
         return this;
     }
 

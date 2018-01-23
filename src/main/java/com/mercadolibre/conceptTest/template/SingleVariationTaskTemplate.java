@@ -1,14 +1,14 @@
 package com.mercadolibre.conceptTest.template;
 
-import com.mercadolibre.conceptTest.graphs.model.component.SingleVariationModel;
+import com.mercadolibre.conceptTest.graphs.model.component.VariationAttributesModel;
 
 /**
  * Created by mforte on 1/15/18.
  */
-public class SingleVariationTaskTemplate extends TaskTemplate<SingleVariationModel> {
+public class SingleVariationTaskTemplate extends TaskTemplate<VariationAttributesModel> {
 
     public SingleVariationTaskTemplate() {
-        super(SingleVariationModel.class);
+        super(VariationAttributesModel.class);
     }
 
     @Override

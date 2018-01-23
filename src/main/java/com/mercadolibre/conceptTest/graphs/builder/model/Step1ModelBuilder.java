@@ -23,11 +23,13 @@ import com.mercadolibre.util.providers.CategoryProvider;
 /**
  * Contiene toda la informacion en crudo para mostrar el Paso 1.
  * Implementa distintas interfaces para desacoplar.
+ * <p>
  * Created by msosto on 1/10/18.
  */
 public class Step1ModelBuilder extends ModelBuilder {
 
     private final FinderModelBuilder finderModelBuilder;
+    private final VariationAttributesModelBuilder variationAttributesModelBuilder;
     private final SiteUtils siteUtils;
     private final CategoryAttributeUtils categoryAttributeUtils;
     private final CategoryProvider categoryProvider;
@@ -37,11 +39,12 @@ public class Step1ModelBuilder extends ModelBuilder {
     private final CatalogUtils catalogUtils;
 
     public Step1ModelBuilder() {
+        this.categoryProvider = CategoryProvider.DATA_ITEM;
         this.finderModelBuilder = new FinderModelBuilder();
+        this.variationAttributesModelBuilder = new VariationAttributesModelBuilder(categoryProvider);
         this.siteUtils = ActionsModule.get().getInstance(SiteUtils.class);
         this.categoryAttributeUtils = ActionsModule.get().getInstance(CategoryAttributeUtils.class);
         this.categoryAttributeService = ActionsModule.get().getInstance(CategoryAttributeService.class);
-        this.categoryProvider = CategoryProvider.DATA_ITEM;
         this.catalogProductProvider = CatalogProductProvider.DATA_ITEM;
         this.categoryUtils = ActionsModule.get().getInstance(CategoryUtils.class);
         this.catalogUtils = ActionsModule.get().getInstance(CatalogUtils.class);
@@ -50,11 +53,11 @@ public class Step1ModelBuilder extends ModelBuilder {
     public Step1Model getModel(Context context) {
         Step1Model model = new Step1Model()
                 .setTitleInputModel(finderModelBuilder.build(context))
-                .setPksInputModel(buildPKsInputModel(context));
+                .setPksInputModel(buildPKsInputModel(context))
+                .setVariationAttributesInput(variationAttributesModelBuilder.build(context));
 
         addCategoryData(model, context);
         addCategorySelectionData(model, context);
-
         addAttributesData(model, context);
         model.setCountry(getCountry(context));
         return model;
