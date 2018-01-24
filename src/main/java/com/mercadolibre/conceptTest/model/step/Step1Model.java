@@ -2,9 +2,9 @@ package com.mercadolibre.conceptTest.model.step;
 
 import com.mercadolibre.conceptTest.model.component.InputModel;
 import com.mercadolibre.conceptTest.model.component.title.TitleModel;
-import com.mercadolibre.conceptTest.template.task.CategorySelectionTaskModel;
-import com.mercadolibre.conceptTest.template.task.FinderTaskProvider;
-import com.mercadolibre.conceptTest.template.task.PksTaskProvider;
+import com.mercadolibre.conceptTest.template.task.CategorySelectionTaskSupplier;
+import com.mercadolibre.conceptTest.template.task.FinderTaskSupplier;
+import com.mercadolibre.conceptTest.template.task.PksTaskSupplier;
 import com.mercadolibre.conceptTest.todo.QuantityModel;
 import com.mercadolibre.conceptTest.todo.VariationAttributesProvider;
 import com.mercadolibre.conceptTest.todo.component.VariationAttributesModel;
@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by msosto on 1/10/18.
  */
-public class Step1Model implements FinderTaskProvider, CategorySelectionTaskModel, PksTaskProvider, VariationAttributesProvider {
+public class Step1Model implements FinderTaskSupplier, CategorySelectionTaskSupplier, PksTaskSupplier, VariationAttributesProvider {
 
 
     private InputModel pksInputModel;

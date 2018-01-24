@@ -6,10 +6,10 @@ import com.mercadolibre.conceptTest.model.component.title.TitleModel;
 /**
  * Created by mforte on 1/15/18.
  */
-public class FinderTaskTemplate extends TaskTemplate<FinderTaskProvider> {
+public class FinderTaskTemplate extends TaskTemplate<FinderTaskSupplier> {
 
     public FinderTaskTemplate() {
-        super(FinderTaskProvider.class);
+        super(FinderTaskSupplier.class);
     }
 
     @Override

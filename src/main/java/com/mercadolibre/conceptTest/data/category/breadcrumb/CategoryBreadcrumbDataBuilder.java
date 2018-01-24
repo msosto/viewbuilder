@@ -2,6 +2,8 @@ package com.mercadolibre.conceptTest.data.category.breadcrumb;
 
 import com.google.common.collect.Lists;
 import com.mercadolibre.dto.Category;
+import com.mercadolibre.supply.supplier.CategorySupplier;
+import com.mercadolibre.supply.supplier.ContextIdSupplier;
 
 import java.util.List;
 
@@ -32,9 +34,6 @@ public class CategoryBreadcrumbDataBuilder {
         return viewContract;
     }
 
-    public interface Provider {
-        Category getCategory();
-
-        String getContextId();
+    public interface Provider extends CategorySupplier, ContextIdSupplier {
     }
 }

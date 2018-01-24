@@ -1,15 +1,19 @@
 package com.mercadolibre.conceptTest.template.task;
 
+import com.mercadolibre.ActionsModule;
 import com.mercadolibre.conceptTest.data.attribute.pks.PksDataBuilder;
 import org.apache.commons.collections.CollectionUtils;
 
 /**
  * Created by mforte on 1/15/18.
  */
-public class PKsTaskTemplate extends TaskTemplate<PksTaskProvider> {
+public class PKsTaskTemplate extends TaskTemplate<PksTaskSupplier> {
+
+    private final PksDataBuilder pksDataBuilder;
 
     public PKsTaskTemplate() {
-        super(PksTaskProvider.class);
+        super(PksTaskSupplier.class);
+        pksDataBuilder = ActionsModule.get().getInstance(PksDataBuilder.class);
     }
 
     @Override
@@ -32,6 +36,6 @@ public class PKsTaskTemplate extends TaskTemplate<PksTaskProvider> {
         addChild()
                 .id("PKS").uiType("PKS")
                 .apply(pksModel -> !CollectionUtils.isEmpty(pksModel.getCategoryAttributes()))
-                .dataBuilder(pksModel -> new PksDataBuilder().build(pksModel));
+                .dataBuilder(pksModel -> pksDataBuilder.build(pksModel));
     }
 }

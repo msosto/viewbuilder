@@ -34,8 +34,8 @@ public class Step1ViewBuilderTest {
         return new Step1Model();
     }
 
-//    private CategorySelectionTaskModel getCategorySelectionModel() {
-//        final CategorySelectionTaskModel categorySelectionModel = new CategorySelectionTaskModel()
+//    private CategorySelectionTaskSupplier getCategorySelectionModel() {
+//        final CategorySelectionTaskSupplier categorySelectionModel = new CategorySelectionTaskSupplier()
 //                .withCategoryId("MLA3530")
 //                .withAdultContent(false)
 //                .withShowCategorySelectionComponent(false)

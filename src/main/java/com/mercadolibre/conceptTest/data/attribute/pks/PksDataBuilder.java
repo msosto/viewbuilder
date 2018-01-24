@@ -1,13 +1,15 @@
 package com.mercadolibre.conceptTest.data.attribute.pks;
 
+import com.mercadolibre.ActionsModule;
 import com.mercadolibre.conceptTest.data.attribute.AttributeDataBuilder;
-import com.mercadolibre.conceptTest.model.component.InputModel;
-import com.mercadolibre.conceptTest.template.task.PksTaskProvider;
-import com.mercadolibre.dto.Country;
+import com.mercadolibre.conceptTest.model.supplier.PKsInputModelSupplier;
 import com.mercadolibre.dto.category.CategoryAttribute;
 import com.mercadolibre.dto.category.Vertical;
 import com.mercadolibre.dto.item.ItemAttribute;
 import com.mercadolibre.flux.flow.graph.navigation.DataProxy;
+import com.mercadolibre.service.CategoryAttributeService;
+import com.mercadolibre.supply.supplier.CategoryIdSupplier;
+import com.mercadolibre.supply.supplier.CountrySupplier;
 
 import java.util.List;
 
@@ -18,11 +20,17 @@ import static java.util.Objects.nonNull;
  */
 public class PksDataBuilder extends AttributeDataBuilder {
 
-    public PksViewContract build(PksTaskProvider pksModel) {
+    private final CategoryAttributeService categoryAttributeService;
+
+    public PksDataBuilder() {
+        this.categoryAttributeService = ActionsModule.get().getInstance(CategoryAttributeService.class);
+    }
+
+    public PksViewContract build(Provider pksModel) {
         PksViewContract pksView = new PksViewContract();
         String categoryId = pksModel.getCategoryId();
         if (nonNull(categoryId)) {
-            final List<CategoryAttribute> sortedPKAttributes = pksModel.getCategoryAttributes();
+            final List<CategoryAttribute> sortedPKAttributes = getPksCategoryAttributes(pksModel);
             final List<ItemAttribute> itemAttributes = pksModel.getItemAttributes();
             final Vertical vertical = pksModel.getVertical();
             final String siteId = pksModel.getSiteId();
@@ -35,18 +43,16 @@ public class PksDataBuilder extends AttributeDataBuilder {
         return pksView;
     }
 
-    public interface Provider extends AttributeDataBuilder.Provider {
-        InputModel getPKsInputModel();
-
-        String getCategoryId();
-
-        Country getCountry();
+    private List<CategoryAttribute> getPksCategoryAttributes(Provider model) {
+        final List<CategoryAttribute> categoryAttributes = model.getCategoryAttributes();
+        //TODO: Separar la logica de buscar la data de filtrar los PKs y reutilizarla
+        //final List<CategoryAttribute> pkAttributes = categoryAttributeUtils.getPKsCategoryAttributesFromCategory(context, categoryProvider);
+        return categoryAttributeService.sortAttributes(categoryAttributes);
     }
 
-    //TODO: Refactor para independizarlo del contexto
-//    private List<CategoryAttribute> getPksCategoryAttributes(Context context) {
-//        final List<CategoryAttribute> pkAttributes = categoryAttributeUtils.getPKsCategoryAttributesFromCategory(context, categoryProvider);
-//        return categoryAttributeService.sortAttributes(pkAttributes);
-//    }
-
+    public interface Provider extends AttributeDataBuilder.Provider,
+            CategoryIdSupplier,
+            CountrySupplier,
+            PKsInputModelSupplier {
+    }
 }

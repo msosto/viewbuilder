@@ -12,7 +12,7 @@ import static java.util.Objects.nonNull;
 /**
  * Created by mforte on 1/15/18.
  */
-public class CategorySelectionTaskTemplate extends TaskTemplate<CategorySelectionTaskModel> {
+public class CategorySelectionTaskTemplate extends TaskTemplate<CategorySelectionTaskSupplier> {
 
     public static final String ITEM_CATEGORY_ID_OUTPUT = "item.category_id";
     public static final String ITEM_CATALOG_PRODUCT_ID_OUTPUT = "item.catalog_product_id";
@@ -22,7 +22,7 @@ public class CategorySelectionTaskTemplate extends TaskTemplate<CategorySelectio
     private InputHiddenDataBuilder inputHiddenDataBuilder;
 
     public CategorySelectionTaskTemplate() {
-        super(CategorySelectionTaskModel.class);
+        super(CategorySelectionTaskSupplier.class);
         categorySelectionDataBuilder = new CategorySelectionDataBuilder();
         categoryBreadcrumbDataBuilder = new CategoryBreadcrumbDataBuilder();
         inputHiddenDataBuilder = new InputHiddenDataBuilder();
@@ -68,13 +68,13 @@ public class CategorySelectionTaskTemplate extends TaskTemplate<CategorySelectio
 
     }
 
-    private boolean showCategoryBreadcrumb(CategorySelectionTaskModel categorySelectionTaskModel) {
-        Category category = categorySelectionTaskModel.getCategory();
-        return nonNull(category) && !CollectionUtils.isEmpty(categorySelectionTaskModel.getCategory().getPathFromRoot());
+    private boolean showCategoryBreadcrumb(CategorySelectionTaskSupplier categorySelectionTaskSupplier) {
+        Category category = categorySelectionTaskSupplier.getCategory();
+        return nonNull(category) && !CollectionUtils.isEmpty(categorySelectionTaskSupplier.getCategory().getPathFromRoot());
     }
 
-    private boolean showCategorySelection(CategorySelectionTaskModel categorySelectionTaskModel) {
-        return !isLeaf(categorySelectionTaskModel.getSellCatalogSelection());
+    private boolean showCategorySelection(CategorySelectionTaskSupplier categorySelectionTaskSupplier) {
+        return !isLeaf(categorySelectionTaskSupplier.getSellCatalogSelection());
     }
 
     private boolean isLeaf(SellCatalogSelection selection) {

@@ -6,6 +6,7 @@ import com.mercadolibre.config.Config;
 import com.mercadolibre.dto.Category;
 import com.mercadolibre.dto.catalog.SellCatalogSelection;
 import com.mercadolibre.dto.catalog.SellCatalogSelectionColumn;
+import com.mercadolibre.supply.supplier.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -109,16 +110,10 @@ public class CategorySelectionDataBuilder {
     /**
      * Created by mforte on 1/23/18.
      */
-    public interface Provider {
-
-        Category getCategory();
-
-        String getContextId();
-
-        SellCatalogSelection getSellCatalogSelection();
-
-        String getCategoryId();
-
-        String getCatalogProductId();
+    public interface Provider extends CategorySupplier,
+            ContextIdSupplier,
+            SellCatalogSelectionSupplier,
+            CategoryIdSupplier,
+            CatalogProductIdSupplier {
     }
 }

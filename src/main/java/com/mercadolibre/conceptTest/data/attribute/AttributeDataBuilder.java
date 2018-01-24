@@ -2,13 +2,16 @@ package com.mercadolibre.conceptTest.data.attribute;
 
 import com.mercadolibre.ActionsModule;
 import com.mercadolibre.actions.CategoryAttributeUtils;
-import com.mercadolibre.conceptTest.template.task.CategorySelectionTaskModel;
 import com.mercadolibre.config.Config;
 import com.mercadolibre.dto.catalog.CatalogProductAttribute;
 import com.mercadolibre.dto.category.CategoryAttribute;
 import com.mercadolibre.dto.category.Vertical;
 import com.mercadolibre.dto.item.ItemAttribute;
 import com.mercadolibre.flux.flow.graph.navigation.DataProxy;
+import com.mercadolibre.supply.supplier.CategoryAttributesSupplier;
+import com.mercadolibre.supply.supplier.ItemAttributesSupplier;
+import com.mercadolibre.supply.supplier.SiteIdSupplier;
+import com.mercadolibre.supply.supplier.VerticalSupplier;
 import com.mercadolibre.util.ContextUtils;
 
 import java.util.*;
@@ -38,10 +41,6 @@ public abstract class AttributeDataBuilder {
 
     public AttributeDataBuilder() {
         this.categoryAttributeUtils = ActionsModule.get().getInstance(CategoryAttributeUtils.class);
-    }
-
-    protected String getDecimalSeparator(CategorySelectionTaskModel model) {
-        return model.getCountry().getDecimalSeparator();
     }
 
     /**
@@ -238,13 +237,9 @@ public abstract class AttributeDataBuilder {
         }
     }
 
-    public interface Provider {
-        String getSiteId();
-
-        Vertical getVertical();
-
-        List<CategoryAttribute> getCategoryAttributes();
-
-        List<ItemAttribute> getItemAttributes();
+    public interface Provider extends SiteIdSupplier,
+            VerticalSupplier,
+            CategoryAttributesSupplier,
+            ItemAttributesSupplier {
     }
 }
