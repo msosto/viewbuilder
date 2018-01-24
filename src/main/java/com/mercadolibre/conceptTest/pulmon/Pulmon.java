@@ -1,7 +1,7 @@
 package com.mercadolibre.conceptTest.pulmon;
 
 import com.google.common.collect.Iterables;
-import com.mercadolibre.conceptTest.graphs.builder.view.InputComponent;
+import com.mercadolibre.conceptTest.data.InputComponent;
 import com.mercadolibre.kisc.viewbuilder.Component;
 
 import java.util.ArrayList;

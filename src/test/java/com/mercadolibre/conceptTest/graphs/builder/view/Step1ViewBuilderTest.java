@@ -3,12 +3,8 @@ package com.mercadolibre.conceptTest.graphs.builder.view;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mercadolibre.conceptTest.graphs.builder.model.attribute.PksModelBuilder;
-import com.mercadolibre.conceptTest.graphs.model.CategorySelectionModel;
-import com.mercadolibre.conceptTest.graphs.model.FinderModel;
-import com.mercadolibre.conceptTest.graphs.model.PksModel;
-import com.mercadolibre.conceptTest.graphs.model.Step1Model;
-import com.mercadolibre.conceptTest.template.Step1Template;
+import com.mercadolibre.conceptTest.model.step.Step1Model;
+import com.mercadolibre.conceptTest.template.step1.Step1Template;
 import com.mercadolibre.dto.category.AttributeValueType;
 import com.mercadolibre.dto.category.CategoryAttribute;
 import com.mercadolibre.dto.category.CategoryAttributeHierarchy;
@@ -35,38 +31,35 @@ public class Step1ViewBuilderTest {
     }
 
     private Step1Model buildModel() {
-        return new Step1Model()
-                .setFinderModel(getFinderModel())
-                .setCategorySelectionModel(getCategorySelectionModel())
-                .setPksModel(getPksModel());
+        return new Step1Model();
     }
 
-    private CategorySelectionModel getCategorySelectionModel() {
-        final CategorySelectionModel categorySelectionModel = new CategorySelectionModel()
-                .withCategoryId("MLA3530")
-                .withAdultContent(false)
-                .withShowCategorySelectionComponent(false)
-                .withShowCategoryBreadcrumbComponent(false);
-        categorySelectionModel.getHeaderModel().withTitle("CATEGORY_SELECTION_TITLE");
-        categorySelectionModel.getFooterModel().withButtonConnection("SAME_STEP_CONNECTION");
-        return categorySelectionModel;
-    }
-
-    private FinderModel getFinderModel() {
-        final FinderModel finderModel = new FinderModel().setTitle("Iphone 6s").setRequired(true);
-        finderModel.getHeaderModel().withTitle("FINDER_TITLE");
-        finderModel.getFooterModel().withButtonConnection("SAME_STEP_CONNECTION");
-        return finderModel;
-    }
-
-    private PksModel getPksModel() {
-        final PksModel pksModel = new PksModel()
-                .setPksAttributes(getListOfAttributes())
-                .setDecimalSeparator(",");
-        pksModel.getHeaderModel().withTitle(PksModelBuilder.HEADER_TITLE);
-        pksModel.getFooterModel().withButtonText(PksModelBuilder.FOOTER_BTN_TEXT);
-        return pksModel;
-    }
+//    private CategorySelectionTaskSupplier getCategorySelectionModel() {
+//        final CategorySelectionTaskSupplier categorySelectionModel = new CategorySelectionTaskSupplier()
+//                .withCategoryId("MLA3530")
+//                .withAdultContent(false)
+//                .withShowCategorySelectionComponent(false)
+//                .withShowCategoryBreadcrumbComponent(false);
+//        categorySelectionModel.getHeaderModel().withTitle("CATEGORY_SELECTION_TITLE");
+//        categorySelectionModel.getFooterModel().withButtonConnection("SAME_STEP_CONNECTION");
+//        return categorySelectionModel;
+//    }
+//
+//    private TitleModel getFinderModel() {
+//        final TitleModel finderModel = new TitleModel().setTitle("Iphone 6s").setRequired(true);
+//        finderModel.getHeaderModel().withTitle("FINDER_TITLE");
+//        finderModel.getFooterModel().withButtonConnection("SAME_STEP_CONNECTION");
+//        return finderModel;
+//    }
+//
+//    private PksModel getPksModel() {
+//        final PksModel pksModel = new PksModel()
+//                .setPksAttributes(getListOfAttributes())
+//                .setDecimalSeparator(",");
+//        pksModel.getHeaderModel().withTitle(PksModelBuilder.HEADER_TITLE);
+//        pksModel.getFooterModel().withButtonText(PksModelBuilder.FOOTER_BTN_TEXT);
+//        return pksModel;
+//    }
 
     private List<DataProxy> getListOfAttributes() {
 

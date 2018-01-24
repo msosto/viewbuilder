@@ -14,11 +14,11 @@ public class ExampleModel {
     Integer offset;
     Integer currentPage;
     List<ExampleModelItem> items;
-    OtherModel other;
-
     public String getSearchPlaceholder() {
         return searchPlaceholder;
     }
+
+    OtherModel other;
 
     public ExampleModel withSearchPlaceholder(String searchPlaceholder) {
         this.searchPlaceholder = searchPlaceholder;
