@@ -31,8 +31,8 @@ public class Step1Template extends Template<Step1Model> {
         addChild(new CategorySelectionTaskTemplate());
         addChild(new PKsTaskTemplate());
         //addChild(Pregunta Variaciones).apply(new)
-        addNoVariationGroup();
-        addSingleVariationGroup();
+        //addNoVariationGroup();
+        //addSingleVariationGroup();
     }
 
     private void addNoVariationGroup() {

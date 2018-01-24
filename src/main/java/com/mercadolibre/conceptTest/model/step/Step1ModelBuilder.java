@@ -57,8 +57,8 @@ public class Step1ModelBuilder {
     public Step1Model getModel(Context context) {
         Step1Model model = new Step1Model()
                 .setTitleInputModel(finderModelBuilder.build(context))
-                .setPksInputModel(pKsInputModelBuilder.build(context))
-                .setVariationAttributesInput(variationAttributesModelBuilder.build(context));
+                .setPksInputModel(pKsInputModelBuilder.build(context));
+                //.setVariationAttributesInput(variationAttributesModelBuilder.build(context));
 
         addCategoryData(model, context);
         addCategorySelectionData(model, context);
