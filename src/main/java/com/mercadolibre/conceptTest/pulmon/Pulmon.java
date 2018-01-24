@@ -5,6 +5,7 @@ import com.mercadolibre.conceptTest.data.InputComponent;
 import com.mercadolibre.kisc.viewbuilder.Component;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -50,8 +51,8 @@ public class Pulmon {
      * se muestra hasta la nueva y en la siguiente vez, se muestra todas las que vio alguna vez.
      */
     protected List<Component> showTasks(List<Component> tasks, List<String> componentNavigation) {
-        List<Component> newTasks = getTaskUntilLastCurrentStep(tasks, componentNavigation);
-        if (allStepsInNavigation(newTasks, componentNavigation) && !containsValidationErrors((Component) newTasks)) {
+        List<Component> newTasks = new ArrayList<>(getTaskUntilLastCurrentStep(tasks, componentNavigation));
+        if (allStepsInNavigation(newTasks, componentNavigation) && !containsValidationErrors(newTasks)) {
             addNewTask(tasks, newTasks, componentNavigation);
         }
 
@@ -69,10 +70,15 @@ public class Pulmon {
      * - Esta en Nav y no tiene error => Lo agrego y sigo
      * - Esta en Nav y tiene error => Lo agrego y no sigo
      * - No esta en Nav => Le saco los errores de validacion y corto.
+     *
+     * @param tasks Generadas por view-builder
+     * @param newTasks Tasks until last current step
+     * @param componentNavigation
      */
+
     private void addNewTask(List<Component> tasks, List<Component> newTasks, List<String> componentNavigation) {
         final Component last = Iterables.getLast(newTasks);
-        final List<Component> tasksToAdd = tasks.subList(tasks.indexOf(last), tasks.size()); //TODO: Ver si no es hasta size -1
+        final List<Component> tasksToAdd = tasks.subList(tasks.indexOf(last) + 1, tasks.size()); //TODO: Ver si no es hasta size -1
         for (int i = 0; i < tasksToAdd.size(); i++) {
             final Component task = tasksToAdd.get(i);
             newTasks.add(task);
@@ -93,7 +99,7 @@ public class Pulmon {
     private List<Component> getTaskUntilLastCurrentStep(List<Component> tasks, List<String> componentNavigation) {
         String lastCurrentStep = Iterables.getLast(componentNavigation);
         //TODO: Si hay alguno que no está en el navigation hay que devolver de 0 a ese
-        return tasks.subList(0, getIndexOf(tasks, lastCurrentStep));
+        return tasks.subList(0, getIndexOf(tasks, lastCurrentStep) + 1);
     }
 
     protected Boolean navigateAny(Component stepView, List<String> componentNavigation) {
